@@ -1,9 +1,23 @@
 import React from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import GetInTouch from "./pages/GetInTouch";
+import NotFound from "./pages/NotFound";
 
 function App() {
+  const routes = [
+    { key: 1, path: "/", element: <GetInTouch />, exact: true },
+    { key: 2, path: "*", element: <NotFound /> },
+  ];
+
   return (
     <div className="App">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Router>
+        <Routes>
+        {routes && routes.map((route)=>{
+          return <Route key={route.key} {...route} />;
+        })}
+        </Routes>
+      </Router>
     </div>
   );
 }
