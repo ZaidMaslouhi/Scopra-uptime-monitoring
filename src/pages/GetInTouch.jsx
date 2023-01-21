@@ -1,12 +1,30 @@
 import React, { useState } from "react";
 import bubbleGum from "../assets/images/bubble-gum_get-int-touch.gif";
+import { subscribe } from "../services/subscription.service";
 
 function GetInTouch() {
-  const [message, setMessage] = useState("");
+  const [response, setResponse] = useState({ message: "", color: "" });
   const handleSubmit = (e) => {
     e.preventDefault();
-    const username = e.target["email"].value.split("@")[0];
-    setMessage(`Thank you ${username} for your interest. We will be in touch!`);
+    const email = e.target["email"].value;
+    const username = email.split("@")[0];
+    const subscriber = {
+      email: email,
+      timestamp: Date.now(),
+    };
+    subscribe(subscriber)
+      .then(() => {
+        setResponse({
+          message: `Thank you ${username} for your interest. We will be in touch!`,
+          color: "green",
+        });
+      })
+      .catch(() => {
+        setResponse({
+          message: `Sorry ${username}, something went wrong! please try again later.`,
+          color: "red",
+        });
+      });
   };
 
   return (
@@ -21,9 +39,13 @@ function GetInTouch() {
               The Next Big Thing Is Here!
             </h2>
           </header>
-          {message ? (
-            <div className="px-5 py-3 bg-green-200 rounded-sm">
-              <p className="text-sm text-green-700">{message}</p>
+          {response.message ? (
+            <div
+              className={`px-5 py-3 border-2 border-${response.color}-200 bg-${response.color}-50 rounded-md`}
+            >
+              <p className={`text-sm text-${response.color}-700`}>
+                {response.message}
+              </p>
             </div>
           ) : (
             <form onSubmit={(e) => handleSubmit(e)}>
