@@ -13,9 +13,10 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-        {routes && routes.map((route)=>{
-          return <Route key={route.key} {...route} />;
-        })}
+          {routes &&
+            routes.map((route) => {
+              return <Route key={route.key} {...route} />;
+            })}
         </Routes>
       </Router>
     </div>
