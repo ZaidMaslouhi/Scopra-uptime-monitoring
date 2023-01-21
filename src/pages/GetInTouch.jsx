@@ -10,16 +10,10 @@ function GetInTouch() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-<<<<<<< HEAD
     const email = e.target["email"].value;
     const subscriber = {
       email,
       username: email.split("@")[0],
-=======
-    const subscriber = {
-      email: e.target["email"].value,
-      username: this.email.split("@")[0],
->>>>>>> 44acb3dda46411a5cf8d9238bc6d40896b7dae4e
       timestamp: Date.now(),
     };
 
