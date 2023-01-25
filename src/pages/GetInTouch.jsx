@@ -5,7 +5,7 @@ import MessageReponse from "../components/getInTouch/MessageReponse";
 import AsideSection from "../components/getInTouch/AsideSection";
 
 function GetInTouch() {
-  const [response, setResponse] = useState({ message: "", color: "" });
+  const [response, setResponse] = useState({ message: "", style: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,13 +21,13 @@ function GetInTouch() {
       .then(() => {
         setResponse({
           message: `Thank you ${subscriber.username} for your interest. We will be in touch!`,
-          color: "green",
+          style: "border-green-200 bg-green-50 text-green-700",
         });
       })
       .catch(() => {
         setResponse({
           message: `Sorry ${subscriber.username}, something went wrong! please try again later.`,
-          color: "red",
+          style: "border-red-200 bg-red-50 text-red-700",
         });
       });
   };
@@ -45,7 +45,10 @@ function GetInTouch() {
             </h2>
           </header>
           {response.message ? (
-            <MessageReponse message={response.message} color={response.color} />
+            <MessageReponse
+              message={response.message}
+              className={response.style}
+            />
           ) : (
             <form onSubmit={(e) => handleSubmit(e)}>
               <p className="text-sm font-extralight mb-1 text-center md:text-left">
