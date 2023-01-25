@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { subscribe } from "../services/subscription.service";
-import CopyRightsFooter from "../components/getInTouch/CopyRightsFooter";
-import MessageReponse from "../components/getInTouch/MessageReponse";
-import AsideSection from "../components/getInTouch/AsideSection";
+import { subscribe } from "../../services/subscription.service";
+import CopyRightsFooter from "../../components/getInTouch/CopyRightsFooter";
+import MessageReponse from "../../components/getInTouch/MessageReponse";
+import AsideSection from "../../components/getInTouch/AsideSection";
 
 function GetInTouch() {
-  const [response, setResponse] = useState({ message: "", style: "" });
+  const [response, setResponse] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ function GetInTouch() {
               The Next Big Thing Is Here!
             </h2>
           </header>
-          {response.message ? (
+          {Object.keys(response).length != 0 ? (
             <MessageReponse
               message={response.message}
               className={response.style}
