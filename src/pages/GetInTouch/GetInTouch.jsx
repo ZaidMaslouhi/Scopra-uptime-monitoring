@@ -34,7 +34,7 @@ function GetInTouch() {
 
   return (
     <main className="h-screen flex items-center justify-center bg-slate-200">
-      <section className="w-2/4 h-3/4 rounded-2xl overflow-hidden shadow-2xl flex bg-white bg-opacity-90 backdrop-blur-lg drop-shadow-lg">
+      <section className="w-3/4 md:w-1/2 h-3/4 rounded-2xl overflow-hidden shadow-2xl flex bg-white bg-opacity-90 backdrop-blur-lg drop-shadow-lg">
         <article className="w-full md:w-1/2 h-full py-12 px-5 md:pl-10 md:pr-5 flex flex-col justify-around ">
           <header>
             <h1 className="text-4xl font-bold text-slate-800 text-center md:text-left">
