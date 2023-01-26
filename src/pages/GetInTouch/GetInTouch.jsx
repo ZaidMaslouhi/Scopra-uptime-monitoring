@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { subscribe } from "../../services/subscription.service";
 import CopyRightsFooter from "../../components/getInTouch/CopyRightsFooter";
-import MessageReponse from "../../components/getInTouch/MessageReponse";
 import AsideSection from "../../components/getInTouch/AsideSection";
+import MessageReponse from "../../components/getInTouch/MessageReponse/MessageReponse";
 
 function GetInTouch() {
   const [response, setResponse] = useState({});
@@ -12,7 +12,7 @@ function GetInTouch() {
     e.preventDefault();
 
     const subscriber = {
-      email: email.current,
+      email: email.current.value,
       username: email.current.value.split("@")[0],
       timestamp: Date.now(),
     };
