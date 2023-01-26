@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { subscribe } from "../../services/subscription.service";
 import CopyRightsFooter from "../../components/getInTouch/CopyRightsFooter";
 import MessageReponse from "../../components/getInTouch/MessageReponse";
@@ -6,14 +6,14 @@ import AsideSection from "../../components/getInTouch/AsideSection";
 
 function GetInTouch() {
   const [response, setResponse] = useState({});
+  const email = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const email = e.target["email"].value;
     const subscriber = {
-      email,
-      username: email.split("@")[0],
+      email: email.current,
+      username: email.current.value.split("@")[0],
       timestamp: Date.now(),
     };
 
@@ -59,6 +59,7 @@ function GetInTouch() {
                 className="w-full block text-center md:text-left"
               >
                 <input
+                  ref={email}
                   type="email"
                   name="email"
                   placeholder="Email Adress"
