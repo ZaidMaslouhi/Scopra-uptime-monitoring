@@ -3,11 +3,20 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const basename =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_PRODUCTION_BASENAME
+    : process.env.REACT_APP_DEVELOPMENT_BASENAME;
+
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Router basename={basename}>
+      <App />
+    </Router>
   </React.StrictMode>
 );
 
