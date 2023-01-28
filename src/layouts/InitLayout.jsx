@@ -24,7 +24,7 @@ function InitLayout({ children, image }) {
 
 InitLayout.propTypes = {
   children: PropTypes.node.isRequired,
-  image: PropTypes.string.isRequired,
+  image: PropTypes.object.isRequired,
 };
 
 export default InitLayout;
