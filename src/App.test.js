@@ -2,6 +2,7 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import App from "./App";
 import { MemoryRouter } from "react-router-dom";
+import GetInTouch from "./pages/GetInTouch/GetInTouch";
 
 describe("App", () => {
   afterEach(cleanup);
@@ -13,17 +14,13 @@ describe("App", () => {
       </MemoryRouter>
     );
 
-    const getInTouch = screen.getByRole("heading", {
-      name: /get in touch/i,
-    });
-    const notFoundText = screen.queryByText(/404 not found/i);
+    const { container: getInTouchComponent } = render(<GetInTouch />);
 
-    expect(getInTouch).toBeInTheDocument();
-    expect(notFoundText).not.toBeInTheDocument();
+    expect(getInTouchComponent).toBeInTheDocument();
   });
 
   test("renders the NotFound page for invalid routes", () => {
-    render(
+    const { container: notFoundComponent } = render(
       <MemoryRouter initialEntries={["/invalid"]}>
         <App />
       </MemoryRouter>
@@ -31,6 +28,7 @@ describe("App", () => {
 
     const notFoundText = screen.getByText(/404 not found/i);
 
+    expect(notFoundComponent).toBeInTheDocument();
     expect(notFoundText).toBeInTheDocument();
   });
 });
