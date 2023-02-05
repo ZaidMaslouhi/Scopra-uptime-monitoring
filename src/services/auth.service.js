@@ -8,7 +8,6 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-
 export const getCurrentUser = () => {
   return auth.currentUser;
 };
@@ -30,12 +29,7 @@ export const signInEmailPassword = (user) => {
   return signInWithEmailAndPassword(auth, user.email, user.password);
 };
 
-
-export const signInGoogle = () => {
+export const signOnGoogle = () => {
   const googleAuthProvider = new GoogleAuthProvider();
   return signInWithPopup(auth, googleAuthProvider);
 };
-
-
-
-
