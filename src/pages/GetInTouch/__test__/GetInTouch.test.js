@@ -17,16 +17,14 @@ describe("GetInTouch", () => {
   it("renders the form and aside section", () => {
     render(<GetInTouch />);
 
-    const image = screen.getByRole("img", {
-      name: /bubble gum animation/i,
-    });
+    const animationImage = screen.getByRole("img");
     const getInTouch = screen.getByRole("heading", {
-      name: /get in touch/i,
+      name: /The next big thing is Here!/i,
     });
     const emailInput = screen.getByRole("textbox");
     const notifButton = screen.getByRole("button", { name: /notify me/i });
 
-    expect(image).toBeInTheDocument();
+    expect(animationImage).toBeInTheDocument();
     expect(getInTouch).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
     expect(notifButton).toBeInTheDocument();
