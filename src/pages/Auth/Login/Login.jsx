@@ -1,43 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import InitLayout from "../../../layouts/InitLayout";
-import loginLottie from "../../../assets/lotties/Login-lottie.json";
+import loginLottie from "../../../assets/lotties/login-lottie.json";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  signInEmailPassword,
+  signOnGoogle,
+} from "../../../services/auth.service";
+import OauthButton from "../../../components/auth/OauthButton/OauthButton";
+import { useForm } from "react-hook-form";
+import FormInput from "../../../components/input/FormInput/FormInput";
 
 function Login() {
+  const [authError, setAuthError] = useState("");
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+
+  watch(() => setAuthError(""));
+
+  const handleSignInGoogle = () => signOnGoogle();
+
+  const handleLogin = async (values) => {
+    console.log(values);
+    try {
+      await signInEmailPassword({
+        email: values.email,
+        password: values.password,
+      });
+      navigate("/dashboard");
+    } catch ({ message }) {
+      const msg = message
+        .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
+        .replaceAll("-", " ")
+        .toUpperCase();
+      setAuthError(`Unable to get profile information: ${msg}`);
+    }
+  };
+
   return (
     <InitLayout image={loginLottie}>
       <header>
-        <h2 className="text-3xl font-bold text-slate-900 text-center md:text-left">
-          Nice to see you again
+        <h2 className="text-xl font-semibold text-slate-900 text-center md:text-left">
+          Nice to see you again 👋
         </h2>
       </header>
       <section>
-        <form>
-          <label htmlFor="email" className="text-slate-900 text-xs mx-2">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <FormInput
+            label="Email"
+            id="Email"
             placeholder="Enter Email"
-            className="w-full block p-3 mb-3 bg-slate-200 text-gray-800 text-sm rounded-md outline-none"
+            ref={register("email", {
+              required: "Email Address is required",
+              pattern: {
+                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                message: "Invalid email address",
+              },
+            })}
+            errorMessage={errors.email?.message}
           />
-          <label htmlFor="password" className="text-slate-900 text-xs mx-2">
-            Password
-          </label>
-          <input
+          <FormInput
+            label="Password"
+            id="Password"
             type="password"
-            name="password"
-            id="password"
             placeholder="Enter Password"
-            className="w-full block p-3 mb-3 bg-slate-200 text-gray-800 text-sm rounded-md outline-none"
+            ref={register("password", {
+              required: "Password is required",
+              pattern: {
+                value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+                message:
+                  "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+              },
+            })}
+            errorMessage={errors.password?.message}
           />
-          <div className="flex mb-3 mx-2">
+          <div className="flex my-4 mx-2">
             <input
               type="checkbox"
-              name="rememberMe"
+              {...register("rememberMe")}
               id="rememberMe"
               className="accent-slate-700 outline-none"
             />
@@ -51,14 +96,19 @@ function Login() {
           >
             Sign in
           </button>
+          {authError && (
+            <p className="mt-2 text-sm text-center text-red-700 leading-4 block">
+              {authError}
+            </p>
+          )}
         </form>
         <hr className="my-5 bg-slate-900" />
-        <button
-          type="button"
-          className="text-center text-slate-800 border-2 border-slate-800 bg-white font-semibold block w-full rounded-md mt-3 px-4 py-2 shadow-sm transition-all duration-200 outline-none hover:shadow-md"
-        >
-          <FcGoogle className="inline text-xl mr-1" /> Or sign in with Google
-        </button>
+        <OauthButton
+          Icon={FcGoogle}
+          title="Or sign on with Google"
+          handleClick={handleSignInGoogle}
+          routeTo="/dashboard"
+        />
         <div className="mt-6">
           <p className="text-xs text-center text-slate-500">
             Dont have an account?{" "}
