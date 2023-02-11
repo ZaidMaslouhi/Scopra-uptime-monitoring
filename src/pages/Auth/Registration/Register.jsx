@@ -42,8 +42,8 @@ function Register() {
 
   return (
     <InitLayout image={registerationLottie}>
-      <header>
-        <h2 className="text-xl font-semibold text-slate-900 text-center md:text-left">
+      <header className="my-4 2xl:my-0">
+        <h2 className="text-xl 2xl:text-4xl font-semibold text-slate-900 text-center md:text-left">
           Sign up and get started today! 😉
         </h2>
       </header>

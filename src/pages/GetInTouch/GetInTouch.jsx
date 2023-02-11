@@ -37,21 +37,21 @@ function GetInTouch() {
   return (
     <InitLayout image={stayTunedLottie}>
       <section>
-        <section className="mb-12">
-          <h1 className="mb-2 text-3xl font-bold text-slate-800 text-center md:text-left">
+        <header className="my-4 2xl:mt-0 2xl:mb-6">
+          <h1 className="mb-2 text-xl 2xl:text-4xl font-semibold text-slate-900 text-center md:text-left">
             The next big thing is Here!
           </h1>
-          <h2 className="text-md font-thin text-slate-800 text-center md:text-left">
+          <h2 className="text-md 2xl:text-xl font-thin text-slate-800 text-center md:text-left">
             Get an electronic mail when it&apos;s ready
           </h2>
-        </section>
+        </header>
         {Object.keys(response) != 0 ? (
           <MessageReponse
             message={response.message}
             className={response.style}
           />
         ) : (
-          <form onSubmit={handleSubmit(handleSubscriber)}>
+          <form onSubmit={handleSubmit(handleSubscriber)} className="text-center sm:text-left">
             <FormInput
               label="Email"
               id="Email"
