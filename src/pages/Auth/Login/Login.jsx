@@ -13,6 +13,7 @@ import FormInput from "../../../components/input/FormInput/FormInput";
 
 function Login() {
   const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -26,8 +27,8 @@ function Login() {
   const handleSignInGoogle = () => signOnGoogle();
 
   const handleLogin = async (values) => {
-    console.log(values);
     try {
+      setLoading(true);
       await signInEmailPassword({
         email: values.email,
         password: values.password,
@@ -39,6 +40,8 @@ function Login() {
         .replaceAll("-", " ")
         .toUpperCase();
       setAuthError(`Unable to get profile information: ${msg}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,7 +97,7 @@ function Login() {
             type="submit"
             className="text-center text-white text-sm bg-slate-800 border-2 border-slate-800 font-semibold block w-full rounded-md mt-3 px-4 py-2 shadow-lg ease-in transition-all duration-200 outline-none hover:bg-transparent hover:text-slate-800 hover:-translate-y-1 hover:shadow-2xl"
           >
-            Sign in
+            {loading ? "Loading..." : "Sign in"}
           </button>
           {authError && (
             <p className="mt-2 text-sm text-center text-red-700 leading-4 block">

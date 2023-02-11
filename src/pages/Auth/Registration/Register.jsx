@@ -13,6 +13,7 @@ import {
 
 function Register() {
   const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,17 +27,22 @@ function Register() {
 
   const handleRegistration = async (values) => {
     try {
+      setLoading(true);
       await registerWithEmailAndPassword({
         email: values.email,
         password: values.password,
       });
-      navigate("/welcome");
+      setInterval(() => {
+        navigate("/welcome");
+      }, 2000);
     } catch ({ message }) {
       const msg = message
         .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
         .replaceAll("-", " ")
         .toUpperCase();
       setAuthError(`Unable to store your profile information: ${msg}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,7 +99,7 @@ function Register() {
             type="submit"
             className="text-center text-white text-sm bg-slate-800 border-2 border-slate-800 font-semibold block w-full rounded-md mt-3 px-4 py-2 shadow-lg ease-in transition-all duration-200 outline-none hover:bg-transparent hover:text-slate-800 hover:-translate-y-1 hover:shadow-2xl"
           >
-            Create an account
+            {loading ? "Loading..." : "Create an account"}
           </button>
           {authError && (
             <p className="mt-2 text-sm text-center text-red-700 leading-4 block">
