@@ -5,6 +5,7 @@ import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Registration/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import OnBoarding from "../pages/Dashboard/OnBoarding";
 
 export const routes = [
   { key: 1, path: "*", element: <NotFound /> },
@@ -20,4 +21,14 @@ export const routes = [
       </ProtectedRoute>
     ),
   },
+  {
+    key: 6,
+    path: "/welcome",
+    element: (
+      <ProtectedRoute>
+        <OnBoarding />
+      </ProtectedRoute>
+    ),
+  },
+  
 ];
