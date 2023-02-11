@@ -13,7 +13,7 @@ function InitLayout({ children, image }) {
           </section>
           {children}
           <footer>
-            <p className="mt-auto mb-0 text-xs text-center text-gray-500 md:text-left">
+            <p className="mt-auto mb-0 text-xs text-center text-gray-500">
               &copy; made in 🇲🇦 with 💓😀 {new Date().getFullYear()}.
             </p>
           </footer>
