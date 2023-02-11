@@ -33,13 +33,13 @@ describe("Registration", () => {
       expect(signOnGoogle).toHaveBeenCalled();
     });
 
-    it("redirect to the dashboard after sign on with Google correctly", () => {
+    it("redirect to the welcome page after sign on with Google correctly", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       render(<Register />);
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
-      waitFor(() => expect(navigate).toBeCalledWith("/dashboard"));
+      waitFor(() => expect(navigate).toBeCalledWith("/welcome"));
     });
 
     it("display error message after registration with Google failed", async () => {
@@ -80,7 +80,7 @@ describe("Registration", () => {
       );
     });
 
-    it("redirect to the dashboard after registration with email and password correctly", async () => {
+    it("redirect to the welcome after registration with email and password correctly", async () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       registerWithEmailAndPassword.mockResolvedValue();
@@ -92,7 +92,7 @@ describe("Registration", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
-      waitFor(() => expect(navigate).toBeCalledWith("/dashboard"));
+      waitFor(() => expect(navigate).toBeCalledWith("/welcome"));
     });
 
     it("display error message after registration with email and password failed", async () => {

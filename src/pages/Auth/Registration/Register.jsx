@@ -30,7 +30,7 @@ function Register() {
         email: values.email,
         password: values.password,
       });
-      navigate("/dashboard");
+      navigate("/welcome");
     } catch ({ message }) {
       const msg = message
         .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
