@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.svg";
-import { userSignOut } from "../../services/auth.service";
+import { getCurrentUser, userSignOut } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut, FiHome, FiSettings } from "react-icons/fi";
 import { RxAvatar } from "react-icons/rx";
@@ -9,9 +9,11 @@ import { BsLightbulb } from "react-icons/bs";
 import { RiTempHotLine } from "react-icons/ri";
 import { GiElectric } from "react-icons/gi";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { getProjects } from "../../services/project.service";
 
 function Dashboard() {
-  const projects = [];
+  const [projects, setProjects] = useState([]);
+  const user = getCurrentUser();
   const navigate = useNavigate();
   const handleSignOut = () => {
     try {
@@ -22,7 +24,13 @@ function Dashboard() {
     }
   };
 
-
+  useEffect(() => {
+    getProjects(user).then((doc) => {
+      doc.forEach((project) => {
+        setProjects((prevProjects) => [...prevProjects, project.get("name")]);
+      });
+    });
+  }, []);
 
   return (
     <main className="w-full h-screen flex flex-col box-border bg-slate-200 overflow-hidden">
