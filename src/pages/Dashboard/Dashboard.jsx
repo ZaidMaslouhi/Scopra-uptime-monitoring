@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.svg";
 import { getCurrentUser, userSignOut } from "../../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FiLogOut, FiHome, FiSettings } from "react-icons/fi";
 import { RxAvatar } from "react-icons/rx";
-import { HiOutlineDeviceMobile } from "react-icons/hi";
-import { BsLightbulb } from "react-icons/bs";
-import { RiTempHotLine } from "react-icons/ri";
-import { GiElectric } from "react-icons/gi";
-import { MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { FaWatchmanMonitoring } from "react-icons/fa";
+import { SiStatuspal } from "react-icons/si";
+import { BsConeStriped } from "react-icons/bs";
+import { AiOutlineTool } from "react-icons/ai";
+import { HiOutlineChevronUpDown } from "react-icons/hi2";
 import { getProjects } from "../../services/project.service";
 
 function Dashboard() {
+  const sideBarItems = [
+    {
+      title: "Dashboard",
+      to: "/dashboard",
+      icon: <FiHome />,
+    },
+    { title: "Monitors", to: "/monitors", icon: <FaWatchmanMonitoring /> },
+    { title: "Status Pages", to: "/status", icon: <SiStatuspal /> },
+    { title: "Incident", to: "/incident", icon: <BsConeStriped /> },
+    { title: "Maintenance", to: "/maintenance", icon: <AiOutlineTool /> },
+    { title: "Settings", to: "/settings", icon: <FiSettings /> },
+    { title: "Account", to: "/account", icon: <RxAvatar /> },
+  ];
   const [projects, setProjects] = useState([]);
   const user = getCurrentUser();
   const navigate = useNavigate();
@@ -40,6 +53,22 @@ function Dashboard() {
         </section>
         <section className="flex items-center">
           <div>
+            {projects.length > 0 && (
+              <ul>
+                <li className="flex items-center pl-12 my-3 rounded-r-full text-slate-800">
+                  <button
+                    name="projects"
+                    id="projects"
+                    className="py-2 px-6 my-3 font-semibold flex items-center rounded-full duration-100 cursor-pointer text-slate-700 border-2 border-slate-700"
+                  >
+                    <span>{projects[0]}</span>
+                    <HiOutlineChevronUpDown className="inline ml-5 text-slate-800" />
+                  </button>
+                </li>
+              </ul>
+            )}
+          </div>
+          <div>
             <RxAvatar className="text-3xl text-slate-700 mx-8 cursor-pointer" />
           </div>
           <FiLogOut
@@ -51,30 +80,24 @@ function Dashboard() {
       <section className="pt-14 flex flex-1 flex-row overflow-hidden">
         <aside className="w-1/5 h-full flex flex-col justify-between text-2xl font-lato font-normal overflow-y-auto">
           <ul>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-white bg-slate-700 shadow-lg">
-              <FiHome className="mr-6 h-full" />
-              Dashboard
-            </li>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-slate-800">
-              <HiOutlineDeviceMobile className="mr-6 h-full" />
-              Devices
-            </li>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-slate-800">
-              <BsLightbulb className="mr-6 h-full" />
-              Lights
-            </li>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-slate-800">
-              <RiTempHotLine className="mr-6 h-full" />
-              Temperature
-            </li>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-slate-800">
-              <GiElectric className="mr-6 h-full" />
-              Electricity
-            </li>
-            <li className="flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer text-slate-800">
-              <FiSettings className="mr-6 h-full" />
-              Settings
-            </li>
+            {sideBarItems.length > 0 &&
+              sideBarItems.map((item) => (
+                <li key={item.title}>
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `${
+                        isActive
+                          ? "text-white bg-slate-700 shadow-lg"
+                          : "text-slate-800"
+                      } flex items-center py-4 pl-12 my-3 rounded-r-full duration-100 cursor-pointer`
+                    }
+                  >
+                    {item.icon}
+                    <span className="ml-6">{item.title}</span>
+                  </NavLink>
+                </li>
+              ))}
           </ul>
           {projects.length > 0 && (
             <ul>
@@ -82,10 +105,10 @@ function Dashboard() {
                 <button
                   name="projects"
                   id="projects"
-                  className="py-2 px-6 my-3 flex items-center rounded-full duration-100 cursor-pointer text-slate-700 border-2 border-slate-700"
+                  className="py-2 px-6 my-3 text-xl font-semibold flex items-center rounded-full duration-100 cursor-pointer text-slate-700 border-2 border-slate-700"
                 >
-                  <span className="text-xl font-semibold">{projects[0]}</span>
-                  <MdOutlineKeyboardArrowUp className="inline ml-5" />
+                  <span>{projects[0]}</span>
+                  <HiOutlineChevronUpDown className="inline ml-5 text-slate-800" />
                 </button>
               </li>
             </ul>
