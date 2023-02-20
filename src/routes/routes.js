@@ -3,9 +3,10 @@ import GetInTouch from "../pages/GetInTouch/GetInTouch";
 import NotFound from "../pages/NotFound/NotFound";
 import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Registration/Register";
-import Dashboard from "../pages/Dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-import OnBoarding from "../pages/Dashboard/OnBoarding";
+import Monitors from "../pages/Dashboard/Monitors";
+import OnBoarding from "../pages/onBoarding/OnBoarding";
+import DashboardLayout from "../layouts/DashboardLayout";
 
 export const routes = [
   { key: 1, path: "*", element: <NotFound /> },
@@ -14,15 +15,6 @@ export const routes = [
   { key: 4, path: "/register", element: <Register /> },
   {
     key: 5,
-    path: "/dashboard",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    key: 6,
     path: "/welcome",
     element: (
       <ProtectedRoute>
@@ -30,5 +22,15 @@ export const routes = [
       </ProtectedRoute>
     ),
   },
-  
+  {
+    key: 6,
+    path: "/monitors",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <Monitors />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
+  },
 ];
