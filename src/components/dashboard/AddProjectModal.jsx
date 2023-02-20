@@ -1,7 +1,7 @@
 import React from "react";
 import FormInput from "../input/FormInput/FormInput";
 import { useForm } from "react-hook-form";
-import { ErrorNotification, successNotification } from "../toasts/toasts";
+import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
 import PropTypes from "prop-types";
 import { newProject } from "../../services/project.service";
 import { getCurrentUser } from "../../services/auth.service";
@@ -28,7 +28,7 @@ function AddProjectModal({ onClose }) {
       const currentUser = getCurrentUser();
       await newProject(currentUser, project);
       closeModal();
-      successNotification("New project created.");
+      SuccessNotification("New project created.");
     } catch (_) {
       ErrorNotification("Error: Unable to create a new project.");
     }

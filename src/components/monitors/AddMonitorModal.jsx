@@ -6,7 +6,7 @@ import { getCurrentUser } from "../../services/auth.service";
 import { addMonitor } from "../../services/monitor.service";
 import { ProjectsContext } from "../../context/ProjectsContext";
 import { MonitorsContext } from "../../context/MonitorsContext";
-import { ErrorNotification, successNotification } from "../toasts/toasts";
+import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
 
 function AddMonitorModal({ buttonContent, className }) {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +40,7 @@ function AddMonitorModal({ buttonContent, className }) {
           { ...monitor, id: newMonitorId },
         ]);
       setShowModal(false);
-      successNotification("New monitor created.");
+      SuccessNotification("New monitor created.");
     } catch (_) {
       ErrorNotification("Error: Unable to create new monitors.");
     }

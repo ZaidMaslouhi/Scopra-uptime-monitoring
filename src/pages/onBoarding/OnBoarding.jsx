@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../services/auth.service";
 import {
   ErrorNotification,
-  successNotification,
+  SuccessNotification,
 } from "../../components/toasts/toasts";
 
 function OnBoarding() {
@@ -26,7 +26,7 @@ function OnBoarding() {
       };
       const currentUser = getCurrentUser();
       await newProject(currentUser, project);
-      successNotification("New project created.");
+      SuccessNotification("New project created.");
       navigate("/monitors");
     } catch (_) {
       ErrorNotification("Error: Unable to create a new project.");
