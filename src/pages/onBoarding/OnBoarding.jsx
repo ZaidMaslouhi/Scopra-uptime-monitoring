@@ -5,6 +5,10 @@ import FormInput from "../../components/input/FormInput/FormInput";
 import logo from "../../assets/images/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../services/auth.service";
+import {
+  ErrorNotification,
+  successNotification,
+} from "../../components/toasts/toasts";
 
 function OnBoarding() {
   const {
@@ -12,7 +16,6 @@ function OnBoarding() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   const navigate = useNavigate();
 
   const handleCreateProject = async (value) => {
@@ -23,11 +26,10 @@ function OnBoarding() {
       };
       const currentUser = getCurrentUser();
       await newProject(currentUser, project);
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
+      successNotification("New project created.");
+      navigate("/monitors");
+    } catch (_) {
+      ErrorNotification("Error: Unable to create a new project.");
     }
   };
 
