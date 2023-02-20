@@ -33,13 +33,13 @@ describe("Login", () => {
       expect(signOnGoogle).toHaveBeenCalled();
     });
 
-    it("redirect to the dashboard after sign on with Google correctly", () => {
+    it("redirect to monitors page  after sign on with Google correctly", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       render(<Login />);
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
-      waitFor(() => expect(navigate).toBeCalledWith("/dashboard"));
+      waitFor(() => expect(navigate).toBeCalledWith("/monitors"));
     });
 
     it("display error message after the login with Google failed", async () => {
@@ -92,7 +92,7 @@ describe("Login", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
-      waitFor(() => expect(navigate).toBeCalledWith("/dashboard"));
+      waitFor(() => expect(navigate).toBeCalledWith("/monitors"));
     });
 
     it("display error message after login with email and password failed", async () => {

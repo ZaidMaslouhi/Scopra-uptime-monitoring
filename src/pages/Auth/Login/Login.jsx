@@ -33,7 +33,7 @@ function Login() {
         email: values.email,
         password: values.password,
       });
-      navigate("/dashboard");
+      navigate("/monitors");
     } catch ({ message }) {
       const msg = message
         .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
@@ -110,7 +110,7 @@ function Login() {
           Icon={FcGoogle}
           title="Or sign on with Google"
           handleClick={handleSignInGoogle}
-          routeTo="/dashboard"
+          routeTo="/monitors"
         />
         <div className="mt-6">
           <p className="text-xs text-center text-slate-500">
