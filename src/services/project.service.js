@@ -6,6 +6,6 @@ export const newProject = (user, project) => {
   return addDoc(ref, project);
 };
 
-export const getProjects = async(user) => {
-  return await getDocs(collection(database, `user/${user.uid}/projects`));
+export const getProjects = (user) => {
+  return getDocs(collection(database, `user/${user.uid}/projects`));
 };
