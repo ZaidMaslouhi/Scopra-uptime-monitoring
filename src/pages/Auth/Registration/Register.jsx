@@ -112,7 +112,7 @@ function Register() {
           Icon={FcGoogle}
           title="Or sign on with Google"
           handleClick={handleSignUpGoogle}
-          routeTo="/dashboard"
+          routeTo="/monitors"
         />
         <div className="mt-6">
           <p className="text-xs text-center text-slate-500">
