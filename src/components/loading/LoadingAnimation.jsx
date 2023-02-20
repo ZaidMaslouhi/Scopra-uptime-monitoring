@@ -6,6 +6,7 @@ function LoadingAnimation() {
   return (
     <div className="w-full h-screen flex justify-center items-center bg-slate-200 ">
       <Lottie
+        role="graphics-document"
         animationData={loadingAnimation}
         loop={true}
         className="w-64 h-64"
