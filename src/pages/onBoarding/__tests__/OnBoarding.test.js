@@ -53,7 +53,8 @@ describe("OnBoarding component", () => {
     });
   });
 
-  test("shows success notification on project creation", async () => {
+  test("shows success notification on project creation", () => {
+    useNavigate.mockImplementation(() => jest.fn());
     newProject.mockResolvedValueOnce();
     render(<OnBoarding />);
 
@@ -67,9 +68,9 @@ describe("OnBoarding component", () => {
     });
     fireEvent.click(createButton);
 
-    await waitFor(() => {
-      expect(SuccessNotification).toHaveBeenCalledWith("New project created.");
-    });
+    waitFor(() =>
+      expect(SuccessNotification).toBeCalledWith("New project created.")
+    );
   });
 
   test("shows error notification on project creation failure", async () => {
@@ -93,10 +94,11 @@ describe("OnBoarding component", () => {
     });
   });
 
-  test("Navigates to monitor page on form submission", async () => {
+  test("Navigates to monitor page on form submission", () => {
     const navigate = jest.fn();
     useNavigate.mockImplementation(() => navigate);
     newProject.mockResolvedValueOnce();
+
     render(<OnBoarding />);
 
     const projectNameInput = screen.getByPlaceholderText(/Project name/i);
@@ -109,8 +111,6 @@ describe("OnBoarding component", () => {
     });
     fireEvent.click(createButton);
 
-    await waitFor(() => {
-      expect(navigate).toBeCalledWith("/monitors");
-    });
+    waitFor(() => expect(navigate).toBeCalledWith("/monitors"));
   });
 });
