@@ -3,7 +3,7 @@ import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import OnBoarding from "../OnBoarding";
 import { newProject } from "../../../services/project.service";
 import {
-  successNotification,
+  SuccessNotification,
   ErrorNotification,
 } from "../../../components/toasts/toasts";
 import { useNavigate } from "react-router-dom";
@@ -68,7 +68,7 @@ describe("OnBoarding component", () => {
     fireEvent.click(createButton);
 
     await waitFor(() => {
-      expect(successNotification).toHaveBeenCalledWith("New project created.");
+      expect(SuccessNotification).toHaveBeenCalledWith("New project created.");
     });
   });
 
