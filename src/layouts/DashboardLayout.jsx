@@ -29,6 +29,7 @@ function DashboardLayout({ children }) {
       setProjects(projectsList);
     } catch (_) {
       ErrorNotification("Error: Unable to get projects.");
+      navigate('/welcome');
     } finally {
       setLoading(false);
     }
