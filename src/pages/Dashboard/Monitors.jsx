@@ -21,12 +21,14 @@ function Monitors() {
       setLoading(true);
       const doc = await getMonitors(user, project);
       setMonitors([]);
-      doc.forEach((monitor) => {
-        setMonitors((prevMonitor) => [
-          ...prevMonitor,
+      let monitorsList = [];
+      doc.docs.map((monitor) => {
+        monitorsList = [
+          ...monitorsList,
           { ...monitor.data(), id: monitor.id },
-        ]);
+        ];
       });
+      setMonitors(monitorsList);
     } catch (_) {
       ErrorNotification("Error: Unable to get monitors.");
     } finally {

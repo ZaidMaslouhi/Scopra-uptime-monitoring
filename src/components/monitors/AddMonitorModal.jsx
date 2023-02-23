@@ -34,11 +34,10 @@ function AddMonitorModal({ buttonContent, className }) {
       };
       const project = projects.find((project) => project.selected);
       const newMonitorId = await addMonitor(user, project, monitor);
-      if (newMonitorId)
-        setMonitors((prevMonitors) => [
-          ...prevMonitors,
-          { ...monitor, id: newMonitorId },
-        ]);
+      setMonitors((prevMonitors) => [
+        ...prevMonitors,
+        { ...monitor, id: newMonitorId },
+      ]);
       setShowModal(false);
       SuccessNotification("New monitor created.");
     } catch (_) {
