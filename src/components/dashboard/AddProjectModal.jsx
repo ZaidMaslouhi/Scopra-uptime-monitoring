@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import FormInput from "../input/FormInput/FormInput";
 import { useForm } from "react-hook-form";
 import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
 import PropTypes from "prop-types";
 import { newProject } from "../../services/project.service";
 import { getCurrentUser } from "../../services/auth.service";
+import { ProjectsContext } from "../../context/ProjectsContext";
 
 function AddProjectModal({ onClose }) {
+  const { setProjects } = useContext(ProjectsContext);
   const {
     register,
     handleSubmit,
@@ -26,7 +28,11 @@ function AddProjectModal({ onClose }) {
         timestamp: Date.now(),
       };
       const currentUser = getCurrentUser();
-      await newProject(currentUser, project);
+      const newProjectId = await newProject(currentUser, project);
+      setProjects((previousProjects) => [
+        ...previousProjects,
+        { ...project, id: newProjectId, selected: false },
+      ]);
       closeModal();
       SuccessNotification("New project created.");
     } catch (_) {
@@ -62,6 +68,11 @@ function AddProjectModal({ onClose }) {
                       value: 3,
                       message:
                         "The project name must contain at least 3 letters.",
+                    },
+                    maxLength: {
+                      value: 15,
+                      message:
+                        "The project name should not pass 15 letters.",
                     },
                   })}
                   errorMessage={errors.projectName?.message}
