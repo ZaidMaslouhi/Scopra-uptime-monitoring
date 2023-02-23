@@ -6,7 +6,7 @@ import Logo from "../assets/images/logo.svg";
 function InitLayout({ children, image }) {
   return (
     <main className="h-screen flex items-center justify-center bg-slate-200">
-      <article className="w-3/4 md:w-1/2 2xl:w-1/3 h-4/5 rounded-2xl overflow-hidden shadow-2xl flex bg-white bg-opacity-90 backdrop-blur-lg drop-shadow-lg">
+      <article className="w-3/4 md:w-1/2 2xl:w-5/12 h-4/5 rounded-2xl overflow-hidden shadow-2xl flex bg-white bg-opacity-90 backdrop-blur-lg drop-shadow-lg">
         <section className="w-full md:w-1/2 h-full py-4 md:py-8 px-5 md:pl-10 md:pr-8 flex flex-col justify-between 2xl:justify-evenly overflow-auto">
           <section className="mt-3 flex justify-center md:justify-start">
             <img src={Logo} alt="scopra logo" className="w-1/2 md:w-2/3 2xl:w-1/2" />
