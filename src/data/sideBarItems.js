@@ -15,30 +15,29 @@ export const sideBarItems = [
   },
   {
     key: 1,
+    title: "Github",
+    to: "/github",
+    icon: <FaGithub />,
+  },
+  {
+    key: 2,
     title: "Status Pages",
     to: "/status",
     icon: <SiStatuspal />,
     comingSoon: true,
   },
   {
-    key: 2,
+    key: 3,
     title: "Incident",
     to: "/incident",
     icon: <BsConeStriped />,
     comingSoon: true,
   },
   {
-    key: 3,
+    key: 4,
     title: "Maintenance",
     to: "/maintenance",
     icon: <AiOutlineTool />,
-    comingSoon: true,
-  },
-  {
-    key: 4,
-    title: "Github",
-    to: "/github",
-    icon: <FaGithub />,
     comingSoon: true,
   },
   {
