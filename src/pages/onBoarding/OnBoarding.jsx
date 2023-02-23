@@ -52,7 +52,15 @@ function OnBoarding() {
               type="text"
               placeholder="Project name"
               ref={register("projectName", {
-                required: "Please enter the project name!",
+                required: "You should give a name to your new project!",
+                minLength: {
+                  value: 3,
+                  message: "The project name must contain at least 3 letters.",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "The project name should not pass 15 letters.",
+                },
               })}
               errorMessage={errors.projectName?.message}
             />

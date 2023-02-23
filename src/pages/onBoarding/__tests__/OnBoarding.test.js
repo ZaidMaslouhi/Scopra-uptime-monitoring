@@ -31,7 +31,7 @@ describe("OnBoarding component", () => {
     ).toBeInTheDocument();
   });
 
-  test("creates new project on form submission", async () => {
+  test("creates new project on form submission", () => {
     newProject.mockResolvedValueOnce();
     render(<OnBoarding />);
 
@@ -45,8 +45,8 @@ describe("OnBoarding component", () => {
     });
     fireEvent.click(createButton);
 
-    await waitFor(() => {
-      expect(newProject).toHaveBeenCalledWith(expect.any(Object), {
+    waitFor(() => {
+      expect(newProject).toBeCalledWith(expect.any(Object), {
         name: "Test project Name",
         timestamp: expect.any(Number),
       });
@@ -73,7 +73,7 @@ describe("OnBoarding component", () => {
     );
   });
 
-  test("shows error notification on project creation failure", async () => {
+  test("shows error notification on project creation failure", () => {
     newProject.mockRejectedValueOnce(new Error("Unable to create project"));
     render(<OnBoarding />);
 
@@ -87,8 +87,8 @@ describe("OnBoarding component", () => {
     });
     fireEvent.click(createButton);
 
-    await waitFor(() => {
-      expect(ErrorNotification).toHaveBeenCalledWith(
+    waitFor(() => {
+      expect(ErrorNotification).toBeCalledWith(
         "Error: Unable to create a new project."
       );
     });
