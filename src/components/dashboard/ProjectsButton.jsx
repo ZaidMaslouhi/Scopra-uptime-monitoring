@@ -27,7 +27,7 @@ function ProjectsButton() {
   return (
     <>
       {projects.length > 0 && (
-        <div className="relative text-center">
+        <div className="max-w-xs w-52  relative text-center">
           {showModal ? <AddProjectModal onClose={closeModal} /> : null}
           <button
             name="projects"
@@ -35,7 +35,7 @@ function ProjectsButton() {
             className="mx-auto py-2 px-6 text-xl font-semibold flex items-center rounded-full duration-100 cursor-pointer text-slate-700 border-2 border-slate-700 peer"
           >
             <span>{currentProject.name}</span>
-            <HiOutlineChevronUpDown className="inline ml-5 text-slate-800" />
+            <HiOutlineChevronUpDown className="inline ml-auto mr-0 text-slate-800" />
           </button>
           <ul className="w-5/6 bg-slate-50 border border-slate-300 rounded-lg hidden overflow-hidden shadow-lg absolute right-2/4 translate-x-1/2 peer-hover:block hover:block">
             {projects.map((project) => {
