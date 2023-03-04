@@ -52,7 +52,6 @@ export const sideBarItems = [
     title: "Account",
     to: "/account",
     icon: <RxAvatar />,
-    comingSoon: true,
     space: true,
   },
 ];

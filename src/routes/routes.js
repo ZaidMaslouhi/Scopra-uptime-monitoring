@@ -8,6 +8,7 @@ import Monitors from "../pages/Dashboard/Monitors";
 import OnBoarding from "../pages/onBoarding/OnBoarding";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Github from "../pages/Dashboard/Github";
+import Account from "../pages/Dashboard/Account";
 
 export const routes = [
   { key: 1, path: "*", element: <NotFound /> },
@@ -41,6 +42,17 @@ export const routes = [
       <ProtectedRoute>
         <DashboardLayout>
           <Github />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    key: 8,
+    path: "/account",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <Account />
         </DashboardLayout>
       </ProtectedRoute>
     ),
