@@ -1,9 +1,9 @@
 import React from "react";
 import Plan from "./Plan";
-import { BilingPlans } from "../../../data/BillingPlans";
+import { BillingPlans } from "../../../data/BillingPlans";
 
 function Billing() {
-  const PLANS = BilingPlans;
+  const PLANS = BillingPlans;
 
   return (
     <section className="w-full h-full">
