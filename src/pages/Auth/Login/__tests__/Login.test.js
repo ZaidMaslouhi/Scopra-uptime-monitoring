@@ -9,7 +9,7 @@ import {
 
 jest.mock("react-router-dom", () => ({
   useNavigate: jest.fn(),
-  Link: "Link",
+  Link: jest.fn(),
 }));
 
 jest.mock("../../../../services/auth.service", () => ({
@@ -20,25 +20,33 @@ jest.mock("../../../../services/auth.service", () => ({
 describe("Login", () => {
   it("renders correctly", () => {
     useNavigate.mockImplementation(() => jest.fn());
+
     const { container } = render(<Login />);
-    expect(container).toBeInTheDocument();
+
+    waitFor(() => expect(container).toBeInTheDocument());
   });
 
   describe("Handles sign on with Google", () => {
     it("handles sign on with Google correctly", () => {
       useNavigate.mockImplementation(() => jest.fn());
+
       render(<Login />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
-      expect(signOnGoogle).toHaveBeenCalled();
+
+      waitFor(() => expect(signOnGoogle).toHaveBeenCalled());
     });
 
     it("redirect to monitors page  after sign on with Google correctly", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
+
       render(<Login />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
+
       waitFor(() => expect(navigate).toBeCalledWith("/monitors"));
     });
 
@@ -48,9 +56,12 @@ describe("Login", () => {
       signOnGoogle.mockRejectedValue({
         message: "message error",
       });
+
       const { container } = render(<Login />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
+
       waitFor(() =>
         expect(
           container.getElementsByClassName("text-red-700")
@@ -64,7 +75,9 @@ describe("Login", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       signInEmailPassword.mockResolvedValue();
+
       render(<Login />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Sign in");
@@ -72,6 +85,7 @@ describe("Login", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() =>
         expect(() => signInEmailPassword).toHaveBeenCalledWith({
           email: "test@test.com",
@@ -84,7 +98,9 @@ describe("Login", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       signInEmailPassword.mockResolvedValue();
+
       render(<Login />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Sign in");
@@ -92,6 +108,7 @@ describe("Login", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() => expect(navigate).toBeCalledWith("/monitors"));
     });
 
@@ -101,7 +118,9 @@ describe("Login", () => {
       signInEmailPassword.mockRejectedValue({
         message: "message error",
       });
+
       const { container } = render(<Login />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Sign in");
@@ -109,6 +128,7 @@ describe("Login", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() =>
         expect(
           container.getElementsByClassName("text-red-700")
