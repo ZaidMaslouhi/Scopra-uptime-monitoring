@@ -18,7 +18,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
       - name: Install the dependencies
-        run: npm ci --production
+        run: npm install --production
       - name: Build the application
         run: npm run build
       - name: Run the lint checks
