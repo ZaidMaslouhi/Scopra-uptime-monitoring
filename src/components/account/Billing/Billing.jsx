@@ -1,6 +1,6 @@
 import React from "react";
 import Plan from "./Plan";
-import { BilingPlans } from "../../../data/BilingPlans";
+import { BilingPlans } from "../../../data/BillingPlans";
 
 function Billing() {
   const PLANS = BilingPlans;
