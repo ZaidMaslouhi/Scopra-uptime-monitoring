@@ -2,8 +2,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import InitLayout from "../InitLayout";
 
+jest.mock("lottie-react", () => jest.fn());
+
 describe("InitLayout", () => {
-  const image = null;
+  const image = {};
   const children = <div>Test Content</div>;
 
   it("renders the children prop", () => {
