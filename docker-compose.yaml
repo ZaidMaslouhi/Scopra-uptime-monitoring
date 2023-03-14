@@ -1,0 +1,10 @@
+version: 'latest'
+
+services:
+  scopra:
+    build:
+      context: .
+    container_name: scopra_c
+    ports:
+      - 3000:3000 
+    
