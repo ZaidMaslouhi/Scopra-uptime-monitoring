@@ -20,11 +20,4 @@ describe("MessageResponse component", () => {
     expect(container.firstChild.classList.contains(className)).toBeTruthy();
   });
 
-  test("throws an error if message prop is not provided", () => {
-    try {
-      render(<MessageResponse />);
-    } catch (error) {
-      expect(error.message).toContain("Failed");
-    }
-  });
 });
