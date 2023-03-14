@@ -23,7 +23,5 @@ jobs:
         run: npm run build
       - name: Run the lint checks
         run: npm run lint
-    steps:
       - name: Run tests
         run: npm run test
-        
