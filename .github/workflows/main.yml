@@ -1,0 +1,33 @@
+name: continous-itegration
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master", "develop"]
+  pull_request:
+    branches: ["master", "develop"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Use node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install the dependencies
+        run: npm ci --production
+
+      - name: Build the application
+        run: npm run build
+
+      - name: Run the lint checks
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
