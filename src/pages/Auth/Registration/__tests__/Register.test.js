@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Register from "../Register";
@@ -9,7 +10,7 @@ import {
 
 jest.mock("react-router-dom", () => ({
   useNavigate: jest.fn(),
-  Link: "Link",
+  Link: jest.fn(),
 }));
 
 jest.mock("../../../../services/auth.service", () => ({
@@ -20,25 +21,33 @@ jest.mock("../../../../services/auth.service", () => ({
 describe("Registration", () => {
   it("renders correctly", () => {
     useNavigate.mockImplementation(() => jest.fn());
+
     const { container } = render(<Register />);
-    expect(container).toBeInTheDocument();
+
+    waitFor(() => expect(container).toBeInTheDocument());
   });
 
   describe("Handles sign on with Google", () => {
     it("handles sign on with Google correctly", () => {
       useNavigate.mockImplementation(() => jest.fn());
+
       render(<Register />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
-      expect(signOnGoogle).toHaveBeenCalled();
+
+      waitFor(() => expect(signOnGoogle).toHaveBeenCalled());
     });
 
     it("redirect to the welcome page after sign on with Google correctly", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
+
       render(<Register />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
+
       waitFor(() => expect(navigate).toBeCalledWith("/welcome"));
     });
 
@@ -48,9 +57,12 @@ describe("Registration", () => {
       signOnGoogle.mockRejectedValue({
         message: "message error",
       });
+
       const { container } = render(<Register />);
+
       const signOnGoogleButton = screen.getByText("Or sign on with Google");
       fireEvent.click(signOnGoogleButton);
+
       waitFor(() =>
         expect(
           container.getElementsByClassName("text-red-700")
@@ -64,7 +76,9 @@ describe("Registration", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       registerWithEmailAndPassword.mockResolvedValue();
+
       render(<Register />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Create an account");
@@ -72,6 +86,7 @@ describe("Registration", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() =>
         expect(() => registerWithEmailAndPassword).toHaveBeenCalledWith({
           email: "test@test.com",
@@ -84,7 +99,9 @@ describe("Registration", () => {
       const navigate = jest.fn();
       useNavigate.mockImplementation(() => navigate);
       registerWithEmailAndPassword.mockResolvedValue();
+
       render(<Register />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Create an account");
@@ -92,6 +109,7 @@ describe("Registration", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() => expect(navigate).toBeCalledWith("/welcome"));
     });
 
@@ -101,7 +119,9 @@ describe("Registration", () => {
       registerWithEmailAndPassword.mockRejectedValue({
         message: "message error",
       });
+
       const { container } = render(<Register />);
+
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       const passwordInput = screen.getByLabelText(/password/i);
       const submitButton = screen.getByText("Create an account");
@@ -109,6 +129,7 @@ describe("Registration", () => {
       fireEvent.change(emailInput, { target: { value: "test@test.com" } });
       fireEvent.change(passwordInput, { target: { value: "Password123" } });
       fireEvent.click(submitButton);
+
       waitFor(() =>
         expect(
           container.getElementsByClassName("text-red-700")
