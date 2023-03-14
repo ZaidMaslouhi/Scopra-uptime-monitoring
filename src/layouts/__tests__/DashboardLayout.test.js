@@ -24,15 +24,18 @@ describe("DashboardLayout", () => {
     );
   };
 
-  test("Renders loading animation initially", () => {
+  test("Renders loading animation initially", async () => {
     useNavigate.mockImplementation(() => jest.fn());
+
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    expect(screen.getByRole("graphics-document")).toBeInTheDocument();
-    expect(screen.queryByTestId("test-child")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole("graphics-document")).toBeInTheDocument();
+      expect(screen.queryByTestId("test-child")).not.toBeInTheDocument();
+    });
   });
 
-  test("Fetches projects and renders child components after loading", async () => {
+  test("Fetches projects and renders child components after loading", () => {
     useNavigate.mockImplementation(() => jest.fn());
     const projects = [
       { id: 1, name: "Project 1", selected: true },
@@ -42,45 +45,45 @@ describe("DashboardLayout", () => {
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(screen.queryByRole("graphics-document")).not.toBeInTheDocument();
       expect(screen.getByTestId("test-child")).toBeInTheDocument();
     });
   });
 
-  test("Shows error notification if fetchProjects throws an error", async () => {
+  test("Shows error notification if fetchProjects throws an error", () => {
     useNavigate.mockImplementation(() => jest.fn());
     getProjects.mockRejectedValueOnce(new Error("Unable to get projects."));
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(ErrorNotification).toHaveBeenCalledWith(
         "Error: Unable to get projects."
       );
     });
   });
 
-  test("Redirect to welcome page if fetchProjects throws an error", async () => {
+  test("Redirect to welcome page if fetchProjects throws an error", () => {
     const navigate = jest.fn();
     useNavigate.mockImplementation(() => navigate);
     getProjects.mockRejectedValueOnce(new Error("Unable to get projects."));
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(navigate).toBeCalledWith("/welcome");
     });
   });
 
-  test("Redirect to the welcome page when fetchProjects does not return any projects", async () => {
+  test("Redirect to the welcome page when fetchProjects does not return any projects", () => {
     const navigate = jest.fn();
     useNavigate.mockImplementation(() => navigate);
     getProjects.mockResolvedValue({ docs: [] });
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(navigate).toBeCalledWith("/welcome");
     });
   });
