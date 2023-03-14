@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InitLayout from "../../../layouts/InitLayout";
-import loginLottie from "../../../assets/lotties/login-lottie.json";
+import loginLottie from "../../../assets/lotties/Login-lottie.json";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import {
