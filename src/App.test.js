@@ -10,6 +10,9 @@ jest.mock("./services/subscription.service", () => ({
 jest.mock("./services/auth.service", () => ({
   getCurrentUser: jest.fn(),
 }));
+jest.mock("./hooks/useAuth", () => ({
+  useAuth: jest.fn(),
+}));
 
 describe("App", () => {
   afterEach(cleanup);
