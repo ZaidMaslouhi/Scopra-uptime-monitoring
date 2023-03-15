@@ -14,18 +14,6 @@ jest.mock("../../../services/auth.service", () => ({
   getCurrentUser: jest.fn().mockReturnValue({ uid: 123 }),
 }));
 
-// jest.mock("../../../context/ProjectsContext", () => ({
-//   ProjectsContext: {
-//     Consumer: ({ children }) =>
-//       children({
-//         projects: [
-//           { id: 1, name: "Project 1", selected: false },
-//           { id: 2, name: "Project 2", selected: true },
-//         ],
-//       }),
-//   },
-// }));
-
 const projects = [
   { id: 1, name: "Project 1", selected: false },
   { id: 2, name: "Project 2", selected: true },

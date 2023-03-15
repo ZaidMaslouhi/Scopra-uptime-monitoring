@@ -4,6 +4,9 @@ import GetInTouch from "../GetInTouch";
 import { subscribe } from "../../../services/subscription.service";
 
 jest.mock("../../../services/subscription.service");
+jest.mock("../../../services/auth.service", () => ({
+  getCurrentUser: jest.fn(),
+}));
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
   useState: jest.fn().mockReturnValueOnce([{}, {}]),

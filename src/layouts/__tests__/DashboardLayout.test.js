@@ -7,6 +7,9 @@ import { ErrorNotification } from "../../components/toasts/toasts";
 import { useNavigate } from "react-router-dom";
 
 jest.mock("../../services/project.service");
+jest.mock("../../services/auth.service", () => ({
+  getCurrentUser: jest.fn(),
+}));
 jest.mock("../../components/toasts/toasts", () => ({
   ErrorNotification: jest.fn(),
 }));
