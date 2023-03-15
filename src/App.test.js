@@ -1,19 +1,15 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import App from "./App";
 import { MemoryRouter } from "react-router-dom";
 import GetInTouch from "./pages/GetInTouch/GetInTouch";
 
-jest.mock("./services/subscription.service", () => ({
-  subscribe: jest.fn(),
-}));
-jest.mock("./services/auth.service", () => ({
-  getCurrentUser: jest.fn(),
+jest.mock("./firebase.config", () => ({
+  auth: jest.fn(),
+  database: jest.fn(),
 }));
 
 describe("App", () => {
-  afterEach(cleanup);
-
   test("renders the GetInTouch page by default", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
