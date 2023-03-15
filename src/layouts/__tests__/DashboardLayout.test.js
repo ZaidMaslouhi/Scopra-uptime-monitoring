@@ -29,6 +29,11 @@ describe("DashboardLayout", () => {
 
   test("Renders loading animation initially", async () => {
     useNavigate.mockImplementation(() => jest.fn());
+    const projects = [
+      { id: 1, name: "Project 1", selected: true },
+      { id: 2, name: "Project 2", selected: false },
+    ];
+    getProjects.mockResolvedValue({ docs: projects });
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
