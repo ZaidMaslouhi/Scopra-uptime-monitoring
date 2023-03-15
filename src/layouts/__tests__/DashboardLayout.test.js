@@ -6,7 +6,9 @@ import DashboardLayout from "../DashboardLayout";
 import { ErrorNotification } from "../../components/toasts/toasts";
 import { useNavigate } from "react-router-dom";
 
-jest.mock("../../services/project.service");
+jest.mock("../../services/project.service", () => ({
+  getProjects: jest.fn(),
+}));
 jest.mock("../../services/auth.service", () => ({
   getCurrentUser: jest.fn(),
 }));
@@ -27,7 +29,7 @@ describe("DashboardLayout", () => {
     );
   };
 
-  test("Renders loading animation initially", async () => {
+  test("Renders loading animation initially", () => {
     useNavigate.mockImplementation(() => jest.fn());
     const projects = [
       { id: 1, name: "Project 1", selected: true },
@@ -37,9 +39,9 @@ describe("DashboardLayout", () => {
 
     DashboardLayoutComponent(<div data-testid="test-child" />, []);
 
-    await waitFor(() => {
-      expect(screen.getByRole("graphics-document")).toBeInTheDocument();
-      expect(screen.queryByTestId("test-child")).not.toBeInTheDocument();
+    waitFor(async () => {
+      await expect(screen.getByRole("graphics-document")).toBeInTheDocument();
+      await expect(screen.queryByTestId("test-child")).not.toBeInTheDocument();
     });
   });
 

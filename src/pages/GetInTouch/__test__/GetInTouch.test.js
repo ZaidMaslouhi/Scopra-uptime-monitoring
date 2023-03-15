@@ -3,7 +3,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import GetInTouch from "../GetInTouch";
 import { subscribe } from "../../../services/subscription.service";
 
-jest.mock("../../../services/subscription.service");
+jest.mock("../../../services/subscription.service", () => ({
+  subscribe: jest.fn(),
+}));
 jest.mock("../../../services/auth.service", () => ({
   getCurrentUser: jest.fn(),
 }));
@@ -38,7 +40,7 @@ describe("GetInTouch", () => {
     const handleSubmit = jest.fn();
 
     render(<GetInTouch />);
-    
+
     const emailInput = screen.getByRole("textbox");
     const notifButton = screen.getByRole("button", { name: /notify me/i });
     const form = emailInput.closest("form");
@@ -68,7 +70,7 @@ describe("GetInTouch", () => {
     const successMessage = screen.getByText(
       "Thank you test for your interest. We will be in touch!"
     );
-    
+
     expect(successMessage).toBeInTheDocument();
     expect(successMessage.parentElement).toHaveClass(
       "border-green-200 bg-green-50 text-green-700"
