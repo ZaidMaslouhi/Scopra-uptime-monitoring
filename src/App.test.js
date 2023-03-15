@@ -4,6 +4,10 @@ import App from "./App";
 import { MemoryRouter } from "react-router-dom";
 import GetInTouch from "./pages/GetInTouch/GetInTouch";
 
+jest.mock("./services/subscription.service", () => ({
+  subscribe: jest.fn(),
+}));
+
 describe("App", () => {
   afterEach(cleanup);
 
