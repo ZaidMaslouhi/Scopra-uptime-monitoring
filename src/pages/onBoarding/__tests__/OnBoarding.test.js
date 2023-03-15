@@ -8,6 +8,10 @@ import {
 } from "../../../components/toasts/toasts";
 import { useNavigate } from "react-router-dom";
 
+jest.mock("../../../services/auth.service", () => ({
+  getCurrentUser: jest.fn(),
+}));
+
 jest.mock("../../../services/project.service", () => ({
   newProject: jest.fn(),
 }));
