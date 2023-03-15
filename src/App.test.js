@@ -7,6 +7,9 @@ import GetInTouch from "./pages/GetInTouch/GetInTouch";
 jest.mock("./services/subscription.service", () => ({
   subscribe: jest.fn(),
 }));
+jest.mock("./services/auth.service", () => ({
+  getCurrentUser: jest.fn(),
+}));
 
 describe("App", () => {
   afterEach(cleanup);
