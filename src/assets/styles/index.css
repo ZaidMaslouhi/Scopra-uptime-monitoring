@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
+@import "react-credit-cards-2/dist/es/styles-compiled.css";
 
 html {
   font-size: 0.75rem;
 }
 
+/* Style the default scrollbar */
 *::-webkit-scrollbar {
   width: 0.5rem;
   cursor: pointer;
@@ -21,4 +23,13 @@ html {
   background-color: rgba(30, 41, 59, 0.8);
   border-radius: 14px;
   border: 3px solid #1e293b;
+}
+
+/* hide input type number arrow */
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
