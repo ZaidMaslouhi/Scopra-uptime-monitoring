@@ -1,9 +1,10 @@
 import React from "react";
-import Plan from "./Plan";
-import { BillingPlans } from "../../../data/BillingPlans";
+import Plans from "./Plans";
+import { BillingPlans, Plan } from "../../../../utils/constants/BillingPlans";
+import CreditCard from "./CreditCard";
 
 function Billing() {
-  const PLANS = BillingPlans;
+  const PLANS: Plan[] = BillingPlans;
 
   return (
     <section className="w-full h-full">
@@ -13,16 +14,16 @@ function Billing() {
         </p>
       </div>
       <hr className="my-6" />
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-10">
         {/* Plans */}
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <p className="text-lg font-medium">1. Select a plan</p>
           </div>
-          <div className="w-full flex gap-6 flex-wrap box-border">
+          <div className="w-full grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 gap-6 flex-wrap box-border">
             {PLANS &&
               PLANS.map((plan) => {
-                return <Plan key={plan.name} {...plan} />;
+                return <Plans key={plan.name} {...plan} />;
               })}
           </div>
         </div>
@@ -39,12 +40,12 @@ function Billing() {
                   name="billPeriod"
                   id="monthly"
                   className="hidden peer"
-                  checked={true}
+                  defaultChecked={true}
                 />
-                <div className="w-fit px-5 py-2 flex gap-12 justify-between items-center border-2 peer-checked:border-slate-700 peer-checked:bg-slate-100 peer-checked:shadow-lg rounded-2xl">
+                <div className="w-fit px-5 py-2 flex gap-12 justify-between items-center border-2 transition-all duration-200 ease-in peer-checked:border-slate-700 peer-checked:bg-slate-100 peer-checked:shadow-lg rounded-2xl">
                   <label
                     htmlFor="monthly"
-                    className="text-lg flex justify-between gap-6"
+                    className="text-lg flex justify-between gap-6 cursor-pointer"
                   >
                     <p>Monthly</p>
                     <p className="text-sm text-slate-600 font-semibold">
@@ -62,11 +63,12 @@ function Billing() {
                   name="billPeriod"
                   id="yearly"
                   className="hidden peer"
+                  defaultChecked={false}
                 />
-                <div className="w-fit px-5 py-2 flex gap-12 justify-between items-center border-2 peer-checked:border-slate-700 peer-checked:bg-slate-100 peer-checked:shadow-lg rounded-2xl">
+                <div className="w-fit px-5 py-2 flex gap-12 justify-between items-center border-2 transition-all duration-200 ease-in peer-checked:border-slate-700 peer-checked:bg-slate-100 peer-checked:shadow-lg rounded-2xl">
                   <label
                     htmlFor="yearly"
-                    className="text-lg flex justify-between gap-6"
+                    className="text-lg flex justify-between gap-6 cursor-pointer"
                   >
                     <p>Yearly</p>
                     <p className="text-sm text-slate-600 font-semibold">
@@ -82,33 +84,26 @@ function Billing() {
           </div>
         </div>
         {/* Creadit Card */}
-        <div className="flex flex-col gap-2 w-1/2">
+        <div className="flex flex-col gap-4 w-2/3">
           <div className="flex justify-between">
             <p className="text-lg font-medium">
               3. Add your credit card details
             </p>
           </div>
-          <div className="w-2/3">
-            <div className="mb-4">
-              <input
-                type="text"
-                name="creditCrad"
-                id="creditCrad"
-                placeholder="Credit Card Number"
-                className="py-2 px-4 bg-slate-200 rounded-lg outline-none"
-              />
-            </div>
-            <div>
-              <button className="py-2 px-4 text-slate-800 border border-slate-800 rounded-xl">
-                View your invoice
-              </button>
-            </div>
+          <CreditCard />
+          <div>
+            <button className="py-2 px-4 text-slate-800 border border-slate-800 rounded-xl">
+              View your invoice
+            </button>
           </div>
         </div>
         <hr />
         {/* Upgrade Button */}
         <div className="flex items-center mb-4">
-          <button className="py-2 px-9 bg-slate-700 text-white font-semibold text-lg rounded-lg shadow-2xl">
+          <button
+            type="submit"
+            className="py-2 px-5 bg-slate-700 font-normal text-lg text-white rounded-md shadow-2xl duration-300 hover:shadow-none hover:translate-y-1 "
+          >
             Upgrade
           </button>
         </div>
