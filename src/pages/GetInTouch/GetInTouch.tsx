@@ -1,23 +1,34 @@
 import React, { useState } from "react";
-import { subscribe } from "../../services/subscription.service";
-import MessageReponse from "../../components/getInTouch/MessageReponse/MessageReponse";
+import { Subscriber, subscribe } from "../../services/subscription.service";
+import MessageReponse from "../../components/ui/getInTouch/MessageReponse/MessageReponse";
 import stayTunedLottie from "../../assets/lotties/stay-tuned-lottie.json";
-import InitLayout from "../../layouts/InitLayout";
-import FormInput from "../../components/input/FormInput/FormInput";
-import { useForm } from "react-hook-form";
+import SingleForm from "../../components/layout/SingleForm";
+import FormInput from "../../components/ui/FormInput/FormInput";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface Response {
+  message: string;
+  style: string;
+}
+
+type FieldValues = {
+  email: string;
+};
 
 function GetInTouch() {
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState<Response | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FieldValues>();
 
-  const handleSubscriber = async (value) => {
-    const subscriber = {
-      email: value.email,
-      username: value.email.split("@")[0],
+  const handleSubscriber: SubmitHandler<FieldValues> = async (
+    data: FieldValues
+  ) => {
+    const subscriber: Subscriber = {
+      email: data.email,
+      username: data.email.split("@")[0],
       timestamp: Date.now(),
     };
     try {
@@ -35,7 +46,7 @@ function GetInTouch() {
   };
 
   return (
-    <InitLayout image={stayTunedLottie}>
+    <SingleForm image={stayTunedLottie}>
       <section>
         <header className="my-4 2xl:mt-0 2xl:mb-6">
           <h1 className="mb-2 text-xl 2xl:text-4xl font-semibold text-slate-900 text-center md:text-left">
@@ -45,20 +56,23 @@ function GetInTouch() {
             Get an electronic mail when it&apos;s ready
           </h2>
         </header>
-        {Object.keys(response) != 0 ? (
+        {response ? (
           <MessageReponse
             message={response.message}
             className={response.style}
           />
         ) : (
-          <form onSubmit={handleSubmit(handleSubscriber)} className="text-center sm:text-left">
+          <form
+            onSubmit={handleSubmit(handleSubscriber)}
+            className="text-center sm:text-left"
+          >
             <FormInput
               label="Email"
               id="Email"
               type="email"
               placeholder="Enter Email"
               className="text-xs border-2 border-slate-200 p-2 mr-2 outline-none rounded-md w-3/4"
-              ref={register("email", {
+              inputref={register("email", {
                 required: "Email Address is required",
                 pattern: {
                   value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -67,13 +81,13 @@ function GetInTouch() {
               })}
               errorMessage={errors.email?.message}
             />
-            <button className="py-2 px-4 bg-slate-600 text-white text-sm rounded-2xl shadow-lg shadow-slate-400 transition-all ease-linear duration-200 hover:shadow-2xl hover:shadow-slate-200 hover:-translate-y-1 ">
+            <button className="mt-4 py-2 px-4 bg-slate-600 text-white text-sm rounded-2xl shadow-lg shadow-slate-400 transition-all ease-linear duration-200 hover:shadow-2xl hover:shadow-slate-200 hover:-translate-y-1 ">
               Notify me
             </button>
           </form>
         )}
       </section>
-    </InitLayout>
+    </SingleForm>
   );
 }
 
