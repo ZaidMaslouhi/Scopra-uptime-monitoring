@@ -1,11 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { HiOutlineLockClosed } from "react-icons/hi2";
 import { SiAirplayaudio } from "react-icons/si";
 
-function MonitorCard({ name, endpoint }) {
+function MonitorCard({ name, endpoint }: { name: string; endpoint: string }) {
   return (
-    <div className="h-48 w-1/3 xl:w-1/4 2xl:w-1/5 flex flex-col grow-1 justify-between gap-2 bg-white px-8 py-6 rounded-2xl shadow-2xl">
+    <div className="h-48 flex flex-col justify-between gap-2 bg-white px-8 py-6 rounded-2xl shadow-2xl">
       <div className="flex justify-between items-center">
         <h3 className="font-lato font-bold text-2xl capitalize text-slate-800">
           {name}
@@ -17,14 +16,14 @@ function MonitorCard({ name, endpoint }) {
         </div>
       </div>
       <div className="flex gap-1 items-center">
-        <HiOutlineLockClosed className="text-green-600 inline text-lg" />
+        <HiOutlineLockClosed className="text-green-600 inline text-xl" />
         <a
           href={endpoint}
           target="_blank"
-          className="text-gray-500 font-semibold text-lg"
+          className="text-gray-500 font-semibold text-base overflow-hidden"
           rel="noreferrer"
         >
-          <p>{endpoint}</p>
+          <p className="truncate">{endpoint}</p>
         </a>
       </div>
       <div className="flex">
@@ -40,9 +39,5 @@ function MonitorCard({ name, endpoint }) {
     </div>
   );
 }
-MonitorCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  endpoint: PropTypes.string.isRequired,
-};
 
 export default MonitorCard;
