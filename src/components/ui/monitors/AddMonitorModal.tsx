@@ -1,43 +1,64 @@
-import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
-import FormInput from "../input/FormInput/FormInput";
-import { useForm } from "react-hook-form";
-import { getCurrentUser } from "../../services/auth.service";
-import { addMonitor } from "../../services/monitor.service";
-import { ProjectsContext } from "../../context/ProjectsContext";
-import { MonitorsContext } from "../../context/MonitorsContext";
+import React, { useState } from "react";
+import FormInput from "../FormInput/FormInput";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
+import { Monitor } from "../../../interfaces/monitor.interface";
+import { addNewMonitor } from "../../../store/slices/monitors.slice";
+import { UserInfo } from "../../../interfaces/auth.interface";
+import { Project } from "../../../interfaces/project.interface";
+import { selectCurrentProject } from "../../../store/slices/projects.slice";
+import { selectUserState } from "../../../store/slices/auth.slice";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../utils/hooks/react-redux-hooks";
 
-function AddMonitorModal({ buttonContent, className }) {
+type FieldValues = {
+  name: string;
+  endpoint: string;
+};
+
+function AddMonitorModal({
+  buttonContent,
+  className,
+}: {
+  buttonContent: JSX.Element | string;
+  className: string;
+}) {
   const [showModal, setShowModal] = useState(false);
-  const { projects } = useContext(ProjectsContext);
-  const { setMonitors } = useContext(MonitorsContext);
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUserState).user as UserInfo;
+  const currentProject = useAppSelector(selectCurrentProject) as Project;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<FieldValues>();
 
   const closeModal = () => {
     reset();
     setShowModal(false);
   };
 
-  const handleModalForm = async (values) => {
+  const handleModalForm: SubmitHandler<FieldValues> = async (
+    data: FieldValues
+  ) => {
     try {
-      const user = getCurrentUser();
-      const monitor = {
-        name: values.monitor,
-        endpoint: values.endpoint,
+      const monitor: Monitor = {
+        name: data.name,
+        endpoint: data.endpoint,
         timestamp: Date.now(),
       };
-      const project = projects.find((project) => project.selected);
-      const newMonitorId = await addMonitor(user, project, monitor);
-      setMonitors((prevMonitors) => [
-        ...prevMonitors,
-        { ...monitor, id: newMonitorId },
-      ]);
+      await dispatch(
+        addNewMonitor({
+          userId: user.uid,
+          projectId: currentProject.id,
+          monitor,
+        })
+      );
       setShowModal(false);
       SuccessNotification("New monitor created.");
     } catch (_) {
@@ -76,17 +97,17 @@ function AddMonitorModal({ buttonContent, className }) {
                       label="Monitor Name"
                       id="Monitor"
                       placeholder="Name your monitor"
-                      ref={register("monitor", {
+                      inputref={register("name", {
                         required: "You should give a name to your monitor!",
                       })}
-                      errorMessage={errors.monitor?.message}
+                      errorMessage={errors.name?.message}
                     />
                     <FormInput
                       label="End-Point"
                       id="endpoint"
                       placeholder="Enter the endpoint"
                       type="url"
-                      ref={register("endpoint", {
+                      inputref={register("endpoint", {
                         required: "You should enter the endpoint!",
                         pattern: {
                           value:
@@ -123,10 +144,5 @@ function AddMonitorModal({ buttonContent, className }) {
     </>
   );
 }
-
-AddMonitorModal.propTypes = {
-  buttonContent: (PropTypes.node || PropTypes.string).isRequired,
-  className: PropTypes.string,
-};
 
 export default AddMonitorModal;
