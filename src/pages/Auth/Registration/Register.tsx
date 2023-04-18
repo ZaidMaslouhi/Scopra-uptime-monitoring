@@ -1,53 +1,64 @@
 import React, { useState } from "react";
-import InitLayout from "../../../layouts/InitLayout";
+import SingleForm from "../../../components/layout/SingleForm";
 import registerationLottie from "../../../assets/lotties/registeration-lottie.json";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import OauthButton from "../../../components/auth/OauthButton/OauthButton";
-import FormInput from "../../../components/input/FormInput/FormInput";
-import { useForm } from "react-hook-form";
-import {
-  signOnGoogle,
-  registerWithEmailAndPassword,
-} from "../../../services/auth.service";
+import OauthButton from "../../../components/ui/OauthButton/OauthButton";
+import FormInput from "../../../components/ui/FormInput/FormInput";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { UserInfo } from "../../../interfaces/auth.interface";
+import { authRegister } from "../../../store/slices/auth.slice";
+import { useAppDispatch } from "../../../utils/hooks/react-redux-hooks";
+
+type FieldValues = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 function Register() {
-  const [authError, setAuthError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm();
+  } = useForm<FieldValues>();
   const navigate = useNavigate();
+
   watch(() => setAuthError(""));
 
-  const handleSignUpGoogle = () => signOnGoogle();
-
-  const handleRegistration = async (values) => {
+  const handleRegistration: SubmitHandler<FieldValues> = async (
+    data: FieldValues
+  ) => {
     try {
       setLoading(true);
-      await registerWithEmailAndPassword({
-        email: values.email,
-        password: values.password,
-      });
-      setInterval(() => {
-        navigate("/welcome");
-      }, 2000);
-    } catch ({ message }) {
-      const msg = message
-        .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
-        .replaceAll("-", " ")
-        .toUpperCase();
-      setAuthError(`Unable to store your profile information: ${msg}`);
+      const user: UserInfo = {
+        uid: "",
+        email: data.email,
+        password: data.password,
+      };
+      await dispatch(authRegister(user));
+      navigate("/monitors");
+    } catch (error) {
+      if (error instanceof Error) {
+        const message: string = error.message;
+        const msg = message
+          .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
+          .replaceAll("-", " ")
+          .toUpperCase();
+        setAuthError(`Unable to store your profile information: ${msg}`);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <InitLayout image={registerationLottie}>
+    <SingleForm image={registerationLottie}>
       <header className="my-4 2xl:my-0">
         <h2 className="text-xl 2xl:text-4xl font-semibold text-slate-900 text-center md:text-left">
           Sign up and get started today! 😉
@@ -60,22 +71,21 @@ function Register() {
             id="Email"
             type="email"
             placeholder="Enter Email"
-            errorMessage={errors.email?.message}
-            ref={register("email", {
+            inputref={register("email", {
               required: "Email Address is required",
               pattern: {
                 value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 message: "Invalid email address",
               },
             })}
+            errorMessage={errors.email?.message?.toString()}
           />
           <FormInput
             label="Password"
             id="Password"
             type="password"
             placeholder="Enter Password"
-            errorMessage={errors.password?.message}
-            ref={register("password", {
+            inputref={register("password", {
               required: "Password is required",
               pattern: {
                 value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
@@ -83,6 +93,7 @@ function Register() {
                   "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
               },
             })}
+            errorMessage={errors.password?.message?.toString()}
           />
           <div className="flex my-4 mx-2">
             <input
@@ -111,7 +122,6 @@ function Register() {
         <OauthButton
           Icon={FcGoogle}
           title="Or sign on with Google"
-          handleClick={handleSignUpGoogle}
           routeTo="/monitors"
         />
         <div className="mt-6">
@@ -123,7 +133,7 @@ function Register() {
           </p>
         </div>
       </section>
-    </InitLayout>
+    </SingleForm>
   );
 }
 
