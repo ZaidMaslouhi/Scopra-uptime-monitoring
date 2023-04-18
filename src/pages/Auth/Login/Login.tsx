@@ -1,52 +1,61 @@
 import React, { useState } from "react";
-import InitLayout from "../../../layouts/InitLayout";
-import loginLottie from "../../../assets/lotties/Login-lottie.json";
+import SingleForm from "../../../components/layout/SingleForm";
+import loginLottie from "../../../assets/lotties/login-lottie.json";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  signInEmailPassword,
-  signOnGoogle,
-} from "../../../services/auth.service";
-import OauthButton from "../../../components/auth/OauthButton/OauthButton";
-import { useForm } from "react-hook-form";
-import FormInput from "../../../components/input/FormInput/FormInput";
+import OauthButton from "../../../components/ui/OauthButton/OauthButton";
+import { SubmitHandler, useForm } from "react-hook-form";
+import FormInput from "../../../components/ui/FormInput/FormInput";
+import { UserInfo } from "../../../interfaces/auth.interface";
+import { authLogin } from "../../../store/slices/auth.slice";
+import { useAppDispatch } from "../../../utils/hooks/react-redux-hooks";
+
+type FieldValues = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 function Login() {
-  const [authError, setAuthError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm();
+  } = useForm<FieldValues>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
-  watch(() => setAuthError(""));
+  watch(() => setAuthError(null));
 
-  const handleSignInGoogle = () => signOnGoogle();
-
-  const handleLogin = async (values) => {
+  const handleLogin: SubmitHandler<FieldValues> = async (data: FieldValues) => {
     try {
       setLoading(true);
-      await signInEmailPassword({
-        email: values.email,
-        password: values.password,
-      });
+      const user: UserInfo = {
+        uid: "",
+        email: data.email,
+        password: data.password,
+      };
+      await dispatch(authLogin(user));
       navigate("/monitors");
-    } catch ({ message }) {
-      const msg = message
-        .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
-        .replaceAll("-", " ")
-        .toUpperCase();
-      setAuthError(`Unable to get profile information: ${msg}`);
+    } catch (error) {
+      if (error instanceof Error) {
+        const message: string = error.message;
+        message
+          .slice(message.indexOf("/") + 1, message.lastIndexOf(")"))
+          .replaceAll("-", " ")
+          .toUpperCase();
+        setAuthError(`Unable to get profile information: ${message}`);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <InitLayout image={loginLottie}>
+    <SingleForm image={loginLottie}>
       <header className="my-4 2xl:my-0">
         <h2 className="text-xl 2xl:text-4xl font-semibold text-slate-900 text-center md:text-left">
           Nice to see you again 👋
@@ -58,21 +67,21 @@ function Login() {
             label="Email"
             id="Email"
             placeholder="Enter Email"
-            ref={register("email", {
+            inputref={register("email", {
               required: "Email Address is required",
               pattern: {
                 value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 message: "Invalid email address",
               },
             })}
-            errorMessage={errors.email?.message}
+            errorMessage={errors.email?.message?.toString()}
           />
           <FormInput
             label="Password"
             id="Password"
             type="password"
             placeholder="Enter Password"
-            ref={register("password", {
+            inputref={register("password", {
               required: "Password is required",
               pattern: {
                 value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
@@ -80,7 +89,7 @@ function Login() {
                   "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
               },
             })}
-            errorMessage={errors.password?.message}
+            errorMessage={errors.password?.message?.toString()}
           />
           <div className="flex my-4 mx-2">
             <input
@@ -109,7 +118,6 @@ function Login() {
         <OauthButton
           Icon={FcGoogle}
           title="Or sign on with Google"
-          handleClick={handleSignInGoogle}
           routeTo="/monitors"
         />
         <div className="mt-6">
@@ -121,7 +129,7 @@ function Login() {
           </p>
         </div>
       </section>
-    </InitLayout>
+    </SingleForm>
   );
 }
 
