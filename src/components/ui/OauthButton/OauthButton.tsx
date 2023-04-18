@@ -1,17 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IconType } from "react-icons";
+import { authOauth } from "../../../store/slices/auth.slice";
+import { useAppDispatch } from "../../../utils/hooks/react-redux-hooks";
 
-function OauthButton({ title, Icon, handleClick, routeTo }) {
+interface IOauthButton {
+  title: string;
+  Icon: IconType;
+  routeTo: string;
+}
+
+function OauthButton({ title, Icon, routeTo }: IOauthButton) {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleButtonClick = async () => {
     try {
       setLoading(true);
-      await handleClick();
+      await dispatch(authOauth());
       navigate(routeTo);
     } catch (error) {
       setErrorMessage("Unable to get profile information from the provider");
@@ -35,12 +44,5 @@ function OauthButton({ title, Icon, handleClick, routeTo }) {
     </>
   );
 }
-
-OauthButton.propTypes = {
-  Icon: PropTypes.elementType.isRequired,
-  title: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  routeTo: PropTypes.string.isRequired,
-};
 
 export default OauthButton;
