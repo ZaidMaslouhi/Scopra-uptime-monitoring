@@ -1,42 +1,63 @@
-import React from "react";
-import { newProject } from "../../services/project.service";
-import { useForm } from "react-hook-form";
-import FormInput from "../../components/input/FormInput/FormInput";
-import logo from "../../assets/images/logo.svg";
+import React, { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import FormInput from "../../components/ui/FormInput/FormInput";
+import Logo from "../../assets/icons/logo.svg";
 import { useNavigate } from "react-router-dom";
-import { getCurrentUser } from "../../services/auth.service";
+import { Project } from "../../interfaces/project.interface";
 import {
   ErrorNotification,
   SuccessNotification,
-} from "../../components/toasts/toasts";
+} from "../../components/ui/toasts/toasts";
+import { addProject } from "../../store/slices/projects.slice";
+import { UserInfo } from "../../interfaces/auth.interface";
+import { selectUserState } from "../../store/slices/auth.slice";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/hooks/react-redux-hooks";
+
+type FieldValues = {
+  projectName: string;
+};
 
 function OnBoarding() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUserState).user as UserInfo;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
+  } = useForm<FieldValues>();
 
-  const handleCreateProject = async (value) => {
+  const handleCreateProject: SubmitHandler<FieldValues> = async (
+    data: FieldValues
+  ) => {
     try {
-      const project = {
-        name: value.projectName,
+      setLoading(true);
+      const project: Project = {
+        id: "",
+        name: data.projectName,
         timestamp: Date.now(),
+        selected: true,
+        github: null,
       };
-      const currentUser = getCurrentUser();
-      await newProject(currentUser, project);
-      SuccessNotification("New project created.");
+      await dispatch(addProject({ user, project }));
       navigate("/monitors");
+      SuccessNotification("New project created.");
     } catch (_) {
       ErrorNotification("Error: Unable to create a new project.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <main className="w-full h-screen p-8 bg-slate-100 flex flex-col justify-between">
       <section className="w-full flex justify-center">
-        <img src={logo} alt="logo" className="w-60" />
+        <img src={Logo.toString()} alt="logo" className="w-60" />
       </section>
       <section className="h-full w-full flex flex-1 flex-col justify-center items-center text-center px-20 py-14">
         <h1 className="text-5xl font-light text-slate-900">
@@ -50,8 +71,9 @@ function OnBoarding() {
             <FormInput
               className="px-5 py-2 text-center border-2 border-slate-400 rounded-md outline-none"
               type="text"
+              id="projectName"
               placeholder="Project name"
-              ref={register("projectName", {
+              inputref={register("projectName", {
                 required: "You should give a name to your new project!",
                 minLength: {
                   value: 3,
@@ -62,13 +84,13 @@ function OnBoarding() {
                   message: "The project name should not pass 15 letters.",
                 },
               })}
-              errorMessage={errors.projectName?.message}
+              errorMessage={errors.projectName?.message?.toString()}
             />
             <button
               type="submit"
-              className="py-2 px-5 bg-slate-700 font-normal text-lg text-white rounded-md shadow-2xl duration-300 hover:shadow-none hover:translate-y-1 "
+              className="mt-2 py-2 px-5 bg-slate-700 font-normal text-lg text-white rounded-md shadow-2xl duration-300 hover:shadow-none hover:translate-y-1 "
             >
-              Create a new project
+              {loading ? "Loading..." : "Create a new project"}
             </button>
           </form>
         </div>
