@@ -45,7 +45,7 @@ export const sideBarItems = [
     title: "Settings",
     to: "/settings",
     icon: <FiSettings />,
-    comingSoon: true,
+    // comingSoon: true,
   },
   {
     key: 6,
