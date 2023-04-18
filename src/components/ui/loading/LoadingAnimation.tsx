@@ -1,10 +1,10 @@
 import React from "react";
 import Lottie from "lottie-react";
-import loadingAnimation from "../../assets/lotties/loading.json";
+import loadingAnimation from "../../../assets/lotties/loading.json";
 
 function LoadingAnimation() {
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-slate-200 ">
+    <div className="w-full h-full absolute flex justify-center items-center bg-slate-200 ">
       <Lottie
         role="graphics-document"
         animationData={loadingAnimation}
