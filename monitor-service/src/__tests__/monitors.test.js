@@ -73,3 +73,51 @@ describe('GET /:projectId', () => {
     })
   })
 })
+
+describe('POST /', () => {
+  describe('Monitor not defined in the request body', () => {
+    test('should response with error message and 400 status', async () => {
+      const response = await request(app)
+        .post('/')
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toBe('"Monitor information is required!"')
+    })
+  })
+
+  describe('Create new monitor', () => {
+    test('should create new monitor', async () => {
+      const mockCreateNewMonitor = jest
+        .spyOn(MonitorRepository.prototype, 'CreateNewMonitor')
+        .mockResolvedValue(jest.fn())
+
+      await request(app)
+        .post('/')
+        .send({ monitor: { ...monitorPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(mockCreateNewMonitor).toHaveBeenCalledTimes(1)
+      expect(mockCreateNewMonitor).toHaveBeenCalledWith({
+        name: monitorPayload.name,
+        uri: monitorPayload.uri,
+        projectId: monitorPayload.projectId,
+        taskId: expect.any(String)
+      })
+    })
+
+    test('should return the new monitor object with 201 status', async () => {
+      jest
+        .spyOn(MonitorRepository.prototype, 'CreateNewMonitor')
+        .mockResolvedValue({ ...monitorPayload })
+
+      const response = await request(app)
+        .post('/')
+        .send({ monitor: { ...monitorPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(201)
+      expect(response.body).toEqual({ monitor: { ...monitorPayload } })
+    })
+  })
+})
