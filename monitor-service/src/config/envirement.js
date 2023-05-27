@@ -20,5 +20,8 @@ module.exports = {
   DB_URI: process.env.DB_URI,
   // WebSocket
   WS_HOST: process.env.WS_HOST || 'localhost',
-  WS_PORT: process.env.WS_PORT || 4000
+  WS_PORT: process.env.WS_PORT || 4000,
+  // Redis
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT
 }
