@@ -1,5 +1,9 @@
 const Env = require('./envirement')
+const { RedisPublisher, RedisSubscriber } = require('./redis')
 
 module.exports = {
-  ...Env
+  ...Env,
+  // Redis
+  RedisPublisher,
+  RedisSubscriber
 }
