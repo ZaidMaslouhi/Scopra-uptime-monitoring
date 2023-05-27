@@ -129,4 +129,28 @@ module.exports = (app) => {
       }
     }
   )
+
+  // GitHub auth
+  app.get(
+    '/auth/github',
+    passport.authenticate('github', { scope: ['user:email'] })
+  )
+  app.get(
+    '/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/signin' }),
+    async (req, res, next) => {
+      try {
+        // Redirect or return JWT token
+        const userId = req.user.toString()
+
+        const { refreshToken, accessToken } = service.authGoogle(userId)
+
+        SetCookie(res, 'jwt', refreshToken)
+
+        res.status(201).json({ accessToken })
+      } catch (error) {
+        next(error)
+      }
+    }
+  )
 }
