@@ -1,3 +1,4 @@
+const cron = require('node-cron')
 const jwt = require('jsonwebtoken')
 const { NotFoundError } = require('./error-handler/app-errors')
 
@@ -26,5 +27,46 @@ module.exports.GenerateToken = (payload, token, expiresIn) => {
     return jwt.sign(payload, token, { expiresIn })
   } catch (error) {
     return false
+  }
+}
+
+// Cron Job
+module.exports.createCronJob = ({
+  taskId,
+  scheduledTask,
+  cronExpression = '*/5 * * * * *'
+}) => {
+  try {
+    cron.schedule(cronExpression, () => scheduledTask(), {
+      name: taskId
+    })
+
+    return taskId
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+module.exports.stopCronJob = (taskId) => {
+  try {
+    const task = cron.getTasks().get(taskId)
+
+    task.stop()
+
+    return taskId
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+module.exports.ResumeCronJob = (taskId) => {
+  try {
+    const task = cron.getTasks().get(taskId)
+
+    task.start()
+
+    return taskId
+  } catch (error) {
+    console.error(error)
   }
 }
