@@ -1,7 +1,9 @@
 const { v4: uuidv4 } = require('uuid')
 const cron = require('node-cron')
 const jwt = require('jsonwebtoken')
-const { NotFoundError } = require('./error-handler/app-errors')
+const { NotFoundError, APIError } = require('./error-handler/app-errors')
+const { RedisPublisher, WSS, MONITOR_RESPONSE } = require('../config')
+const { createClient } = require('redis')
 
 // Data validation
 module.exports.FormateData = (data) => {
@@ -70,5 +72,63 @@ module.exports.ResumeCronJob = (taskId) => {
     return taskId
   } catch (error) {
     console.error(error)
+  }
+}
+
+// Redis - Message Broker
+module.exports.PublishMessage = async (channel, message) => {
+  const listeners = await RedisPublisher.publish(
+    channel,
+    JSON.stringify(message)
+  )
+  return listeners
+}
+
+async function ClientSubscriber (subscriber, channel, callBack) {
+  await subscriber.subscribe(channel, callBack)
+}
+
+// Redis Client
+async function CreateRedisSubscriber (subscriber) {
+  if (subscriber) {
+    // Unsubscribe if already subscribed to the channel
+    subscriber.unsubscribe()
+    subscriber.quit()
+  }
+  subscriber = createClient()
+  subscriber.connect((error) => {
+    if (error) console.error(error)
+    console.log('Redis Subscriber Connected to Redis')
+  })
+  return subscriber
+}
+
+module.exports.startWebSocketServer = () => {
+  try {
+    WSS.on('connection', async (ws) => {
+      let wsSubscriber = null
+
+      ws.on('message', async (message) => {
+        const data = JSON.parse(message)
+
+        wsSubscriber = CreateRedisSubscriber(wsSubscriber)
+
+        ClientSubscriber(wsSubscriber, MONITOR_RESPONSE, (message) => {
+          const response = JSON.parse(message)
+          if (data.includes(response.task)) {
+            this.sendSocketMessage(ws, response)
+          }
+        })
+      })
+
+      ws.on('close', async () => {
+        if (wsSubscriber) {
+          wsSubscriber.unsubscribe()
+          wsSubscriber.quit()
+        }
+      })
+    })
+  } catch (error) {
+    throw new APIError('Unable to connect to the websocket server!')
   }
 }
