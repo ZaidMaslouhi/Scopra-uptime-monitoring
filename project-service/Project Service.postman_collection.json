@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "1f032c44-7ded-4e21-b534-473d078e0240",
+		"name": "Project Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Projects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROJECT_HOST}}",
+					"host": [
+						"{{PROJECT_HOST}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"project\": {\r\n        \"name\": \"Twitter\",\r\n        \"isDefault\": true\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROJECT_HOST}}",
+					"host": [
+						"{{PROJECT_HOST}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Project",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"project\": {\r\n        \"id\": \"647250ba1394dcb66b50774c\",\r\n        \"name\": \"SpaceX\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROJECT_HOST}}",
+					"host": [
+						"{{PROJECT_HOST}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROJECT_HOST}}/647250ba1394dcb66b50774c",
+					"host": [
+						"{{PROJECT_HOST}}"
+					],
+					"path": [
+						"647250ba1394dcb66b50774c"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2NTRhNmQ5MWVlZDI2YzU0YTE4NTgwIiwiaWF0IjoxNjg1MjEzMzQxLCJleHAiOjE2ODUyMTUxNDF9.atW00V_0N07tkqQL1UhWJAzEvMj5N0pDUL9W0cJSGFQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "PROJECT_HOST",
+			"value": "http://localhost:8000/project"
+		}
+	]
+}
