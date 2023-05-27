@@ -53,3 +53,54 @@ describe('GET /', () => {
     })
   })
 })
+
+describe('POST /', () => {
+  describe('Project does not defined on the request body', () => {
+    test('should return error message with 400 status', async () => {
+      const response = await request(app)
+        .post('/')
+        .send({})
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toEqual('"Project is required!"')
+    })
+  })
+
+  describe("Can't create new project", () => {
+    test('should return error message with 500 status', async () => {
+      const mockCreateProject = jest
+        .spyOn(ProjectRepository.prototype, 'CreateProject')
+        .mockResolvedValue(null)
+
+      const response = await request(app)
+        .post('/')
+        .send({ project: { ...projectPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(500)
+      expect(response.text).toEqual('"Cannot create new project!"')
+      expect(mockCreateProject).toHaveBeenCalledTimes(1)
+      expect(mockCreateProject).toHaveBeenCalledWith({
+        ...projectPayload,
+        userId: expect.any(String)
+      })
+    })
+  })
+
+  describe('Create new project successfully', () => {
+    test('should return created poject object with 201 status', async () => {
+      jest
+        .spyOn(ProjectRepository.prototype, 'CreateProject')
+        .mockResolvedValue({ ...projectPayload })
+
+      const response = await request(app)
+        .post('/')
+        .send({ project: { ...projectPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(201)
+      expect(response.body).toEqual({ project: { ...projectPayload } })
+    })
+  })
+})
