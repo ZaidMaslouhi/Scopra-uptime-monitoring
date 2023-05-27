@@ -12,5 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   // App variables
   APP_SECRET: process.env.APP_SECRET,
-  PORT: process.env.PORT || 3000
+  PORT: process.env.PORT || 8001,
+  // DataBase
+  DB_URI: process.env.DB_URI
 }
