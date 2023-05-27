@@ -104,3 +104,51 @@ describe('POST /', () => {
     })
   })
 })
+
+describe('PUT /', () => {
+  describe('Project does not defined on the request body', () => {
+    test('should return error message with 400 status', async () => {
+      const response = await request(app)
+        .put('/')
+        .send({})
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toEqual('"Project is required!"')
+    })
+  })
+
+  describe("Can't update project", () => {
+    test('should return error message with 500 status', async () => {
+      const mockUpdateProject = jest
+        .spyOn(ProjectRepository.prototype, 'UpdateProject')
+        .mockResolvedValue(null)
+
+      const response = await request(app)
+        .put('/')
+        .send({ project: { ...projectPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(500)
+      expect(response.text).toEqual('"Cannot update project!"')
+      expect(mockUpdateProject).toHaveBeenCalledTimes(1)
+      expect(mockUpdateProject).toHaveBeenCalledWith({ ...projectPayload })
+    })
+  })
+
+  describe('update project successfully', () => {
+    test('should return updated poject object with 201 status', async () => {
+      jest
+        .spyOn(ProjectRepository.prototype, 'UpdateProject')
+        .mockResolvedValue({ ...projectPayload })
+
+      const response = await request(app)
+        .put('/')
+        .send({ project: { ...projectPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({ project: { ...projectPayload } })
+    })
+  })
+})
