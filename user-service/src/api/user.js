@@ -119,7 +119,7 @@ module.exports = (app) => {
       try {
         const userId = req.user.toString()
 
-        const { refreshToken, accessToken } = service.authGoogle(userId)
+        const { refreshToken, accessToken } = service.passportAuth(userId)
 
         SetCookie(res, 'jwt', refreshToken)
 
@@ -143,7 +143,7 @@ module.exports = (app) => {
         // Redirect or return JWT token
         const userId = req.user.toString()
 
-        const { refreshToken, accessToken } = service.authGoogle(userId)
+        const { refreshToken, accessToken } = service.passportAuth(userId)
 
         SetCookie(res, 'jwt', refreshToken)
 

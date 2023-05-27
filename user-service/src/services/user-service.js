@@ -120,7 +120,7 @@ class UserService {
     return user
   }
 
-  async authGoogle (userId) {
+  async passportAuth (userId) {
     const accessToken = GenerateToken(
       { user: userId },
       ACCESS_TOKEN_KEY,
