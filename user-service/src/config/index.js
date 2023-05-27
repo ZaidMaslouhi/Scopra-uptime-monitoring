@@ -1,5 +1,8 @@
 const Env = require('./envirement')
+const PassportConfig = require('./passport')
 
 module.exports = {
-  ...Env
+  ...Env,
+  // Passport Configurations
+  PassportConfig
 }

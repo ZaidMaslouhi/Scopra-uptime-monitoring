@@ -4,6 +4,7 @@ const { userApi } = require('./api')
 const session = require('express-session')
 const { APP_SECRET } = require('./config')
 const cookieParser = require('cookie-parser')
+const { PassportConfig } = require('./config')
 const ErrorHandler = require('./utils/error-handler')
 
 const expressApp = () => {
@@ -22,6 +23,9 @@ const expressApp = () => {
       cookie: { secure: false }
     })
   )
+
+  // Passport config
+  PassportConfig()
 
   // Api
   userApi(app)
