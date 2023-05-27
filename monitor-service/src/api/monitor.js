@@ -44,6 +44,15 @@ module.exports = (app) => {
   })
 
   // Delete Monitor
-  app.delete('/:monitorId', async (req, res, next) => {
+  app.delete('/:monitorId', UserAuth, async (req, res, next) => {
+    try {
+      const monitor = { id: req.params.monitorId }
+
+      const deletedMonitor = await service.deleteMonitor(monitor)
+
+      return res.status(200).json({ monitor: deletedMonitor })
+    } catch (error) {
+      next(error)
+    }
   })
 }
