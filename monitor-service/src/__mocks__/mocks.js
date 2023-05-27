@@ -19,3 +19,10 @@ jest.mock('ws', () => {
 jest.mock('node-cron', () => ({
   schedule: jest.fn()
 }))
+
+jest.mock('../utils', () => {
+  return {
+    ...jest.requireActual('../utils'),
+    publisherRPC: () => Promise.resolve(1)
+  }
+})
