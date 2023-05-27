@@ -5,11 +5,18 @@
   "main": "src/index.js",
   "scripts": {
     "start": "set NODE_ENV=production&& nodemon main",
-    "dev": "set NODE_ENV=development&& nodemon main"
+    "dev": "set NODE_ENV=development&& nodemon main",
+    "lint": "eslint src/**/*.js",
+    "lint-fix": "eslint src/**/*.js --fix"
   },
   "author": "Zaid Elmaslouhi",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.41.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^2.0.22"
   },
   "dependencies": {
