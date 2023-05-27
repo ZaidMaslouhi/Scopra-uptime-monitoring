@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid')
 const cron = require('node-cron')
 const jwt = require('jsonwebtoken')
 const { NotFoundError, APIError } = require('./error-handler/app-errors')
-const { RedisPublisher, WSS, MONITOR_RESPONSE } = require('../config')
+const { RedisPublisher, WSS, MONITOR_RESPONSE, RedisSubscriber } = require('../config')
 const { createClient } = require('redis')
 
 // Data validation
@@ -131,4 +131,23 @@ module.exports.startWebSocketServer = () => {
   } catch (error) {
     throw new APIError('Unable to connect to the websocket server!')
   }
+}
+
+// RPC - Message Broker
+module.exports.RPC_subscriber = async (channel, service) => {
+  await RedisSubscriber.subscribe(channel, async (message) => {
+    const state = JSON.parse(message)
+    await service.serveRPCRequest(state)
+  })
+}
+
+module.exports.RPC_publisher = async (channel, message) => {
+  return await RedisPublisher.publish(channel, message)
+}
+
+module.exports.RPC_message = ({ event, payload }) => {
+  return JSON.stringify({
+    event,
+    payload
+  })
 }
