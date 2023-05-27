@@ -31,7 +31,16 @@ module.exports = (app) => {
   })
 
   // Update Monitor
-  app.put('/', async (req, res, next) => {
+  app.put('/', UserAuth, async (req, res, next) => {
+    try {
+      const { monitor } = req.body
+
+      const updatedMonitor = await service.updateMonitor(monitor)
+
+      return res.status(200).json({ monitor: updatedMonitor })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Delete Monitor
