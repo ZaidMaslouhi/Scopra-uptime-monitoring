@@ -1,5 +1,6 @@
 const { ProjectService } = require('../services')
 const UserAuth = require('./middlewares/auth')
+const { BadRequestError } = require('../utils/error-handler/app-errors')
 
 module.exports = (app) => {
   const service = new ProjectService()
@@ -20,7 +21,7 @@ module.exports = (app) => {
   // Add new project
   app.post('/', UserAuth, async (req, res, next) => {
     try {
-      if (!req.body.project) throw new Error('Project is required!')
+      if (!req.body.project) throw new BadRequestError('Project is required!')
 
       const project = { ...req.body.project, userId: req.user.user }
 
@@ -35,7 +36,7 @@ module.exports = (app) => {
   // Update project
   app.put('/', UserAuth, async (req, res, next) => {
     try {
-      if (!req.body.project) throw new Error('Project is required!')
+      if (!req.body.project) throw new BadRequestError('Project is required!')
 
       const { project } = req.body
 

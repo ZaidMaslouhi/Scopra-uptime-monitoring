@@ -1,3 +1,4 @@
+const { APIError } = require('../../utils/error-handler/app-errors')
 const { ProjectModel } = require('../models')
 
 class ProjectRepository {
@@ -7,7 +8,7 @@ class ProjectRepository {
 
       return projects
     } catch (_) {
-      throw new Error('Unable to Find Project')
+      throw new APIError('Unable to Find Project')
     }
   }
 
@@ -20,7 +21,7 @@ class ProjectRepository {
 
       return newProject?.toJSON()
     } catch (_) {
-      throw new Error('Unable to Create New Project')
+      throw new APIError('Unable to Create New Project')
     }
   }
 
@@ -39,7 +40,7 @@ class ProjectRepository {
 
       return updatedPorject?.toJSON()
     } catch (_) {
-      throw new Error('Unable to update monitor list')
+      throw new APIError('Unable to update monitor list')
     }
   }
 
@@ -53,7 +54,7 @@ class ProjectRepository {
 
       return updatedProject?.toJSON()
     } catch (_) {
-      throw new Error('Unable to update project')
+      throw new APIError('Unable to update project')
     }
   }
 
@@ -65,7 +66,7 @@ class ProjectRepository {
 
       return deletedProject?.toJSON()
     } catch (_) {
-      throw new Error('Unable to delete project')
+      throw new APIError('Unable to delete project')
     }
   }
 
@@ -84,7 +85,7 @@ class ProjectRepository {
 
       return updatedPorject?.toJSON()
     } catch (_) {
-      throw new Error('Unable to delete monitor')
+      throw new APIError('Unable to delete monitor')
     }
   }
 }
