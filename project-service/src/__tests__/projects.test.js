@@ -152,3 +152,37 @@ describe('PUT /', () => {
     })
   })
 })
+
+describe('DELETE /', () => {
+  describe("Can't delete project", () => {
+    test('should return error message with 500 status', async () => {
+      const mockDeleteProject = jest
+        .spyOn(ProjectRepository.prototype, 'DeleteProject')
+        .mockResolvedValue(null)
+
+      const response = await request(app)
+        .delete(`/${projectPayload.id}`)
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(500)
+      expect(response.text).toEqual('"Cannot delete project!"')
+      expect(mockDeleteProject).toHaveBeenCalledTimes(1)
+      expect(mockDeleteProject).toHaveBeenCalledWith({ id: projectPayload.id })
+    })
+  })
+
+  describe('delete project successfully', () => {
+    test('should return updated poject object with 201 status', async () => {
+      jest
+        .spyOn(ProjectRepository.prototype, 'DeleteProject')
+        .mockResolvedValue({ ...projectPayload })
+
+      const response = await request(app)
+        .delete(`/${projectPayload.id}`)
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({ project: { ...projectPayload } })
+    })
+  })
+})
