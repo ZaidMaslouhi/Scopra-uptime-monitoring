@@ -1,5 +1,8 @@
 const UserAuth = require('./middlewares/auth')
 const { MonitorService } = require('../services')
+const { PROJECT_SERVICE, ProjectServiceEvents } = require('../config')
+const { APIError } = require('../utils/error-handler/app-errors')
+const { messageRPC, publisherRPC } = require('../utils')
 
 module.exports = (app) => {
   const service = new MonitorService()
@@ -23,6 +26,17 @@ module.exports = (app) => {
       const { monitor } = req.body
 
       const newMonitor = await service.createMonitor(monitor)
+
+      const message = messageRPC({
+        event: ProjectServiceEvents.ADD_MONITOR_TO_PROJECT,
+        payload: {
+          monitorId: newMonitor._id,
+          projectId: newMonitor.projectId
+        }
+      })
+
+      const response = await publisherRPC(PROJECT_SERVICE, message)
+      if (!response) throw new APIError('Project service is unavailable!')
 
       return res.status(201).json({ monitor: newMonitor })
     } catch (error) {
