@@ -23,3 +23,10 @@ jobs:
           npm ci
           npm lint
           npm test
+
+      - name: Test User Service
+        working-directory: ./user-service
+        run: |
+          npm ci
+          npm lint
+          npm test  
