@@ -64,6 +64,19 @@ module.exports = (app) => {
 
       const deletedMonitor = await service.deleteMonitor(monitor)
 
+      if (deletedMonitor._id && deletedMonitor.projectId) {
+        const message = messageRPC({
+          event: ProjectServiceEvents.DELETE_MONITOR_FROM_PROJECT,
+          payload: {
+            monitorId: deletedMonitor._id,
+            projectId: deletedMonitor.projectId
+          }
+        })
+
+        const response = await publisherRPC(PROJECT_SERVICE, message)
+        if (!response) throw new APIError('Project service is unavailable!')
+      }
+
       return res.status(200).json({ monitor: deletedMonitor })
     } catch (error) {
       next(error)
