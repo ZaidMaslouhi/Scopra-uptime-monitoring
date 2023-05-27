@@ -1,3 +1,4 @@
+const { ProjectServiceEvents } = require('../config')
 const { ProjectRepository } = require('../database/repository')
 const { FormateData } = require('../utils')
 const {
@@ -40,6 +41,27 @@ class ProjectService {
     if (!deletedProject) throw new APIError('Cannot delete project!')
 
     return FormateData(deletedProject)
+  }
+
+  async serveRPCRequest (message) {
+    const { event, payload } = message
+
+    switch (event) {
+      case ProjectServiceEvents.ADD_MONITOR_TO_PROJECT:
+        return this.repository.AddMonitorToProject({
+          monitorId: payload.monitorId,
+          projectId: payload.projectId
+        })
+
+      case ProjectServiceEvents.DELETE_MONITOR_FROM_PROJECT:
+        return this.repository.DeleteMonitorFromProject({
+          monitorId: payload.monitorId,
+          projectId: payload.projectId
+        })
+
+      default:
+        break
+    }
   }
 }
 
