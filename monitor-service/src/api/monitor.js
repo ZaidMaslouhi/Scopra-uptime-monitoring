@@ -1,8 +1,20 @@
+const UserAuth = require('./middlewares/auth')
+const { MonitorService } = require('../services')
 
 module.exports = (app) => {
-  // Get monitors by project
-  app.get('/:projectId', async (req, res, next) => {
+  const service = new MonitorService()
 
+  // Get monitors by project
+  app.get('/:projectId', UserAuth, async (req, res, next) => {
+    try {
+      const { projectId } = req.params
+
+      const monitors = await service.getMonitorsByProjectId(projectId)
+
+      return res.status(200).json(monitors)
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Add new monitor
