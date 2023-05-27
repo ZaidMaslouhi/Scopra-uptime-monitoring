@@ -14,5 +14,10 @@ module.exports = {
   APP_SECRET: process.env.APP_SECRET,
   PORT: process.env.PORT || 8002,
   // DataBase
-  DB_URI: process.env.DB_URI
+  DB_URI: process.env.DB_URI,
+  // JWT
+  REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
+  ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
+  // Sentry Data Source Name
+  SENTRY_DSN: process.env.SENTRY_DSN
 }
