@@ -1,12 +1,12 @@
-const path = require("path");
-const dotenv = require("dotenv");
+const path = require('path')
+const dotenv = require('dotenv')
 
-if (process.env.NODE_ENV === "production") {
-  const configFile = ".env";
-  dotenv.config({ path: path.join(__dirname, configFile) });
+if (process.env.NODE_ENV === 'production') {
+  const configFile = '.env'
+  dotenv.config({ path: path.join(__dirname, configFile) })
 } else {
-  const configFile = "./.env.dev";
-  dotenv.config({ path: configFile });
+  const configFile = './.env.dev'
+  dotenv.config({ path: configFile })
 }
 
 module.exports = {
@@ -17,5 +17,5 @@ module.exports = {
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
   // DataBase
-  DB_URI: process.env.DB_URI,
-};
+  DB_URI: process.env.DB_URI
+}
