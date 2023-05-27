@@ -14,4 +14,6 @@ module.exports = {
   // App variables
   APP_SECRET: process.env.APP_SECRET,
   PORT: process.env.PORT || 8002,
+  // DataBase
+  DB_URI: process.env.DB_URI,
 };
