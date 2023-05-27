@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid')
 const cron = require('node-cron')
 const jwt = require('jsonwebtoken')
 const { NotFoundError } = require('./error-handler/app-errors')
@@ -32,12 +33,13 @@ module.exports.GenerateToken = (payload, token, expiresIn) => {
 
 // Cron Job
 module.exports.createCronJob = ({
-  taskId,
   scheduledTask,
   cronExpression = '*/5 * * * * *'
 }) => {
   try {
-    cron.schedule(cronExpression, () => scheduledTask(), {
+    const taskId = uuidv4()
+
+    cron.schedule(cronExpression, () => scheduledTask(taskId), {
       name: taskId
     })
 
