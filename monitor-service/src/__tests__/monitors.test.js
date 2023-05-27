@@ -164,3 +164,38 @@ describe('PUT /', () => {
     })
   })
 })
+
+describe('DELETE /monitorId', () => {
+  describe('Monitor ID not defined in the request body', () => {
+    test('should response with 404 status', async () => {
+      const response = await request(app)
+        .delete('/')
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('Delete Monitor successfully', () => {
+    test('should response deleted monitor object with 200 status', async () => {
+      const mockDeleteMonitorById = jest
+        .spyOn(MonitorRepository.prototype, 'DeleteMonitorById')
+        .mockResolvedValue({ _id: monitorPayload.id })
+
+      const response = await request(app)
+        .delete(`/${monitorPayload.id}`)
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({
+        monitor: {
+          _id: monitorPayload.id
+        }
+      })
+      expect(mockDeleteMonitorById).toHaveBeenCalledTimes(1)
+      expect(mockDeleteMonitorById).toHaveBeenCalledWith({
+        id: monitorPayload.id
+      })
+    })
+  })
+})
