@@ -6,6 +6,14 @@ module.exports = {
   },
   extends: 'standard',
   overrides: [
+    {
+      files: [
+        '**/*.test.js'
+      ],
+      env: {
+        jest: true
+      }
+    }
   ],
   parserOptions: {
     ecmaVersion: 'latest'
