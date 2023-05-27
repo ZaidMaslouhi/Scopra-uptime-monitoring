@@ -1,5 +1,6 @@
-const { REFRESH_TOKEN_KEY, ACCESS_TOKEN_KEY } = require('../config')
+const UserAuth = require('./middlewares/auth')
 const { UserService } = require('../services')
+const { REFRESH_TOKEN_KEY, ACCESS_TOKEN_KEY } = require('../config')
 const { SetCookie, ValidateToken, GenerateToken } = require('../utils')
 
 module.exports = (app) => {
@@ -61,7 +62,16 @@ module.exports = (app) => {
   })
 
   // Update user info
-  app.put('/account', async (req, res, next) => {
+  app.put('/account', UserAuth, async (req, res, next) => {
+    try {
+      const { user } = req.body
+
+      const updatedUser = await service.updateUser(user)
+
+      return res.status(201).json({ user: updatedUser })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Logout user
