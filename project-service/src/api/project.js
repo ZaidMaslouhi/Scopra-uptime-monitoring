@@ -19,6 +19,17 @@ module.exports = (app) => {
 
   // Add new project
   app.post('/', UserAuth, async (req, res, next) => {
+    try {
+      if (!req.body.project) throw new Error('Project is required!')
+
+      const project = { ...req.body.project, userId: req.user.user }
+
+      const newProject = await service.createProject(project)
+
+      return res.status(201).json({ project: newProject })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Update project
