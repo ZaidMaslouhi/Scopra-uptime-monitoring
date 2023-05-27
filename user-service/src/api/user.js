@@ -14,6 +14,7 @@ const {
   NotFoundError,
   ForbiddenError
 } = require('../utils/error-handler/app-errors')
+const passport = require('passport')
 
 module.exports = (app) => {
   const service = new UserService()
@@ -105,4 +106,27 @@ module.exports = (app) => {
       next(error)
     }
   })
+
+  // Google auth
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  )
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/signin' }),
+    async (req, res, next) => {
+      try {
+        const userId = req.user.toString()
+
+        const { refreshToken, accessToken } = service.authGoogle(userId)
+
+        SetCookie(res, 'jwt', refreshToken)
+
+        res.status(201).json({ accessToken })
+      } catch (error) {
+        next(error)
+      }
+    }
+  )
 }

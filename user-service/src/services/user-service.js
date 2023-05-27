@@ -119,6 +119,24 @@ class UserService {
 
     return user
   }
+
+  async authGoogle (userId) {
+    const accessToken = GenerateToken(
+      { user: userId },
+      ACCESS_TOKEN_KEY,
+      '30min'
+    )
+    const refreshToken = GenerateToken(
+      { user: userId },
+      REFRESH_TOKEN_KEY,
+      '1d'
+    )
+
+    const updatedUser = await this.repository.UpdateUserToken({ id: userId, token: refreshToken })
+    if (!updatedUser) throw new NotFoundError('User does not exists!')
+
+    return { refreshToken, accessToken }
+  }
 }
 
 module.exports = UserService
