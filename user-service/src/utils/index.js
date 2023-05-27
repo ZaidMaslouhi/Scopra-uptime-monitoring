@@ -1,6 +1,24 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+// Cookies
+module.exports.SetCookie = async (res, name, value) => {
+  res.cookie(name, value, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production', // TODO: Set true in production
+    sameSite: 'None'
+  })
+}
+
+module.exports.ClearCookie = async (res, name) => {
+  res.clearCookie(name, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None'
+  })
+}
+
 // Data validation
 module.exports.FormateData = (data) => {
   if (data) {
