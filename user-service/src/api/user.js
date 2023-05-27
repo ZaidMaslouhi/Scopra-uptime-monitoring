@@ -21,6 +21,17 @@ module.exports = (app) => {
 
   // Sign-up new user
   app.post('/signup', async (req, res, next) => {
+    try {
+      const { user } = req.body
+
+      const { newUser, refreshToken } = await service.createUser(user)
+
+      SetCookie(res, 'jwt', refreshToken)
+
+      return res.status(201).json({ user: newUser })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Update user info
