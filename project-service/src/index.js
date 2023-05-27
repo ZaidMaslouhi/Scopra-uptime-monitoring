@@ -1,21 +1,21 @@
-const { PORT } = require("./config");
-const expressApp = require("./express-app");
-const { databaseConnection } = require("./database");
+const { PORT } = require('./config')
+const expressApp = require('./express-app')
+const { databaseConnection } = require('./database')
 
 const startServer = async () => {
   // Database Connection
-  await databaseConnection();
+  await databaseConnection()
 
   // Express App
-  const app = expressApp();
+  const app = expressApp()
 
   app
     .listen(PORT, () => {
-      console.log(`Example app listening at http://localhost:${PORT}`);
+      console.log(`Example app listening at http://localhost:${PORT}`)
     })
-    .on("error", (err) => {
-      console.log(err);
-    });
-};
+    .on('error', (err) => {
+      console.log(err)
+    })
+}
 
-startServer();
+startServer()

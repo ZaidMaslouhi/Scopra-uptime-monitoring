@@ -1,5 +1,5 @@
-const Env = require("./envirement");
+const Env = require('./envirement')
 
 module.exports = {
-  ...Env,
-};
+  ...Env
+}
