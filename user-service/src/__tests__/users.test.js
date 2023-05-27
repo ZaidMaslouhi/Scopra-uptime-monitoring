@@ -424,3 +424,92 @@ describe('PUT /account', () => {
     })
   })
 })
+
+describe('GET /logout', () => {
+  describe('No jwt cookie found', () => {
+    test('should return 200 status', async () => {
+      const response = await request(app)
+        .get('/logout')
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+    })
+  })
+
+  describe('No user found with the given token ', () => {
+    test('should return message with 200 status', async () => {
+      const mockFindUserByToken = jest
+        .spyOn(UserRepository.prototype, 'FindUserByToken')
+        .mockResolvedValue(null)
+
+      const response = await request(app)
+        .get('/logout')
+        .set('Cookie', [`jwt=${jwt}`])
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['set-cookie'][0].split(';')[0]).toEqual('jwt=')
+      expect(response.body).toEqual({ message: 'User logged off!' })
+      expect(mockFindUserByToken).toHaveBeenCalled()
+    })
+
+    test('should delete jwt token from cookies', async () => {
+      jest
+        .spyOn(UserRepository.prototype, 'FindUserByToken')
+        .mockResolvedValue(null)
+
+      const response = await request(app)
+        .get('/logout')
+        .set('Cookie', [`jwt=${jwt}`])
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['set-cookie'][0].split(';')[0]).toEqual('jwt=')
+    })
+  })
+
+  describe('User found with the given token ', () => {
+    test('should return message with 200 status', async () => {
+      const mockFindUserByToken = jest
+        .spyOn(UserRepository.prototype, 'FindUserByToken')
+        .mockResolvedValue({ _id: userPayload.user.id })
+
+      const mockUpdateUserToken = jest
+        .spyOn(UserRepository.prototype, 'UpdateUserToken')
+        .mockResolvedValue({ _id: userPayload.user.id })
+
+      const response = await request(app)
+        .get('/logout')
+        .set('Cookie', [`jwt=${jwt}`])
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({ message: 'User logged off!' })
+      expect(mockFindUserByToken).toHaveBeenCalledTimes(1)
+      expect(mockFindUserByToken).toHaveBeenCalledWith(expect.any(String))
+      expect(mockUpdateUserToken).toHaveBeenCalledTimes(1)
+      expect(mockUpdateUserToken).toHaveBeenCalledWith({
+        id: userPayload.user.id,
+        token: expect.any(String)
+      })
+    })
+
+    test('should delete jwt token from cookies', async () => {
+      jest
+        .spyOn(UserRepository.prototype, 'FindUserByToken')
+        .mockResolvedValue({ _id: userPayload.user.id })
+
+      jest
+        .spyOn(UserRepository.prototype, 'UpdateUserToken')
+        .mockResolvedValue({ _id: userPayload.user.id })
+
+      const response = await request(app)
+        .get('/logout')
+        .set('Cookie', [`jwt=${jwt}`])
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['set-cookie'][0].split(';')[0]).toEqual('jwt=')
+    })
+  })
+})
