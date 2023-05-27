@@ -1,6 +1,7 @@
 const axios = require('./axios')
 const Env = require('./envirement')
 const WebSocketServer = require('./webSocket')
+const ProjectServiceEvents = require('./rpcEvents')
 const { RedisPublisher, RedisSubscriber } = require('./redis')
 
 module.exports = {
@@ -12,6 +13,12 @@ module.exports = {
   RedisSubscriber,
   // Websockets
   WSS: WebSocketServer,
+  // RPC services
+  USER_SERVICE: 'USER_SERVICE',
+  PROJECT_SERVICE: 'PROJECT_SERVICE',
+  MONITOR_SERVICE: 'MONITOR_SERVICE',
+  // RPC Events
+  ProjectServiceEvents,
   // Monitor Response Queue
   MONITOR_RESPONSE: 'MONITOR_RESPONSE'
 }
