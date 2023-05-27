@@ -1,5 +1,6 @@
+const { REFRESH_TOKEN_KEY, ACCESS_TOKEN_KEY } = require('../config')
 const { UserService } = require('../services')
-const { SetCookie } = require('../utils')
+const { SetCookie, ValidateToken, GenerateToken } = require('../utils')
 
 module.exports = (app) => {
   const service = new UserService()
@@ -34,15 +35,36 @@ module.exports = (app) => {
     }
   })
 
+  // Refresh Token
+  app.get('/refresh', async (req, res, next) => {
+    try {
+      const cookies = req.cookies
+      if (!cookies?.jwt) throw new Error('Refresh Token not found!')
+
+      const refreshToken = cookies.jwt
+
+      const isAuthorized = ValidateToken(req, refreshToken, REFRESH_TOKEN_KEY)
+      if (!isAuthorized) throw new Error('Unvalid Refresh Token!')
+
+      const user = await service.findUserByToken(refreshToken)
+
+      const accessToken = GenerateToken(
+        { user: user._id },
+        ACCESS_TOKEN_KEY,
+        '30min'
+      )
+
+      res.status(201).json({ ...user, token: accessToken })
+    } catch (error) {
+      next(error)
+    }
+  })
+
   // Update user info
   app.put('/account', async (req, res, next) => {
   })
 
   // Logout user
   app.get('/logout', async (req, res, next) => {
-  })
-
-  // Refresh Token
-  app.get('/refresh', async (req, res, next) => {
   })
 }
