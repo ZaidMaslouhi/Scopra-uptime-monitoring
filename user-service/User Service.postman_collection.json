@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "be5b6a0e-7477-42a0-ae33-dff821c2ef46",
+		"name": "User Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign-up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"email\": \"zaid.ems@gmail.com\",\r\n        \"password\": \"Zaid2023\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{USER_HOST}}/signup",
+					"host": [
+						"{{USER_HOST}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"email\": \"amine.zeifri@gmail.com\",\r\n        \"password\": \"Amine2023\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{USER_HOST}}/signin",
+					"host": [
+						"{{USER_HOST}}"
+					],
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"id\": \"64722c06b861e59b56cd0c67\",\r\n        \"username\": \"Zaid Ems\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{USER_HOST}}/account",
+					"host": [
+						"{{USER_HOST}}"
+					],
+					"path": [
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{USER_HOST}}/logout",
+					"host": [
+						"{{USER_HOST}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2NTRhNmQ5MWVlZDI2YzU0YTE4NTgwIiwiaWF0IjoxNjg0MzYyMDI0LCJleHAiOjE2ODQzNjM4MjR9.Eo6mFVY-KPqDWEU7pjkBPJOxflAUskl4L1uwnwrItNs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{USER_HOST}}/refresh",
+					"host": [
+						"{{USER_HOST}}"
+					],
+					"path": [
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ3MjJjMDZiODYxZTU5YjU2Y2QwYzY3IiwiaWF0IjoxNjg1MjAzOTc1LCJleHAiOjE2ODUyMDU3NzV9.cNigoXpOmNiPbMYFimLtRKMdzQLWOVkB2J74fVVojQw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "USER_HOST",
+			"value": "http://localhost:8000/user"
+		}
+	]
+}
