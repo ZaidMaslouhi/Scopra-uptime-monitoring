@@ -3,6 +3,7 @@ const express = require('express')
 const session = require('express-session')
 const { APP_SECRET } = require('./config')
 const { monitorApi } = require('./api')
+const ErrorHandler = require('./utils/error-handler')
 
 const expressApp = () => {
   const app = express()
@@ -22,6 +23,9 @@ const expressApp = () => {
 
   // Api
   monitorApi(app)
+
+  // Error Handler
+  app.use(ErrorHandler)
 
   return app
 }
