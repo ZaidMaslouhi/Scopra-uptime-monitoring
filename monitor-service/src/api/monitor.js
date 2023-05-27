@@ -18,7 +18,16 @@ module.exports = (app) => {
   })
 
   // Add new monitor
-  app.post('/', async (req, res, next) => {
+  app.post('/', UserAuth, async (req, res, next) => {
+    try {
+      const { monitor } = req.body
+
+      const newMonitor = await service.createMonitor(monitor)
+
+      return res.status(201).json({ monitor: newMonitor })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Update Monitor
