@@ -23,5 +23,7 @@ module.exports = {
   WS_PORT: process.env.WS_PORT || 4000,
   // Redis
   REDIS_HOST: process.env.REDIS_HOST,
-  REDIS_PORT: process.env.REDIS_PORT
+  REDIS_PORT: process.env.REDIS_PORT,
+  // Sentry Data Source Name
+  SENTRY_DSN: process.env.SENTRY_DSN
 }
