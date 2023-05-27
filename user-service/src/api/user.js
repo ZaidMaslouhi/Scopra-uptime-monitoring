@@ -1,7 +1,19 @@
-const UserAuth = require('./middlewares/auth')
 const { UserService } = require('../services')
-const { REFRESH_TOKEN_KEY, ACCESS_TOKEN_KEY } = require('../config')
-const { SetCookie, ValidateToken, GenerateToken, ClearCookie } = require('../utils')
+const UserAuth = require('./middlewares/auth')
+const {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY
+} = require('../config')
+const {
+  GenerateToken,
+  ValidateToken,
+  SetCookie,
+  ClearCookie
+} = require('../utils')
+const {
+  NotFoundError,
+  ForbiddenError
+} = require('../utils/error-handler/app-errors')
 
 module.exports = (app) => {
   const service = new UserService()
@@ -40,12 +52,12 @@ module.exports = (app) => {
   app.get('/refresh', async (req, res, next) => {
     try {
       const cookies = req.cookies
-      if (!cookies?.jwt) throw new Error('Refresh Token not found!')
+      if (!cookies?.jwt) throw new NotFoundError('Refresh Token not found!')
 
       const refreshToken = cookies.jwt
 
       const isAuthorized = ValidateToken(req, refreshToken, REFRESH_TOKEN_KEY)
-      if (!isAuthorized) throw new Error('Unvalid Refresh Token!')
+      if (!isAuthorized) throw new ForbiddenError('Unvalid Refresh Token!')
 
       const user = await service.findUserByToken(refreshToken)
 

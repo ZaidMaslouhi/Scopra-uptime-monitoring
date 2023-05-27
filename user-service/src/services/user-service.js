@@ -9,6 +9,13 @@ const {
   GenerateToken,
   FormateData
 } = require('../utils')
+const {
+  NotFoundError,
+  UnauthorizedError,
+  BadRequestError,
+  ConflictError,
+  APIError
+} = require('../utils/error-handler/app-errors')
 
 class UserService {
   constructor () {
@@ -16,10 +23,13 @@ class UserService {
   }
 
   async loginUser ({ user }) {
+    if (!user || !user.email || !user.password) { throw new BadRequestError('User email and password are required!') }
+
     const loggedUser = await this.repository.FindUserByEmail(user.email)
+    if (!loggedUser) throw new NotFoundError('Cannot found the user!')
 
     const match = await ValidatePassword(user.password, loggedUser.password)
-    if (!match) throw new Error('Invalid password!')
+    if (!match) throw new UnauthorizedError('Invalid password!')
 
     const accessToken = GenerateToken(
       { user: loggedUser._id },
@@ -36,6 +46,7 @@ class UserService {
       id: loggedUser._id,
       token: refreshToken
     })
+    if (!updatedUser) throw new NotFoundError('Cannot update user token!')
 
     return FormateData({
       user: { ...updatedUser, token: accessToken },
@@ -44,8 +55,10 @@ class UserService {
   }
 
   async createUser (user) {
+    if (!user || !user.email || !user.password) { throw new BadRequestError('User Email and Password are required!') }
+
     const userExisted = await this.repository.FindUserByEmail(user.email)
-    if (userExisted) throw new Error('User already exists!')
+    if (userExisted) throw new ConflictError('User already exists!')
 
     const username =
       user.username ?? user.email.slice(0, user.email.indexOf('@'))
@@ -73,6 +86,7 @@ class UserService {
       id: newUser._id,
       token: refreshToken
     })
+    if (!updatedUser) throw new APIError('Cannot update user token!')
 
     return FormateData({
       newUser: { ...updatedUser, token: accessToken },
@@ -81,18 +95,26 @@ class UserService {
   }
 
   async updateUser (user) {
+    if (!user || !user.id) throw new BadRequestError('User ID is required!')
+
     const updatedUser = await this.repository.UpdateUser(user)
+    if (!updatedUser) throw new NotFoundError('User does not exists!')
 
     return FormateData(updatedUser)
   }
 
   async updateUserToken ({ id, token }) {
+    if (!id) throw new BadRequestError('User ID is required!')
+
     const updatedUser = this.repository.UpdateUserToken({ id, token })
+    if (!updatedUser) throw new NotFoundError('User does not exists!')
 
     return FormateData(updatedUser)
   }
 
   async findUserByToken (token) {
+    if (!token) throw new BadRequestError('Token is required!')
+
     const user = await this.repository.FindUserByToken(token)
 
     return user

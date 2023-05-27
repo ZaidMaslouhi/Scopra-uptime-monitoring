@@ -1,4 +1,5 @@
 const { UserModel } = require('../models')
+const { APIError } = require('../../utils/error-handler/app-errors')
 
 class UserRepository {
   async FindUserByEmail (email) {
@@ -6,8 +7,8 @@ class UserRepository {
       const user = await UserModel.findOne({ email }).exec()
 
       return user
-    } catch (error) {
-      console.log(error)
+    } catch (_) {
+      throw new APIError('Unable to find user')
     }
   }
 
@@ -16,8 +17,8 @@ class UserRepository {
       const user = await UserModel.findOne({ token }).exec()
 
       return !user ? {} : user.toJSON()
-    } catch (error) {
-      console.log(error)
+    } catch (_) {
+      throw new APIError('Unable to find user by token')
     }
   }
 
@@ -31,8 +32,8 @@ class UserRepository {
       })
 
       return newUser.toJSON()
-    } catch (error) {
-      console.log(error)
+    } catch (_) {
+      throw new APIError('Unable to create new user')
     }
   }
 
@@ -53,8 +54,8 @@ class UserRepository {
       )
 
       return updatedUser.toJSON()
-    } catch (error) {
-      console.log(error)
+    } catch (_) {
+      throw new APIError("Unable to update user's informations")
     }
   }
 
@@ -66,8 +67,8 @@ class UserRepository {
       )
 
       return updatedUser.toJSON()
-    } catch (error) {
-      console.log(error)
+    } catch (_) {
+      throw new APIError("Unable to update user's token")
     }
   }
 }

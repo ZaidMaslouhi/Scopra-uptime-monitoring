@@ -1,10 +1,14 @@
 const { ACCESS_TOKEN_KEY } = require('../../config')
 const { ValidateToken } = require('../../utils')
+const {
+  ForbiddenError,
+  NotFoundError
+} = require('../../utils/error-handler/app-errors')
 
 module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization
-    if (!token) throw new Error('Authorization Token unavailable!')
+    if (!token) throw new NotFoundError('Authorization Token unavailable!')
 
     const isAuthorized = ValidateToken(
       req,
@@ -12,7 +16,7 @@ module.exports = async (req, res, next) => {
       ACCESS_TOKEN_KEY
     )
 
-    if (!isAuthorized) { throw new Error('Not authorized to access resources!') }
+    if (!isAuthorized) { throw new ForbiddenError('Not authorized to access resources!') }
     next()
   } catch (error) {
     next(error)
