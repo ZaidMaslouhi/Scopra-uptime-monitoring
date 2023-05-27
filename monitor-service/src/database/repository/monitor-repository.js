@@ -1,4 +1,5 @@
-const { Axios } = require('../../config')
+const { Axios, RedisPublisher, MONITOR_RESPONSE } = require('../../config')
+const { PublishMessage } = require('../../utils')
 const { APIError } = require('../../utils/error-handler/app-errors')
 const { MonitorModel } = require('../models')
 
@@ -71,6 +72,9 @@ class MonitorRepository {
       response: duration,
       SSLExpiration: expirationDate
     })
+
+    RedisPublisher.hSet(taskId, Date.now().toString(), JSON.stringify(task))
+    PublishMessage(MONITOR_RESPONSE, task)
 
     return task
   }
