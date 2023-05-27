@@ -2,7 +2,7 @@ require('../__mocks__/mocks')
 const request = require('supertest')
 const createServer = require('../express-app')
 const { GenerateToken, GeneratePassword } = require('../utils')
-const { ACCESS_TOKEN_KEY } = require('../config')
+const { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } = require('../config')
 const UserRepository = require('../database/repository/user-repository')
 
 const app = createServer()
@@ -332,6 +332,57 @@ describe('POST /signup', () => {
       expect(
         response.headers['set-cookie'][0].split(';')[0].split('jwt=')[1]
       ).toBeTruthy()
+    })
+  })
+})
+
+describe('GET /refresh', () => {
+  describe('No jwt refresh token cookie found', () => {
+    test('shouold return error message with 404 status', async () => {
+      const response = await request(app).get('/refresh')
+      expect(response.statusCode).toBe(404)
+      expect(response.text).toEqual('"Refresh Token not found!"')
+    })
+  })
+
+  describe('Invalid the refresh token', () => {
+    test('should return error message with 403 status', async () => {
+      const expiredToken = await GenerateToken(
+        userPayload.user.email,
+        REFRESH_TOKEN_KEY,
+        '0s'
+      )
+      const response = await request(app)
+        .get('/refresh')
+        .set('Cookie', [`jwt=${expiredToken}`])
+
+      expect(response.statusCode).toBe(403)
+      expect(response.text).toEqual('"Unvalid Refresh Token!"')
+    })
+  })
+
+  describe('Find user by refresh token', () => {
+    test('should return user object with access token and 201 status', async () => {
+      const mockFindUserByToken = jest
+        .spyOn(UserRepository.prototype, 'FindUserByToken')
+        .mockResolvedValue({ _id: userPayload.user.id })
+
+      const refreshToken = GenerateToken(
+        userPayload,
+        REFRESH_TOKEN_KEY,
+        '1min'
+      )
+      const response = await request(app)
+        .get('/refresh')
+        .set('Cookie', [`jwt=${refreshToken}`])
+
+      expect(response.statusCode).toBe(201)
+      expect(response.body).toEqual({
+        _id: userPayload.user.id,
+        token: expect.any(String)
+      })
+      expect(mockFindUserByToken).toHaveBeenCalledTimes(1)
+      expect(mockFindUserByToken).toHaveBeenCalledWith(refreshToken)
     })
   })
 })
