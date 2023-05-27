@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid')
-const { FormateData } = require('../utils')
+const { FormateData, createCronJob } = require('../utils')
 const { MonitorRepository } = require('../database/repository')
 const { BadRequestError } = require('../utils/error-handler/app-errors')
 
@@ -20,6 +20,11 @@ class MonitorService {
     const { name, uri, projectId } = monitor
 
     const taskId = uuidv4()
+    createCronJob({
+      taskId,
+      scheduledTask: () => this.repository.MonitorScheduledTask(taskId, uri)
+    })
+
     const newMonitor = await this.repository.CreateNewMonitor({
       name,
       uri,

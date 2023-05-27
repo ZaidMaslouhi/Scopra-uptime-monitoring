@@ -1,5 +1,8 @@
 const Env = require('./envirement')
+const axios = require('./axios')
 
 module.exports = {
-  ...Env
+  ...Env,
+  // Axios
+  Axios: axios
 }

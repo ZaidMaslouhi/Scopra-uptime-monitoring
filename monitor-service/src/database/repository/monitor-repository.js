@@ -1,3 +1,4 @@
+const { Axios } = require('../../config')
 const { APIError } = require('../../utils/error-handler/app-errors')
 const { MonitorModel } = require('../models')
 
@@ -49,6 +50,29 @@ class MonitorRepository {
     } catch (_) {
       throw new APIError('Unable to remove monitor')
     }
+  }
+
+  async MonitorScheduledTask (taskId, URI) {
+    const response = await Axios.head(URI, {
+      validateStatus: false
+    })
+
+    const duration = response.headers['request-duration']
+    const cert = response.request.socket.getPeerCertificate()
+    const expirationDate =
+      Object.keys(cert).indexOf('valid_to') > -1
+        ? new Date(cert.valid_to).toLocaleDateString('en-GB')
+        : '-'
+
+    const task = Object.freeze({
+      task: taskId,
+      uri: URI,
+      status: `${response.status} ${response.statusText}`,
+      response: duration,
+      SSLExpiration: expirationDate
+    })
+
+    return task
   }
 }
 
