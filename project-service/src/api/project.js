@@ -34,6 +34,17 @@ module.exports = (app) => {
 
   // Update project
   app.put('/', UserAuth, async (req, res, next) => {
+    try {
+      if (!req.body.project) throw new Error('Project is required!')
+
+      const { project } = req.body
+
+      const updatedProject = await service.updateProject(project)
+
+      return res.status(200).json({ project: updatedProject })
+    } catch (error) {
+      next(error)
+    }
   })
 
   // Delete project
