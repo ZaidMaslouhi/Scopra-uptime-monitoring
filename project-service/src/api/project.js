@@ -49,5 +49,16 @@ module.exports = (app) => {
 
   // Delete project
   app.delete('/:id', UserAuth, async (req, res, next) => {
+    try {
+      const project = { id: req.params.id }
+
+      const deletedProject = await service.deleteProject(project)
+
+      return res.status(200).json({
+        project: deletedProject
+      })
+    } catch (error) {
+      next(error)
+    }
   })
 }
