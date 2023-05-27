@@ -134,18 +134,18 @@ module.exports.startWebSocketServer = () => {
 }
 
 // RPC - Message Broker
-module.exports.RPC_subscriber = async (channel, service) => {
+module.exports.subscriberRPC = async (channel, service) => {
   await RedisSubscriber.subscribe(channel, async (message) => {
     const state = JSON.parse(message)
     await service.serveRPCRequest(state)
   })
 }
 
-module.exports.RPC_publisher = async (channel, message) => {
+module.exports.publisherRPC = async (channel, message) => {
   return await RedisPublisher.publish(channel, message)
 }
 
-module.exports.RPC_message = ({ event, payload }) => {
+module.exports.messageRPC = ({ event, payload }) => {
   return JSON.stringify({
     event,
     payload
