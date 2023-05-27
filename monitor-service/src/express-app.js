@@ -2,6 +2,7 @@ const cors = require('cors')
 const express = require('express')
 const session = require('express-session')
 const { APP_SECRET } = require('./config')
+const { monitorApi } = require('./api')
 
 const expressApp = () => {
   const app = express()
@@ -18,6 +19,9 @@ const expressApp = () => {
       cookie: { secure: false }
     })
   )
+
+  // Api
+  monitorApi(app)
 
   return app
 }
