@@ -31,3 +31,10 @@ jobs:
           npm ci
           npm run lint
           npm run test  
+          
+      - name: Test Project Service
+        working-directory: ./project-service
+        run: |
+          npm ci
+          npm run lint
+          npm run test  
