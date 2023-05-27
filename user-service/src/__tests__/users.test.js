@@ -386,3 +386,41 @@ describe('GET /refresh', () => {
     })
   })
 })
+
+describe('PUT /account', () => {
+  describe('No user id defined on the request body', () => {
+    test('should return error message with 400 status', async () => {
+      const response = await request(app)
+        .put('/account')
+        .send({ user: {} })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toEqual('"User ID is required!"')
+    })
+  })
+
+  describe('User information defined on the request body', () => {
+    test('should return the updated user object with 201 status', async () => {
+      const mockUpdateUser = jest
+        .spyOn(UserRepository.prototype, 'UpdateUser')
+        .mockResolvedValue({
+          _id: userPayload.user.id,
+          username: userPayload.user.username
+        })
+
+      const response = await request(app)
+        .put('/account')
+        .send({
+          user: { ...userPayload.user }
+        })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(mockUpdateUser).toHaveBeenCalledTimes(1)
+      expect(response.statusCode).toBe(201)
+      expect(response.body).toEqual({
+        user: { _id: userPayload.user.id, username: userPayload.user.username }
+      })
+    })
+  })
+})
