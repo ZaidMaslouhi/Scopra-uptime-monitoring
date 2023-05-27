@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid')
 const { FormateData } = require('../utils')
 const { MonitorRepository } = require('../database/repository')
+const { BadRequestError } = require('../utils/error-handler/app-errors')
 
 class MonitorService {
   constructor () {
@@ -14,7 +15,7 @@ class MonitorService {
   }
 
   async createMonitor (monitor) {
-    if (!monitor) throw new Error('Monitor information is required!')
+    if (!monitor) throw new BadRequestError('Monitor information is required!')
 
     const { name, uri, projectId } = monitor
 
@@ -30,7 +31,7 @@ class MonitorService {
   }
 
   async updateMonitor (monitor) {
-    if (!monitor || !monitor.id) { throw new Error('Monitor information is required!') }
+    if (!monitor || !monitor.id) { throw new BadRequestError('Monitor information is required!') }
 
     const updatedMonitor = await this.repository.UpdateMonitor(monitor)
 
@@ -38,7 +39,7 @@ class MonitorService {
   }
 
   async deleteMonitor (monitor) {
-    if (!monitor) throw new Error('Monitor ID is required!')
+    if (!monitor) throw new BadRequestError('Monitor ID is required!')
 
     const deletedMonitor = await this.repository.DeleteMonitorById(monitor)
 

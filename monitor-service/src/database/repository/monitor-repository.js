@@ -1,3 +1,4 @@
+const { APIError } = require('../../utils/error-handler/app-errors')
 const { MonitorModel } = require('../models')
 
 class MonitorRepository {
@@ -7,7 +8,7 @@ class MonitorRepository {
 
       return monitors ?? []
     } catch (_) {
-      throw new Error('Unable to find monitor')
+      throw new APIError('Unable to find monitor')
     }
   }
 
@@ -22,7 +23,7 @@ class MonitorRepository {
 
       return !newMonitor ? {} : newMonitor.toJSON()
     } catch (_) {
-      throw new Error('Unable to create new monitor')
+      throw new APIError('Unable to create new monitor')
     }
   }
 
@@ -36,7 +37,7 @@ class MonitorRepository {
 
       return !updatedMonitor ? {} : updatedMonitor.toJSON()
     } catch (_) {
-      throw new Error('Unable to update monitor')
+      throw new APIError('Unable to update monitor')
     }
   }
 
@@ -46,7 +47,7 @@ class MonitorRepository {
 
       return !deletedMonitor ? {} : deletedMonitor.toJSON()
     } catch (_) {
-      throw new Error('Unable to remove monitor')
+      throw new APIError('Unable to remove monitor')
     }
   }
 }
