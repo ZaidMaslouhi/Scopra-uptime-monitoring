@@ -121,3 +121,46 @@ describe('POST /', () => {
     })
   })
 })
+
+describe('PUT /', () => {
+  describe('Monitor not defined in the request body', () => {
+    test('should response with error message and 400 status', async () => {
+      const response = await request(app)
+        .put('/')
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toBe('"Monitor information is required!"')
+    })
+  })
+
+  describe('Monitor ID not defined in the request body', () => {
+    test('should response with error message and 400 status', async () => {
+      const response = await request(app)
+        .put('/')
+        .send({ monitor: {} })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.text).toBe('"Monitor information is required!"')
+    })
+  })
+
+  describe('Update Monitor successfully', () => {
+    test('should response with updated monitor object and 200 status', async () => {
+      const mockUpdateMonitor = jest
+        .spyOn(MonitorRepository.prototype, 'UpdateMonitor')
+        .mockResolvedValue({ ...monitorPayload })
+
+      const response = await request(app)
+        .put('/')
+        .send({ monitor: { ...monitorPayload } })
+        .set('authorization', `Bearer ${jwt}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({ monitor: { ...monitorPayload } })
+      expect(mockUpdateMonitor).toHaveBeenCalledTimes(1)
+      expect(mockUpdateMonitor).toHaveBeenCalledWith({ ...monitorPayload })
+    })
+  })
+})
