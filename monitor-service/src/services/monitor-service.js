@@ -48,6 +48,15 @@ class MonitorService {
 
     return FormateData(deletedMonitor)
   }
+
+  async serveRPCRequest (message) {
+    const { event, payload } = message
+
+    switch (event) {
+      default:
+        return payload
+    }
+  }
 }
 
 module.exports = MonitorService
