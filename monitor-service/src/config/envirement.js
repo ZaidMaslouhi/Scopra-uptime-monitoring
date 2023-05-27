@@ -17,5 +17,8 @@ module.exports = {
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
   // DataBase
-  DB_URI: process.env.DB_URI
+  DB_URI: process.env.DB_URI,
+  // WebSocket
+  WS_HOST: process.env.WS_HOST || 'localhost',
+  WS_PORT: process.env.WS_PORT || 4000
 }

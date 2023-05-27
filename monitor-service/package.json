@@ -22,7 +22,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.1",
     "node-cron": "^3.0.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.1",
