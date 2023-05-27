@@ -4,6 +4,7 @@ const { userApi } = require('./api')
 const session = require('express-session')
 const { APP_SECRET } = require('./config')
 const cookieParser = require('cookie-parser')
+const ErrorHandler = require('./utils/error-handler')
 
 const expressApp = () => {
   const app = express()
@@ -24,6 +25,9 @@ const expressApp = () => {
 
   // Api
   userApi(app)
+
+  // Error Handler
+  app.use(ErrorHandler)
 
   return app
 }
