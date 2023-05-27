@@ -16,4 +16,6 @@ module.exports = {
   // JWT
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
+  // DataBase
+  DB_URI: process.env.DB_URI,
 };
