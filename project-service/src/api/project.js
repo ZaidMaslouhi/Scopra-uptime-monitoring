@@ -1,18 +1,19 @@
+const UserAuth = require('./middlewares/auth')
 
 module.exports = (app) => {
   // Get user's projects
-  app.get('/', async (req, res, next) => {
+  app.get('/', UserAuth, async (req, res, next) => {
   })
 
   // Add new project
-  app.post('/', async (req, res, next) => {
+  app.post('/', UserAuth, async (req, res, next) => {
   })
 
   // Update project
-  app.put('/', async (req, res, next) => {
+  app.put('/', UserAuth, async (req, res, next) => {
   })
 
   // Delete project
-  app.delete('/:id', async (req, res, next) => {
+  app.delete('/:id', UserAuth, async (req, res, next) => {
   })
 }
