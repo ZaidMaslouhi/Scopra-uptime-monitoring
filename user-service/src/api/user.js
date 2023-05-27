@@ -1,7 +1,7 @@
 const UserAuth = require('./middlewares/auth')
 const { UserService } = require('../services')
 const { REFRESH_TOKEN_KEY, ACCESS_TOKEN_KEY } = require('../config')
-const { SetCookie, ValidateToken, GenerateToken } = require('../utils')
+const { SetCookie, ValidateToken, GenerateToken, ClearCookie } = require('../utils')
 
 module.exports = (app) => {
   const service = new UserService()
@@ -75,6 +75,22 @@ module.exports = (app) => {
   })
 
   // Logout user
-  app.get('/logout', async (req, res, next) => {
+  app.get('/logout', UserAuth, async (req, res, next) => {
+    try {
+      const cookies = req.cookies
+      if (!cookies?.jwt) return res.sendStatus(200)
+
+      const user = await service.findUserByToken(cookies.jwt)
+
+      if (user) {
+        await service.updateUserToken({ id: user._id, token: '' })
+      }
+
+      ClearCookie(res, 'jwt')
+
+      res.status(200).json({ message: 'User logged off!' })
+    } catch (error) {
+      next(error)
+    }
   })
 }
