@@ -1,7 +1,8 @@
 const { UserRepository } = require('../database/repository')
 const {
   ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY
+  REFRESH_TOKEN_KEY,
+  UserServiceEvents
 } = require('../config')
 const {
   GeneratePassword,
@@ -136,6 +137,20 @@ class UserService {
     if (!updatedUser) throw new NotFoundError('User does not exists!')
 
     return { refreshToken, accessToken }
+  }
+
+  async serveRPCRequest (message) {
+    const { event, payload } = message
+
+    switch (event) {
+      case UserServiceEvents.SET_DEFAULT_PROJECT:
+        return this.repository.UpdateUser({
+          id: payload.userId,
+          defaultProject: payload.projectId
+        })
+      default:
+        break
+    }
   }
 }
 
