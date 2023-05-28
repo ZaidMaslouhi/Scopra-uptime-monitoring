@@ -67,6 +67,19 @@ module.exports = (app) => {
 
       const updatedProject = await service.updateProject(project)
 
+      if (project?.isDefault) {
+        const message = messageRPC({
+          event: UserServiceEvents.SET_DEFAULT_PROJECT,
+          payload: {
+            userId: updatedProject.userId,
+            projectId: updatedProject._id
+          }
+        })
+
+        const response = await publisherRPC(USER_SERVICE, message)
+        if (!response) throw new APIError('User service is unavailable!')
+      }
+
       return res.status(200).json({ project: updatedProject })
     } catch (error) {
       next(error)
