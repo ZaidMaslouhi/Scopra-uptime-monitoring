@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7.0.11-alpine
+    restart: unless-stopped
+    command: redis-server --save 20 1 --loglevel warning
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+  user-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: ./user-service
+    ports:
+      - 8001:8001
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./user-service:/app/user-service
+      - /app/user-service/node_modules
+    env_file:
+      - ./user-service/.env
+  project-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: ./project-service
+    ports:
+      - 8002:8002
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./project-service:/app/project-service
+      - /app/project-service/node_modules
+    env_file:
+      - ./project-service/.env
+  monitor-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: ./monitor-service
+    ports:
+      - 8003:8003
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./monitor-service:/app/monitor-service
+      - /app/monitor-service/node_modules
+    env_file:
+      - ./monitor-service/.env
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    depends_on:
+      - user-service
+      - project-service
+      - monitor-service
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  redis:
+    driver: local
