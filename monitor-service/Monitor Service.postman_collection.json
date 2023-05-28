@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "d14c83e3-711f-4c79-8bd8-b53be69ee60d",
+		"name": "Monitor Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Monitors",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MONITOR_HOST}}/646e1e470d6f68a9bd0b0e00",
+					"host": [
+						"{{MONITOR_HOST}}"
+					],
+					"path": [
+						"646e1e470d6f68a9bd0b0e00"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Monitor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"monitor\": {\r\n        \"name\": \"Paypal\",\r\n        \"uri\": \"https://www.paypal.com/\",\r\n        \"projectId\": \"646e1e470d6f68a9bd0b0e00\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MONITOR_HOST}}",
+					"host": [
+						"{{MONITOR_HOST}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Monitor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"monitor\": {\r\n        \"id\": \"6472739d4e9ad0f5c91599af\",\r\n        \"name\": \"Pay\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MONITOR_HOST}}",
+					"host": [
+						"{{MONITOR_HOST}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Monitor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{MONITOR_HOST}}/6472739d4e9ad0f5c91599af",
+					"host": [
+						"{{MONITOR_HOST}}"
+					],
+					"path": [
+						"6472739d4e9ad0f5c91599af"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjQ2NTRhNmQ5MWVlZDI2YzU0YTE4NTgwIiwiaWF0IjoxNjg1MjIyMjE5LCJleHAiOjE2ODUyMjQwMTl9.nAdq778w-ZfPeqdxwDCUg5uzD67_B4F0Qk3EcTB2dKc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "MONITOR_HOST",
+			"value": "http://localhost:8000/monitor"
+		}
+	]
+}
