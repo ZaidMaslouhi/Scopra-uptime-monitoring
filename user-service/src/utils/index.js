@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { NotFoundError } = require('./error-handler/app-errors')
+const { RedisSubscriber, RedisPublisher } = require('../config')
 
 // Cookies
 module.exports.SetCookie = async (res, name, value) => {
@@ -54,4 +55,23 @@ module.exports.GenerateToken = (payload, token, expiresIn) => {
   } catch (error) {
     return error
   }
+}
+
+// RPC - Message Broker
+module.exports.subscriberRPC = async (channel, service) => {
+  await RedisSubscriber.subscribe(channel, async (message) => {
+    const state = JSON.parse(message)
+    await service.serveRPCRequest(state)
+  })
+}
+
+module.exports.publisherRPC = async (channel, message) => {
+  return await RedisPublisher.publish(channel, message)
+}
+
+module.exports.messageRPC = ({ event, payload }) => {
+  return JSON.stringify({
+    event,
+    payload
+  })
 }
