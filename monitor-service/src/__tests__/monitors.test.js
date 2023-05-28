@@ -3,7 +3,8 @@ const request = require('supertest')
 const createServer = require('../express-app')
 const MonitorRepository = require('../database/repository/monitor-repository')
 const { ACCESS_TOKEN_KEY } = require('../config')
-const { GenerateToken } = require('../utils')
+const { GenerateToken, createCronJob } = require('../utils')
+const cron = require('node-cron')
 
 const app = createServer()
 let jwt = null
@@ -87,6 +88,30 @@ describe('POST /', () => {
   })
 
   describe('Create new monitor', () => {
+    test('should create a cron job', async () => {
+      const mockMonitorScheduledTask = jest.fn()
+      const cronExpression = '0 * * * *'
+
+      createCronJob({
+        cronExpression,
+        scheduledTask: () => mockMonitorScheduledTask()
+      })
+
+      expect(cron.schedule).toHaveBeenCalledWith(
+        cronExpression,
+        expect.any(Function),
+        expect.any(Object)
+      )
+
+      // Get the function passed as an argument to cron.schedule
+      const callbackFn = cron.schedule.mock.calls[0][1]
+
+      // Call the callback function to simulate the scheduled task
+      callbackFn()
+
+      expect(mockMonitorScheduledTask).toHaveBeenCalled()
+    })
+
     test('should create new monitor', async () => {
       const mockCreateNewMonitor = jest
         .spyOn(MonitorRepository.prototype, 'CreateNewMonitor')
