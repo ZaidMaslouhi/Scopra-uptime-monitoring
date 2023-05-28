@@ -27,5 +27,8 @@ module.exports = {
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
   // Sentry Data Source Name
-  SENTRY_DSN: process.env.SENTRY_DSN
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  // Redis
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT
 }
