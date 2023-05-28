@@ -1,9 +1,18 @@
 const { ProjectService } = require('../services')
 const UserAuth = require('./middlewares/auth')
-const { BadRequestError } = require('../utils/error-handler/app-errors')
+const {
+  BadRequestError
+} = require('../utils/error-handler/app-errors')
+const { subscriberRPC } = require('../utils')
+const {
+  PROJECT_SERVICE
+} = require('../config')
 
 module.exports = (app) => {
   const service = new ProjectService()
+
+  // RPC Subscriber
+  subscriberRPC(PROJECT_SERVICE, service)
 
   // Get user's projects
   app.get('/', UserAuth, async (req, res, next) => {
