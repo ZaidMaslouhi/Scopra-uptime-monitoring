@@ -19,5 +19,8 @@ module.exports = {
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
   // Sentry Data Source Name
-  SENTRY_DSN: process.env.SENTRY_DSN
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  // Redis
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT
 }
