@@ -2,13 +2,15 @@ const { UserService } = require('../services')
 const UserAuth = require('./middlewares/auth')
 const {
   ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY
+  REFRESH_TOKEN_KEY,
+  USER_SERVICE
 } = require('../config')
 const {
   GenerateToken,
   ValidateToken,
   SetCookie,
-  ClearCookie
+  ClearCookie,
+  subscriberRPC
 } = require('../utils')
 const {
   NotFoundError,
@@ -18,6 +20,9 @@ const passport = require('passport')
 
 module.exports = (app) => {
   const service = new UserService()
+
+  // RPC Subscriber
+  subscriberRPC(USER_SERVICE, service)
 
   // Sign-in the user
   app.post('/signin', async (req, res, next) => {
