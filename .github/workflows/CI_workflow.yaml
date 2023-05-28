@@ -18,12 +18,12 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      # - name: Test Front-End
-      #   working-directory: ./frontend
-      #   run: |
-      #     npm ci
-      #     npm lint
-      #     npm test
+      - name: Test Front-End
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm lint
+          npm test
 
       - name: Test User Service
         working-directory: ./user-service
@@ -34,6 +34,13 @@ jobs:
           
       - name: Test Project Service
         working-directory: ./project-service
+        run: |
+          npm ci
+          npm run lint
+          npm run test  
+          
+      - name: Test Monitor Service
+        working-directory: ./monitor-service
         run: |
           npm ci
           npm run lint
