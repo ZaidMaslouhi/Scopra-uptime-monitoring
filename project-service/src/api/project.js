@@ -1,11 +1,14 @@
-const { ProjectService } = require('../services')
 const UserAuth = require('./middlewares/auth')
+const { ProjectService } = require('../services')
 const {
-  BadRequestError
+  BadRequestError,
+  APIError
 } = require('../utils/error-handler/app-errors')
-const { subscriberRPC } = require('../utils')
+const { publisherRPC, subscriberRPC, messageRPC } = require('../utils')
 const {
-  PROJECT_SERVICE
+  USER_SERVICE,
+  PROJECT_SERVICE,
+  UserServiceEvents
 } = require('../config')
 
 module.exports = (app) => {
@@ -35,6 +38,19 @@ module.exports = (app) => {
       const project = { ...req.body.project, userId: req.user.user }
 
       const newProject = await service.createProject(project)
+
+      if (project?.isDefault) {
+        const message = messageRPC({
+          event: UserServiceEvents.SET_DEFAULT_PROJECT,
+          payload: {
+            userId: newProject.userId,
+            projectId: newProject._id
+          }
+        })
+
+        const response = await publisherRPC(USER_SERVICE, message)
+        if (!response) throw new APIError('User service is unavailable!')
+      }
 
       return res.status(201).json({ project: newProject })
     } catch (error) {
