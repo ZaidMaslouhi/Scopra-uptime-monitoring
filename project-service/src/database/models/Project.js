@@ -10,7 +10,13 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true
-    }
+    },
+    monitors: [
+      {
+        ref: 'Monitor',
+        type: mongoose.Schema.Types.ObjectId
+      }
+    ]
   },
   {
     toJSON: {
