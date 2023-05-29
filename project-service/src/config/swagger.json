@@ -1,0 +1,177 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Project API",
+    "description": "API for managing projects",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8002",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Get user's projects",
+        "tags": ["Projects"],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "projects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new project",
+        "tags": ["Projects"],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "project": {
+                    "type": "object"
+                  }
+                },
+                "required": ["project"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "project": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update project",
+        "tags": ["Projects"],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "project": {
+                    "type": "object"
+                  }
+                },
+                "required": ["project"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "project": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "delete": {
+        "summary": "Delete project",
+        "tags": ["Projects"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the project",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "project": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "UserAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    }
+  }
+}

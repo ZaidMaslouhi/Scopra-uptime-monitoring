@@ -8,14 +8,19 @@ const { publisherRPC, subscriberRPC, messageRPC } = require('../utils')
 const {
   USER_SERVICE,
   PROJECT_SERVICE,
-  UserServiceEvents
+  UserServiceEvents,
+  swaggerDocument
 } = require('../config')
+const swaggerUi = require('swagger-ui-express')
 
 module.exports = (app) => {
   const service = new ProjectService()
 
   // RPC Subscriber
   subscriberRPC(PROJECT_SERVICE, service)
+
+  // Swagger Documentation
+  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
   // Get user's projects
   app.get('/', UserAuth, async (req, res, next) => {

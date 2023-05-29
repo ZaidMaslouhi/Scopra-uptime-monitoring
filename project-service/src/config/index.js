@@ -1,4 +1,5 @@
 const Env = require('./envirement')
+const swaggerDocument = require('./swagger.json')
 const { RedisPublisher, RedisSubscriber } = require('./redis')
 const { UserServiceEvents, ProjectServiceEvents } = require('./rpcEvents')
 
@@ -13,5 +14,7 @@ module.exports = {
   MONITOR_SERVICE: 'MONITOR_SERVICE',
   // RPC Events
   UserServiceEvents,
-  ProjectServiceEvents
+  ProjectServiceEvents,
+  // Swagger Docs
+  swaggerDocument
 }
