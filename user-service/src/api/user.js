@@ -3,7 +3,8 @@ const UserAuth = require('./middlewares/auth')
 const {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
-  USER_SERVICE
+  USER_SERVICE,
+  swaggerDocument
 } = require('../config')
 const {
   GenerateToken,
@@ -17,12 +18,16 @@ const {
   ForbiddenError
 } = require('../utils/error-handler/app-errors')
 const passport = require('passport')
+const swaggerUi = require('swagger-ui-express')
 
 module.exports = (app) => {
   const service = new UserService()
 
   // RPC Subscriber
   subscriberRPC(USER_SERVICE, service)
+
+  // Swagger Documentation
+  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
   // Sign-in the user
   app.post('/signin', async (req, res, next) => {
