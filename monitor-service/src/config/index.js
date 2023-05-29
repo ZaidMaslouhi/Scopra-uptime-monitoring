@@ -2,7 +2,7 @@ const axios = require('./axios')
 const Env = require('./envirement')
 const WebSocketServer = require('./webSocket')
 const swaggerDocument = require('./swagger.json')
-const ProjectServiceEvents = require('./rpcEvents')
+const { ProjectServiceEvents } = require('./rpcEvents')
 const { RedisPublisher, RedisSubscriber } = require('./redis')
 
 module.exports = {
