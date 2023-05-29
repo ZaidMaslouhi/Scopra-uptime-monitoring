@@ -1,0 +1,184 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Monitor API",
+      "description": "API for managing monitors",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8003",
+        "description": "Local development server"
+      }
+    ],
+    "paths": {
+      "/{projectId}": {
+        "get": {
+          "summary": "Get monitors by project ID",
+          "tags": ["Monitors"],
+          "parameters": [
+            {
+              "name": "projectId",
+              "in": "path",
+              "description": "ID of the project",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "UserAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/": {
+        "post": {
+          "summary": "Add new monitor",
+          "tags": ["Monitors"],
+          "security": [
+            {
+              "UserAuth": []
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "monitor": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "monitor": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Update Monitor",
+          "tags": ["Monitors"],
+          "security": [
+            {
+              "UserAuth": []
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "monitor": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "monitor": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/{monitorId}": {
+        "delete": {
+          "summary": "Delete Monitor",
+          "tags": ["Monitors"],
+          "parameters": [
+            {
+              "name": "monitorId",
+              "in": "path",
+              "description": "ID of the monitor",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "UserAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "monitor": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "UserAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "Authorization"
+        }
+      }
+    }
+  }
+  

@@ -1,6 +1,7 @@
 const axios = require('./axios')
 const Env = require('./envirement')
 const WebSocketServer = require('./webSocket')
+const swaggerDocument = require('./swagger.json')
 const ProjectServiceEvents = require('./rpcEvents')
 const { RedisPublisher, RedisSubscriber } = require('./redis')
 
@@ -20,5 +21,7 @@ module.exports = {
   // RPC Events
   ProjectServiceEvents,
   // Monitor Response Queue
-  MONITOR_RESPONSE: 'MONITOR_RESPONSE'
+  MONITOR_RESPONSE: 'MONITOR_RESPONSE',
+  // Swagger Docs
+  swaggerDocument
 }

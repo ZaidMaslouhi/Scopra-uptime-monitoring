@@ -23,6 +23,7 @@
     "mongoose": "^7.2.1",
     "node-cron": "^3.0.2",
     "redis": "^4.6.6",
+    "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",
     "ws": "^8.13.0"
   },

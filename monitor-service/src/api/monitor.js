@@ -3,9 +3,14 @@ const { MonitorService } = require('../services')
 const { PROJECT_SERVICE, ProjectServiceEvents } = require('../config')
 const { APIError } = require('../utils/error-handler/app-errors')
 const { messageRPC, publisherRPC } = require('../utils')
+const swaggerUi = require('swagger-ui-express')
+const { swaggerDocument } = require('../config')
 
 module.exports = (app) => {
   const service = new MonitorService()
+
+  // Swagger Documentation
+  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
   // Get monitors by project
   app.get('/:projectId', UserAuth, async (req, res, next) => {
