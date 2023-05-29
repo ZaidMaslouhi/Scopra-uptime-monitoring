@@ -2,7 +2,7 @@ const UserAuth = require('./middlewares/auth')
 const { MonitorService } = require('../services')
 const { PROJECT_SERVICE, ProjectServiceEvents } = require('../config')
 const { APIError } = require('../utils/error-handler/app-errors')
-const { messageRPC, publisherRPC } = require('../utils')
+const { messageRPC, publisherRPC, createCronJob } = require('../utils')
 const swaggerUi = require('swagger-ui-express')
 const { swaggerDocument } = require('../config')
 
@@ -87,4 +87,6 @@ module.exports = (app) => {
       next(error)
     }
   })
+
+  createCronJob({ cronExpression: '*/15 * * * *', scheduledTask: () => service.storeResponses() }) // store responses to db every 15min
 }
