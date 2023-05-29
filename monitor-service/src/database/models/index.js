@@ -1,3 +1,4 @@
 module.exports = {
-  MonitorModel: require('./monitor')
+  MonitorModel: require('./monitor'),
+  ResponseModel: require('./response')
 }

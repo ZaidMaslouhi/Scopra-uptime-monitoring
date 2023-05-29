@@ -1,4 +1,3 @@
-
 const { FormateData, createCronJob } = require('../utils')
 const { MonitorRepository } = require('../database/repository')
 const { BadRequestError } = require('../utils/error-handler/app-errors')
@@ -47,6 +46,12 @@ class MonitorService {
     const deletedMonitor = await this.repository.DeleteMonitorById(monitor)
 
     return FormateData(deletedMonitor)
+  }
+
+  async storeResponses () {
+    const responses = await this.repository.batchResponses()
+
+    return FormateData({ responses })
   }
 
   async serveRPCRequest (message) {
