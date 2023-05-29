@@ -27,15 +27,14 @@ class ProjectRepository {
 
   async AddMonitorToProject ({ monitorId, projectId }) {
     try {
-      const update = {
-        $push: {
-          monitors: monitorId
-        }
-      }
-
-      const updatedPorject = await ProjectModel.updateOne(
+      const updatedPorject = await ProjectModel.findByIdAndUpdate(
         { _id: projectId },
-        update
+        {
+          $push: {
+            monitors: monitorId
+          }
+        },
+        { new: true }
       )
 
       return updatedPorject?.toJSON()
@@ -72,15 +71,14 @@ class ProjectRepository {
 
   async DeleteMonitorFromProject ({ monitorId, projectId }) {
     try {
-      const update = {
-        $pull: {
-          monitors: monitorId
-        }
-      }
-
-      const updatedPorject = await ProjectModel.updateOne(
+      const updatedPorject = await ProjectModel.findByIdAndUpdate(
         { _id: projectId },
-        update
+        {
+          $pull: {
+            monitors: monitorId
+          }
+        },
+        { new: true }
       )
 
       return updatedPorject?.toJSON()
