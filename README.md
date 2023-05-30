@@ -73,8 +73,8 @@ Please note that this is not an exhaustive list and other libraries, tools, and 
 
 - *Get in touch / Sign-up Screens*
 
-![Get in touch](https://i.postimg.cc/dV8FYJnL/get-in-touch.gif) | ![Sign up](https://i.postimg.cc/3wXxngzf/sign-up.gif)
-----------------------|----------------------
+![Get in touch](https://i.postimg.cc/dV8FYJnL/get-in-touch.gif)
+![Sign up](https://i.postimg.cc/3wXxngzf/sign-up.gif)
 
 - *Monitors / Github Screens*
 
