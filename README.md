@@ -1,4 +1,5 @@
-![Logo](https://i.postimg.cc/7LKWwdw8/image-1.png)
+![Logo - Light](https://i.postimg.cc/7LKWwdw8/image-1.png)
+![Logo - Dark](https://i.postimg.cc/wTKgKMLY/logo-dark.png)
 
 
 # Scopra - Uptime Monitoring Application
@@ -70,8 +71,29 @@ Please note that this is not an exhaustive list and other libraries, tools, and 
 
 ## 📸 Screenshots
 
+- *Get in touch / Sign-up Screens*
 
+![Get in touch](https://i.postimg.cc/dV8FYJnL/get-in-touch.gif) | ![Sign up](https://i.postimg.cc/3wXxngzf/sign-up.gif)
+----------------------|----------------------
 
+- *Monitors / Github Screens*
+
+![Monitors](https://i.postimg.cc/jdxPNjnr/monitors-page.png) | ![Github](https://i.postimg.cc/bvtt8DW1/Github-page.png)
+----------------------|----------------------
+
+- *Project Settings Screen*
+
+![Project Setting](https://i.postimg.cc/7h2zPCfF/Poject-Settings.png)
+
+- *Account Settings - General/Usage Screens*
+
+![Account Settings - General](https://i.postimg.cc/LX7fMk6k/account-settings-general.png) | ![Account Settings - Usage](https://i.postimg.cc/fbzY7Trd/account-settings-usage.png)
+----------------------|----------------------
+
+- *Account Settings - Billing Screens*
+
+![Account Settings - Billing 1](https://i.postimg.cc/pLtfTBQq/account-settings-billing-1.png) | ![Account Settings - Billing 1](https://i.postimg.cc/Y9jgVDkq/account-settings-billing-2.png)
+----------------------|----------------------
 
 ## 🧭 Roadmap
 
@@ -105,6 +127,7 @@ If you have any questions, suggestions, or feedback regarding Scopra, feel free 
 - Email: [zaid.maslouhi@gmail.com](mailto:zaid.maslouhi@gmail.com)
 - Twiter: [@ElmaslouhiZaid](https://twitter.com/ElmaslouhiZaid)
 - GitHub: [@ZaidMaslouhi](https://www.github.com/ZaidMaslouhi)
+
 ## ✒️ Authors
 
 - [@ZaidMaslouhi](https://www.github.com/ZaidMaslouhi)
