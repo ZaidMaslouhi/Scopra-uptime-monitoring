@@ -6,7 +6,7 @@ import { Project } from "../interfaces/project.interface";
 import { Octokit } from "octokit";
 
 const octokit = new Octokit({
-  auth: process.env.REACT_APP_GITHUB_API_KEY,
+  auth: import.meta.env.VITE_GITHUB_API_KEY,
 });
 
 export const updateProjectGithubRepo = async (

@@ -1,8 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
-@import "react-credit-cards-2/dist/es/styles-compiled.css";
 
 html {
   font-size: 0.75rem;
@@ -33,3 +31,5 @@ html {
     margin: 0;
   }
 }
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
+@import "react-credit-cards-2/dist/es/styles-compiled.css";

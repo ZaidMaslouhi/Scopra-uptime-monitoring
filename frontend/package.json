@@ -23,13 +23,13 @@
     "react-icons": "^4.7.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
-    "react-scripts": "^5.0.1",
     "typescript": "^5.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set BROWSER=none&& react-scripts start",
-    "build": "react-scripts build",
+    "start": "set BROWSER=none&& vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
@@ -59,13 +59,20 @@
     "@types/redux-mock-store": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
     "dotenv": "^16.0.3",
-    "eslint": "^8.36.0",
+    "eslint": "5.12.0",
     "eslint-plugin-react": "^7.32.1",
     "gh-pages": "^5.0.0",
     "jest-canvas-mock": "^2.4.0",
+    "postcss": "^8.4.24",
     "redux-mock-store": "^1.5.4",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9",
+    "vite-plugin-node-polyfills": "^0.8.2",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "jest": {
     "coverageReporters": [
