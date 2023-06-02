@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import * as githubServiceMock from "../../../services/github.service";
@@ -10,7 +11,7 @@ import { toCommit } from "../../../interfaces/commit.interface";
 import { toIssue } from "../../../interfaces/issue.interface";
 import { toPullRequest } from "../../../interfaces/pullRequest.interface";
 
-jest.mock("../../../services/github.service");
+vi.mock("../../../services/github.service");
 const mockStore = configureStore([thunk])();
 const mockGithubRepoData = [
   [
@@ -85,10 +86,10 @@ describe("Github Repo Slice", () => {
   describe("Thunks with mocked dipatch and redux store", () => {
     describe("getRepoContent", () => {
       test("should return object of github repo content", async () => {
-        const mockedGetCommits = githubServiceMock.getCommits as jest.Mock;
-        const mockedGetIssues = githubServiceMock.getIssues as jest.Mock;
+        const mockedGetCommits = githubServiceMock.getCommits as Mock;
+        const mockedGetIssues = githubServiceMock.getIssues as Mock;
         const mockedGetPullRequests =
-          githubServiceMock.getPullRequests as jest.Mock;
+          githubServiceMock.getPullRequests as Mock;
         mockedGetCommits.mockResolvedValueOnce(mockGithubRepoData[0]);
         mockedGetIssues.mockResolvedValueOnce(mockGithubRepoData[1]);
         mockedGetPullRequests.mockResolvedValueOnce(mockGithubRepoData[2]);
@@ -118,7 +119,7 @@ describe("Github Repo Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedGetCommits = githubServiceMock.getCommits as jest.Mock;
+        const mockedGetCommits = githubServiceMock.getCommits as Mock;
         mockedGetCommits.mockRejectedValueOnce(
           new Error("Unable to get repository informations!")
         );
@@ -145,10 +146,10 @@ describe("Github Repo Slice", () => {
   describe("Thunks with associated reducer methods / with full redux store", () => {
     describe("getRepoContent", () => {
       test("should return the repository content with success status", async () => {
-        const mockedGetCommits = githubServiceMock.getCommits as jest.Mock;
-        const mockedGetIssues = githubServiceMock.getIssues as jest.Mock;
+        const mockedGetCommits = githubServiceMock.getCommits as Mock;
+        const mockedGetIssues = githubServiceMock.getIssues as Mock;
         const mockedGetPullRequests =
-          githubServiceMock.getPullRequests as jest.Mock;
+          githubServiceMock.getPullRequests as Mock;
         mockedGetCommits.mockResolvedValueOnce(mockGithubRepoData[0]);
         mockedGetIssues.mockResolvedValueOnce(mockGithubRepoData[1]);
         mockedGetPullRequests.mockResolvedValueOnce(mockGithubRepoData[2]);
@@ -179,7 +180,7 @@ describe("Github Repo Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedGetCommits = githubServiceMock.getCommits as jest.Mock;
+        const mockedGetCommits = githubServiceMock.getCommits as Mock;
         mockedGetCommits.mockRejectedValueOnce(
           new Error("Unable to get repository informations!")
         );

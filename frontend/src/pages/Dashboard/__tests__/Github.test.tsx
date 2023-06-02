@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import Github from "../Github";
@@ -14,10 +15,10 @@ import { Project } from "../../../interfaces/project.interface";
 import userEvent from "@testing-library/user-event";
 import { ErrorNotification } from "../../../components/ui/toasts/toasts";
 
-jest.mock("../../../services/github.service");
-jest.mock("../../../components/ui/toasts/toasts");
-jest.mock("react-router-dom", () => ({
-  useNavigate: () => jest.fn(),
+vi.mock("../../../services/github.service");
+vi.mock("../../../components/ui/toasts/toasts");
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => vi.fn(),
 }));
 
 const mockGithubRepo: GithubRepo = {
@@ -139,7 +140,7 @@ describe("Github component", () => {
   });
 
   test("should display error message", () => {
-    const mockGetCommit = mockGithubService.getCommits as jest.Mock;
+    const mockGetCommit = mockGithubService.getCommits as Mock;
     mockGetCommit.mockRejectedValueOnce(
       new Error("Unable to get repository informations!")
     );
@@ -166,7 +167,7 @@ describe("Github component", () => {
   });
 
   test("dispaly toast/notification error message", () => {
-    const mockGetCommit = mockGithubService.getCommits as jest.Mock;
+    const mockGetCommit = mockGithubService.getCommits as Mock;
     mockGetCommit.mockRejectedValueOnce(
       new Error("Unable to get repository informations!")
     );

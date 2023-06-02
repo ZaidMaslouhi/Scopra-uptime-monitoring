@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { Project } from "../../../interfaces/project.interface";
@@ -15,7 +16,7 @@ import projectsReducer, {
   updateProjectInfo,
 } from "../projects.slice";
 
-jest.mock("../../../services/project.service");
+vi.mock("../../../services/project.service");
 const mockStore = configureStore([thunk])();
 const mockProjectsData = [
   { id: "1", data: () => ({ name: "Project 1" }) },
@@ -93,7 +94,7 @@ describe("Projects Slice", () => {
   describe("Thunks with mocked redux store ", () => {
     describe("getAllProjects", () => {
       test("should return list of projects", async () => {
-        const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+        const mockedGetProjects = projectServiceMock.getProjects as Mock;
         mockedGetProjects.mockResolvedValueOnce({
           docs: [...mockProjectsData],
         });
@@ -114,7 +115,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return empty list", async () => {
-        const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+        const mockedGetProjects = projectServiceMock.getProjects as Mock;
         mockedGetProjects.mockResolvedValueOnce({ docs: [] });
 
         await mockStore.dispatch(getAllProjects({ user: mockUser }) as never);
@@ -127,7 +128,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+        const mockedGetProjects = projectServiceMock.getProjects as Mock;
         mockedGetProjects.mockRejectedValueOnce(
           new Error("Unable to get projects!")
         );
@@ -145,11 +146,12 @@ describe("Projects Slice", () => {
 
     describe("addProject", () => {
       test("should return new project object ", async () => {
-        const mockedAddProject = projectServiceMock.addNewProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.addNewProject as Mock;
         mockedAddProject.mockResolvedValueOnce({ id: "123456789" });
         const mockNewProject: Project = {
           name: "Project 1",
           id: "",
+          github: null
         };
 
         await mockStore.dispatch(
@@ -167,13 +169,14 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedAddProject = projectServiceMock.addNewProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.addNewProject as Mock;
         mockedAddProject.mockRejectedValueOnce(
           new Error("Unable to add new project!")
         );
         const mockNewProject: Project = {
           id: "foo",
           name: "Project 1",
+          github: null
         };
 
         await mockStore.dispatch(
@@ -191,8 +194,7 @@ describe("Projects Slice", () => {
 
     describe("updateProjectInfo", () => {
       test("should return updated project", async () => {
-        const mockedUpdateProject =
-          projectServiceMock.updateProject as jest.Mock;
+        const mockedUpdateProject = projectServiceMock.updateProject as Mock;
         mockedUpdateProject.mockResolvedValueOnce({});
 
         await mockStore.dispatch(
@@ -213,7 +215,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedAddProject = projectServiceMock.updateProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.updateProject as Mock;
         mockedAddProject.mockRejectedValueOnce(
           new Error("Unable to update new project!")
         );
@@ -238,8 +240,7 @@ describe("Projects Slice", () => {
 
     describe("deleteProject", () => {
       test("should return the deleted project object", async () => {
-        const mockedRemovedProject =
-          projectServiceMock.removeProject as jest.Mock;
+        const mockedRemovedProject = projectServiceMock.removeProject as Mock;
         mockedRemovedProject.mockResolvedValueOnce({});
 
         await mockStore.dispatch(
@@ -257,8 +258,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedRemovedProject =
-          projectServiceMock.removeProject as jest.Mock;
+        const mockedRemovedProject = projectServiceMock.removeProject as Mock;
         mockedRemovedProject.mockRejectedValueOnce(
           new Error("Unable to delete thie project!")
         );
@@ -285,7 +285,7 @@ describe("Projects Slice", () => {
   describe("Thunks with associated reducer methods / with full redux store", () => {
     describe("getAllProjects", () => {
       test("should return list of projects with success status", async () => {
-        const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+        const mockedGetProjects = projectServiceMock.getProjects as Mock;
         mockedGetProjects.mockResolvedValueOnce({ docs: mockProjectsData });
         const store = getStoreWithState();
 
@@ -303,7 +303,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+        const mockedGetProjects = projectServiceMock.getProjects as Mock;
         mockedGetProjects.mockRejectedValueOnce(
           new Error("Unable to get projects!")
         );
@@ -321,7 +321,7 @@ describe("Projects Slice", () => {
 
     describe("addProject", () => {
       test("should add the new project to the projects state with success status", async () => {
-        const mockedAddProject = projectServiceMock.addNewProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.addNewProject as Mock;
         mockedAddProject.mockResolvedValueOnce({ id: "3" });
 
         const state = getStateWithProjects([...mockedProjectsList]);
@@ -335,6 +335,7 @@ describe("Projects Slice", () => {
         const mockNewProject: Project = {
           id: "3",
           name: "project 3",
+          github: null
         };
         await store.dispatch(
           addProject({
@@ -351,7 +352,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedAddProject = projectServiceMock.addNewProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.addNewProject as Mock;
         mockedAddProject.mockRejectedValueOnce(
           new Error("Unable to add new project!")
         );
@@ -361,6 +362,7 @@ describe("Projects Slice", () => {
         const mockNewProject: Project = {
           id: "3",
           name: "project 3",
+          github: null
         };
         await store.dispatch(
           addProject({
@@ -379,8 +381,7 @@ describe("Projects Slice", () => {
 
     describe("updateProjectInfo", () => {
       test("should push the updated project to the projects state with success status", async () => {
-        const mockedUpdatedProject =
-          projectServiceMock.updateProject as jest.Mock;
+        const mockedUpdatedProject = projectServiceMock.updateProject as Mock;
         mockedUpdatedProject.mockResolvedValueOnce({});
 
         const state = getStateWithProjects([...mockedProjectsList]);
@@ -389,6 +390,7 @@ describe("Projects Slice", () => {
         const mockUpdatedProject: Project = {
           id: "1",
           name: "project 2",
+          github: null
         };
         await store.dispatch(
           updateProjectInfo({
@@ -408,7 +410,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedAddProject = projectServiceMock.addNewProject as jest.Mock;
+        const mockedAddProject = projectServiceMock.addNewProject as Mock;
         mockedAddProject.mockRejectedValueOnce(
           new Error("Unable to add new project!")
         );
@@ -417,6 +419,7 @@ describe("Projects Slice", () => {
         const mockNewProject: Project = {
           id: "2",
           name: "project 2",
+          github: null
         };
         await store.dispatch(
           addProject({
@@ -435,8 +438,7 @@ describe("Projects Slice", () => {
 
     describe("deleteProject", () => {
       test("should remove the given project from the projects list state with success status", async () => {
-        const mockedRemovedProject =
-          projectServiceMock.removeProject as jest.Mock;
+        const mockedRemovedProject = projectServiceMock.removeProject as Mock;
         mockedRemovedProject.mockResolvedValueOnce({});
 
         const state = getStateWithProjects([...mockedProjectsList]);
@@ -458,8 +460,7 @@ describe("Projects Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedRemovedProject =
-          projectServiceMock.removeProject as jest.Mock;
+        const mockedRemovedProject = projectServiceMock.removeProject as Mock;
         mockedRemovedProject.mockRejectedValueOnce(
           new Error("Unable to delete project!")
         );

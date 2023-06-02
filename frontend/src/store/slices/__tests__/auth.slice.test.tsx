@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { UserInfo } from "../../../interfaces/auth.interface";
@@ -14,7 +15,7 @@ import authReducer, {
   signOut,
 } from "../auth.slice";
 
-jest.mock("../../../services/auth.service");
+vi.mock("../../../services/auth.service");
 const mockStore = configureStore([thunk])();
 const mockUser = {
   uid: "foo",
@@ -83,7 +84,7 @@ describe("Auth Slice", () => {
     describe("authLogin", () => {
       test("should return logged user", async () => {
         const mockedLoginUser =
-          authServiceMock.signInEmailPassword as jest.Mock;
+          authServiceMock.signInEmailPassword as Mock;
         mockedLoginUser.mockResolvedValueOnce({ user: mockUser });
 
         await mockStore.dispatch(authLogin(mockUser) as never);
@@ -97,7 +98,7 @@ describe("Auth Slice", () => {
 
       test("should return null if no user found", async () => {
         const mockedLoginUser =
-          authServiceMock.signInEmailPassword as jest.Mock;
+          authServiceMock.signInEmailPassword as Mock;
         mockedLoginUser.mockResolvedValueOnce({ user: null });
 
         await mockStore.dispatch(authLogin(mockUser) as never);
@@ -111,7 +112,7 @@ describe("Auth Slice", () => {
 
       test("should return error message", async () => {
         const mockedLoginUser =
-          authServiceMock.signInEmailPassword as jest.Mock;
+          authServiceMock.signInEmailPassword as Mock;
         mockedLoginUser.mockRejectedValueOnce(new Error("Unable to login!"));
 
         await mockStore.dispatch(authLogin(mockUser) as never);
@@ -128,7 +129,7 @@ describe("Auth Slice", () => {
     describe("authRegister", () => {
       test("should return registred user", async () => {
         const mockedRegistredUser =
-          authServiceMock.registerWithEmailAndPassword as jest.Mock;
+          authServiceMock.registerWithEmailAndPassword as Mock;
         mockedRegistredUser.mockResolvedValueOnce({ user: mockUser });
 
         await mockStore.dispatch(authRegister(mockUser) as never);
@@ -142,7 +143,7 @@ describe("Auth Slice", () => {
 
       test("should fail to register and return null", async () => {
         const mockedRegistredUser =
-          authServiceMock.registerWithEmailAndPassword as jest.Mock;
+          authServiceMock.registerWithEmailAndPassword as Mock;
         mockedRegistredUser.mockResolvedValueOnce({ user: null });
 
         await mockStore.dispatch(authRegister(mockUser) as never);
@@ -156,7 +157,7 @@ describe("Auth Slice", () => {
 
       test("should return error message", async () => {
         const mockedLoginUser =
-          authServiceMock.registerWithEmailAndPassword as jest.Mock;
+          authServiceMock.registerWithEmailAndPassword as Mock;
         mockedLoginUser.mockRejectedValueOnce(
           new Error("Unable to register new user!")
         );
@@ -176,7 +177,7 @@ describe("Auth Slice", () => {
 
     describe("authOauth", () => {
       test("should return registred user", async () => {
-        const mockedOauth = authServiceMock.signOnGoogle as jest.Mock;
+        const mockedOauth = authServiceMock.signOnGoogle as Mock;
         mockedOauth.mockResolvedValueOnce({ user: mockUser });
 
         await mockStore.dispatch(authOauth() as never);
@@ -189,7 +190,7 @@ describe("Auth Slice", () => {
       });
 
       test("should fail to register and return null", async () => {
-        const mockedOauth = authServiceMock.signOnGoogle as jest.Mock;
+        const mockedOauth = authServiceMock.signOnGoogle as Mock;
         mockedOauth.mockResolvedValueOnce({ user: null });
 
         await mockStore.dispatch(authOauth() as never);
@@ -202,7 +203,7 @@ describe("Auth Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedLoginUser = authServiceMock.signOnGoogle as jest.Mock;
+        const mockedLoginUser = authServiceMock.signOnGoogle as Mock;
         mockedLoginUser.mockRejectedValueOnce(new Error("Unable to signin!"));
 
         await mockStore.dispatch(authOauth() as never);
@@ -218,7 +219,7 @@ describe("Auth Slice", () => {
 
     describe("updateUserInfo", () => {
       test("should return updated user", async () => {
-        const mockedUpdatedUser = authServiceMock.updateUser as jest.Mock;
+        const mockedUpdatedUser = authServiceMock.updateUser as Mock;
         mockedUpdatedUser.mockResolvedValueOnce({ user: mockUser });
 
         await mockStore.dispatch(updateUserInfo(mockUser) as never);
@@ -231,7 +232,7 @@ describe("Auth Slice", () => {
       });
 
       test("should return error message", async () => {
-        const mockedUpdatedUser = authServiceMock.updateUser as jest.Mock;
+        const mockedUpdatedUser = authServiceMock.updateUser as Mock;
         mockedUpdatedUser.mockRejectedValueOnce(
           new Error("Unable to update user information!")
         );
@@ -254,7 +255,7 @@ describe("Auth Slice", () => {
     describe("authLogin", () => {
       test("should return the logged user with success status", async () => {
         const mockedLoginUser =
-          authServiceMock.signInEmailPassword as jest.Mock;
+          authServiceMock.signInEmailPassword as Mock;
         mockedLoginUser.mockResolvedValueOnce({ user: mockUser });
 
         const store = getStoreWithState();
@@ -269,7 +270,7 @@ describe("Auth Slice", () => {
 
       test("should return error message with failed status", async () => {
         const mockedLoginUser =
-          authServiceMock.signInEmailPassword as jest.Mock;
+          authServiceMock.signInEmailPassword as Mock;
         mockedLoginUser.mockRejectedValueOnce(new Error("Unable to login!"));
 
         const store = getStoreWithState();
@@ -286,7 +287,7 @@ describe("Auth Slice", () => {
     describe("authRegister", () => {
       test("should return the new user with success status", async () => {
         const mockedRegistredUser =
-          authServiceMock.registerWithEmailAndPassword as jest.Mock;
+          authServiceMock.registerWithEmailAndPassword as Mock;
         mockedRegistredUser.mockResolvedValueOnce({ user: mockUser });
 
         const store = getStoreWithState();
@@ -301,7 +302,7 @@ describe("Auth Slice", () => {
 
       test("should return error message with failed status", async () => {
         const mockedRegistredUser =
-          authServiceMock.registerWithEmailAndPassword as jest.Mock;
+          authServiceMock.registerWithEmailAndPassword as Mock;
         mockedRegistredUser.mockRejectedValueOnce(
           new Error("Unable to register new user!")
         );
@@ -319,7 +320,7 @@ describe("Auth Slice", () => {
 
     describe("authOauth", () => {
       test("should return the new user with success status", async () => {
-        const mockedOauth = authServiceMock.signOnGoogle as jest.Mock;
+        const mockedOauth = authServiceMock.signOnGoogle as Mock;
         mockedOauth.mockResolvedValueOnce({ user: mockUser });
 
         const store = getStoreWithState();
@@ -333,7 +334,7 @@ describe("Auth Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedOauth = authServiceMock.signOnGoogle as jest.Mock;
+        const mockedOauth = authServiceMock.signOnGoogle as Mock;
         mockedOauth.mockRejectedValueOnce(new Error("Unable to signin!"));
 
         const store = getStoreWithState();
@@ -349,7 +350,7 @@ describe("Auth Slice", () => {
 
     describe("updateUserInfo", () => {
       test("should return updated user with success status", async () => {
-        const mockedUpdatedUser = authServiceMock.updateUser as jest.Mock;
+        const mockedUpdatedUser = authServiceMock.updateUser as Mock;
         mockedUpdatedUser.mockResolvedValueOnce({ user: mockUser });
 
         const store = getStoreWithState();
@@ -363,7 +364,7 @@ describe("Auth Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedUpdatedUser = authServiceMock.updateUser as jest.Mock;
+        const mockedUpdatedUser = authServiceMock.updateUser as Mock;
         mockedUpdatedUser.mockRejectedValueOnce(
           new Error("Unable to update user information!")
         );

@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import Login from "../Login";
@@ -6,16 +7,16 @@ import * as mockAuthService from "../../../../services/auth.service";
 import { renderWithContext } from "../../../../utils/test-utils";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../../../services/auth.service");
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
-  Link: jest.fn(),
+vi.mock("../../../../services/auth.service");
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
+  Link: vi.fn(),
 }));
 
 describe("Login", () => {
   describe("Handles sign on with Google", () => {
     test("handles sign on with Google correctly", () => {
-      const mockSignGoogle = mockAuthService.signOnGoogle as jest.Mock;
+      const mockSignGoogle = mockAuthService.signOnGoogle as Mock;
 
       renderWithContext(<Login />);
 
@@ -43,7 +44,7 @@ describe("Login", () => {
     });
 
     test("display error message after the login with Google failed", async () => {
-      const mockSignGoogle = mockAuthService.signOnGoogle as jest.Mock;
+      const mockSignGoogle = mockAuthService.signOnGoogle as Mock;
       mockSignGoogle.mockRejectedValue(new Error("Unable to signin!"));
 
       renderWithContext(<Login />);
@@ -51,8 +52,7 @@ describe("Login", () => {
       waitFor(() => {
         const signOnGoogleButton = screen.getByText("Or sign on with Google");
         userEvent.click(signOnGoogleButton);
-      })
-      ;
+      });
       waitFor(() => {
         expect(screen.getByText("Unable to signin!")).toHaveClass(
           "text-red-700"
@@ -63,7 +63,7 @@ describe("Login", () => {
 
   describe("Handles login with email and password", () => {
     test("handles login with email and password correctly", async () => {
-      const mockLoginService = mockAuthService.signInEmailPassword as jest.Mock;
+      const mockLoginService = mockAuthService.signInEmailPassword as Mock;
       mockLoginService.mockResolvedValue({});
 
       renderWithContext(<Login />);
@@ -85,7 +85,7 @@ describe("Login", () => {
     });
 
     test("redirect to the dashboard after login with email and password correctly", async () => {
-      const mockLoginService = mockAuthService.signInEmailPassword as jest.Mock;
+      const mockLoginService = mockAuthService.signInEmailPassword as Mock;
       mockLoginService.mockResolvedValue({});
 
       renderWithContext(<Login />);
@@ -102,7 +102,7 @@ describe("Login", () => {
     });
 
     test("display error message after login with email and password failed", async () => {
-      const mockLoginService = mockAuthService.signInEmailPassword as jest.Mock;
+      const mockLoginService = mockAuthService.signInEmailPassword as Mock;
       mockLoginService.mockRejectedValue(new Error("Unable to login!"));
 
       renderWithContext(<Login />);

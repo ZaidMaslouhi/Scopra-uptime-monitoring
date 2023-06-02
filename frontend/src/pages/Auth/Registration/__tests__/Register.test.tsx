@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import { vi, Mock } from "vitest";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/react";
@@ -7,16 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { renderWithContext } from "../../../../utils/test-utils";
 import * as mockAuthService from "../../../../services/auth.service";
 
-jest.mock("../../../../services/auth.service");
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
-  Link: jest.fn(),
+vi.mock("../../../../services/auth.service");
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
+  Link: vi.fn(),
 }));
 
 describe("Registration component", () => {
   describe("Handles sign on with Google", () => {
     test("handles sign on with Google correctly", () => {
-      const mockSignGoogle = mockAuthService.signOnGoogle as jest.Mock;
+      const mockSignGoogle = mockAuthService.signOnGoogle as Mock;
 
       renderWithContext(<Register />);
 
@@ -30,7 +30,7 @@ describe("Registration component", () => {
     });
 
     test("redirect to the welcome page after sign on with Google correctly", () => {
-      const mockSignGoogle = mockAuthService.signOnGoogle as jest.Mock;
+      const mockSignGoogle = mockAuthService.signOnGoogle as Mock;
       mockSignGoogle.mockResolvedValueOnce({});
 
       renderWithContext(<Register />);
@@ -46,7 +46,7 @@ describe("Registration component", () => {
     });
 
     test("display error message after registration with Google failed", () => {
-      const mockSignGoogle = mockAuthService.signOnGoogle as jest.Mock;
+      const mockSignGoogle = mockAuthService.signOnGoogle as Mock;
       mockSignGoogle.mockRejectedValue(new Error("Unable to signin!"));
 
       renderWithContext(<Register />);
@@ -67,7 +67,7 @@ describe("Registration component", () => {
   describe("Handles sign up with email and password", () => {
     test("handles registration with email and password correctly", () => {
       const mockRegisterService =
-        mockAuthService.registerWithEmailAndPassword as jest.Mock;
+        mockAuthService.registerWithEmailAndPassword as Mock;
       mockRegisterService.mockResolvedValueOnce({});
 
       renderWithContext(<Register />);
@@ -90,7 +90,7 @@ describe("Registration component", () => {
 
     test("redirect to the welcome after registration with email and password correctly", () => {
       const mockRegisterService =
-        mockAuthService.registerWithEmailAndPassword as jest.Mock;
+        mockAuthService.registerWithEmailAndPassword as Mock;
       mockRegisterService.mockResolvedValueOnce({});
 
       renderWithContext(<Register />);
@@ -110,7 +110,7 @@ describe("Registration component", () => {
 
     test("display error message after registration with email and password failed", () => {
       const mockRegisterService =
-        mockAuthService.registerWithEmailAndPassword as jest.Mock;
+        mockAuthService.registerWithEmailAndPassword as Mock;
       mockRegisterService.mockRejectedValue(
         new Error("Unable to register new user!")
       );

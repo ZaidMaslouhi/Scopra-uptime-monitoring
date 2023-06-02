@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import Monitors from "../Monitors";
@@ -12,10 +13,10 @@ import {
 } from "../../../utils/test-utils";
 import { Monitor } from "../../../interfaces/monitor.interface";
 
-jest.mock("../../../services/monitor.service");
-jest.mock("../../../components/ui/toasts/toasts");
-jest.mock("react-router-dom", () => ({
-  useNavigate: () => jest.fn(),
+vi.mock("../../../services/monitor.service");
+vi.mock("../../../components/ui/toasts/toasts");
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => vi.fn(),
 }));
 
 const mockMonitorData = [
@@ -76,7 +77,7 @@ describe("Monitors component", () => {
     });
 
     test("update store with monitors list and Succeeded status", async () => {
-      const mockedGetMonitors = monitorsServiceMock.getMonitors as jest.Mock;
+      const mockedGetMonitors = monitorsServiceMock.getMonitors as Mock;
       mockedGetMonitors.mockResolvedValueOnce({ docs: [...mockMonitorData] });
 
       const state = getStateWithProjects([], "Succeeded");
@@ -97,7 +98,7 @@ describe("Monitors component", () => {
     });
 
     test("dispaly no monitors message w/ add monitor button", () => {
-      const mockedGetMonitors = monitorsServiceMock.getMonitors as jest.Mock;
+      const mockedGetMonitors = monitorsServiceMock.getMonitors as Mock;
       mockedGetMonitors.mockResolvedValue({});
 
       renderWithContext(<Monitors />);
@@ -113,7 +114,7 @@ describe("Monitors component", () => {
 
   describe("Failed fetching monitors", () => {
     test("dispaly error message after failed fetching monitors", () => {
-      const mockedGetMonitors = monitorsServiceMock.getMonitors as jest.Mock;
+      const mockedGetMonitors = monitorsServiceMock.getMonitors as Mock;
       mockedGetMonitors.mockRejectedValueOnce(
         new Error("Unable to get monitors!")
       );
@@ -131,7 +132,7 @@ describe("Monitors component", () => {
     });
 
     test("dispaly toast/notification error message", () => {
-      const mockedGetMonitors = monitorsServiceMock.getMonitors as jest.Mock;
+      const mockedGetMonitors = monitorsServiceMock.getMonitors as Mock;
       mockedGetMonitors.mockRejectedValueOnce(
         new Error("Unable to get monitors!")
       );

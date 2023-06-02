@@ -1,3 +1,4 @@
+import { Mock, vi, expect } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import OnBoarding from "../OnBoarding";
@@ -10,10 +11,10 @@ import {
 import { renderWithContext } from "../../../utils/test-utils";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../../services/auth.service");
-jest.mock("../../../services/project.service");
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("../../../services/auth.service");
+vi.mock("../../../services/project.service");
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
 
 describe("OnBoarding component", () => {
@@ -28,7 +29,7 @@ describe("OnBoarding component", () => {
   });
 
   test("creates new project on form submission", () => {
-    const mockNewProject = mockProjectsService.addNewProject as jest.Mock;
+    const mockNewProject = mockProjectsService.addNewProject as Mock;
     mockNewProject.mockResolvedValueOnce({});
 
     renderWithContext(<OnBoarding />);
@@ -50,7 +51,7 @@ describe("OnBoarding component", () => {
   });
 
   test("shows success notification on project creation", () => {
-    const mockNewProject = mockProjectsService.addNewProject as jest.Mock;
+    const mockNewProject = mockProjectsService.addNewProject as Mock;
     mockNewProject.mockResolvedValueOnce({});
 
     renderWithContext(<OnBoarding />);
@@ -69,7 +70,7 @@ describe("OnBoarding component", () => {
   });
 
   test("shows error notification on project creation failure", () => {
-    const mockNewProject = mockProjectsService.addNewProject as jest.Mock;
+    const mockNewProject = mockProjectsService.addNewProject as Mock;
     mockNewProject.mockRejectedValueOnce(new Error("Unable to create project"));
 
     renderWithContext(<OnBoarding />);
@@ -90,7 +91,7 @@ describe("OnBoarding component", () => {
   });
 
   test("Navigates to monitor page on form submission", () => {
-    const mockNewProject = mockProjectsService.addNewProject as jest.Mock;
+    const mockNewProject = mockProjectsService.addNewProject as Mock;
     mockNewProject.mockResolvedValueOnce({});
 
     renderWithContext(<OnBoarding />);

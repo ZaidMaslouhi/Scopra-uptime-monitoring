@@ -1,8 +1,9 @@
+import { vi } from 'vitest';
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import SingleForm from "../SingleForm";
 
-jest.mock("lottie-react", () => jest.fn());
+vi.mock("lottie-react", () => vi.fn());
 const image = {};
 const children = <div>children components</div>;
 

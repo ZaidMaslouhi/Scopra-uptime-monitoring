@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import ProjectSettings from "../ProjectSettings";
@@ -14,10 +15,10 @@ import {
   renderWithContext,
 } from "../../../utils/test-utils";
 
-jest.mock("../../../services/project.service");
-jest.mock("../../../components/ui/toasts/toasts");
-jest.mock("react-router-dom", () => ({
-  useNavigate: () => jest.fn(),
+vi.mock("../../../services/project.service");
+vi.mock("../../../components/ui/toasts/toasts");
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => vi.fn(),
 }));
 const mockedProjectsList: Project[] = [
   {
@@ -66,7 +67,7 @@ describe("Settings component", () => {
     });
 
     test("Remove selected project and dispaly other project", async () => {
-      const mockRemoveProject = projectServiceMock.removeProject as jest.Mock;
+      const mockRemoveProject = projectServiceMock.removeProject as Mock;
       mockRemoveProject.mockResolvedValueOnce({});
       const state = getStateWithProjects([...mockedProjectsList]);
 
@@ -89,7 +90,7 @@ describe("Settings component", () => {
     });
 
     test("Navigate to welcome page", async () => {
-      const mockRemoveProject = projectServiceMock.removeProject as jest.Mock;
+      const mockRemoveProject = projectServiceMock.removeProject as Mock;
       mockRemoveProject.mockResolvedValueOnce({});
       const state = getStateWithProjects([...mockedProjectsList]);
 

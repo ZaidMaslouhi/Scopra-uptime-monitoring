@@ -1,3 +1,4 @@
+import { Mock, vi } from "vitest";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import * as monitorServiceMock from "../../../services/monitor.service";
@@ -11,7 +12,7 @@ import monitorsReducer, {
   getAllMonitors,
 } from "../monitors.slice";
 
-jest.mock("../../../services/monitor.service");
+vi.mock("../../../services/monitor.service");
 const mockStore = configureStore([thunk])();
 const mockMonitorData = [
   { id: "1", data: () => ({ name: "Monitor 1", endpoint: "/1" }) },
@@ -62,8 +63,8 @@ describe("Monitors Slice", () => {
   describe("Thunks with mocked dipatch and redux store", () => {
     describe("getAllMonitors", () => {
       test("should return list of monitors after getAllMonitors() have been resolved /mocked with dispatch", async () => {
-        const dispatch = jest.fn();
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const dispatch = vi.fn();
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockResolvedValueOnce({ docs: mockMonitorData });
 
         const thunk = getAllMonitors({
@@ -86,7 +87,7 @@ describe("Monitors Slice", () => {
       });
 
       test("should return empty list if no monitors exist after getAllMonitors() have been resolved /mocked with redux store", async () => {
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockResolvedValueOnce({ docs: [] });
 
         await mockStore.dispatch(
@@ -101,7 +102,7 @@ describe("Monitors Slice", () => {
       });
 
       test("should return error message after getAllMonitors() have been rejected /mocked with store", async () => {
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockRejectedValueOnce(
           new Error("Unable to get monitors!")
         );
@@ -121,7 +122,7 @@ describe("Monitors Slice", () => {
 
     describe("addNewMonitor", () => {
       test("should return new monitor object after addNewMonitor() have been resolved", async () => {
-        const mockedAddMonitor = monitorServiceMock.addMonitor as jest.Mock;
+        const mockedAddMonitor = monitorServiceMock.addMonitor as Mock;
         mockedAddMonitor.mockResolvedValueOnce({ id: "foo" });
 
         await mockStore.dispatch(
@@ -143,7 +144,7 @@ describe("Monitors Slice", () => {
       });
 
       test("should return error message after addNewMonitor() have been rejected", async () => {
-        const mockedAddMonitor = monitorServiceMock.addMonitor as jest.Mock;
+        const mockedAddMonitor = monitorServiceMock.addMonitor as Mock;
         mockedAddMonitor.mockRejectedValueOnce(
           new Error("Unable to add new monitor!")
         );
@@ -169,7 +170,7 @@ describe("Monitors Slice", () => {
   describe("Thunks with associated reducer methods / with full redux store", () => {
     describe("getAllMonitors", () => {
       test("should return list of monitors with success status", async () => {
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockResolvedValueOnce({ docs: mockMonitorData });
         const store = getStoreWithState();
 
@@ -185,7 +186,7 @@ describe("Monitors Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockRejectedValueOnce(
           new Error("Unable to get monitors!")
         );
@@ -205,7 +206,7 @@ describe("Monitors Slice", () => {
 
     describe("addNewMonitor", () => {
       test("should return list of monitors with success status", async () => {
-        const mockedAddMonitor = monitorServiceMock.addMonitor as jest.Mock;
+        const mockedAddMonitor = monitorServiceMock.addMonitor as Mock;
         mockedAddMonitor.mockResolvedValueOnce({ id: "4" });
         const state = getStateWithMonitors([...mockMonitorsList]);
         const store = getStoreWithState(state);
@@ -239,7 +240,7 @@ describe("Monitors Slice", () => {
       });
 
       test("should return error message with failed status", async () => {
-        const mockedGetMonitors = monitorServiceMock.getMonitors as jest.Mock;
+        const mockedGetMonitors = monitorServiceMock.getMonitors as Mock;
         mockedGetMonitors.mockRejectedValueOnce(
           new Error("Unable to get monitors!")
         );

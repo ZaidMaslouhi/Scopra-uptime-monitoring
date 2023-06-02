@@ -1,3 +1,8 @@
+/**
+ * @vitest-environment jsdom
+ */
+import { vi } from "vitest";
+import { test, describe, expect } from "vitest";
 import React from "react";
 import {
   getStateWithProjects,
@@ -10,10 +15,10 @@ import * as projectServiceMock from "../../../services/project.service";
 import { ErrorNotification } from "../../ui/toasts/toasts";
 import { Project } from "../../../interfaces/project.interface";
 
-jest.mock("../../ui/toasts/toasts");
-jest.mock("../../../services/project.service");
-jest.mock("react-router-dom", () => ({
-  useNavigate: () => jest.fn(),
+vi.mock("../../ui/toasts/toasts");
+vi.mock("../../../services/project.service");
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => vi.fn(),
   NavLink: () => <div />,
 }));
 const mockedProjectsList: Project[] = [
@@ -50,7 +55,7 @@ describe("Dashboard Layout", () => {
 
   describe("Succeeded fetching projects", () => {
     test("Renders child components after fetching projects", () => {
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
       const state = getStateWithProjects([...mockedProjectsList]);
 
       renderWithContext(
@@ -69,7 +74,7 @@ describe("Dashboard Layout", () => {
 
     test("update store w/ Succeeded status and fetched projects", () => {
       const state = getStateWithProjects([...mockedProjectsList]);
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
 
       const { store } = renderWithContext(
         <Dashboard>
@@ -90,7 +95,7 @@ describe("Dashboard Layout", () => {
 
   describe("Failed fetching projects", () => {
     test("Redirect to the welcome page after reject fetching projects", () => {
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
       mockedGetProjects.mockRejectedValueOnce(
         new Error("Unable to get projects!")
       );
@@ -109,7 +114,7 @@ describe("Dashboard Layout", () => {
     });
 
     test("Redirect to the welcome page if no projects found", () => {
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
       mockedGetProjects.mockResolvedValue({});
 
       renderWithContext(
@@ -126,7 +131,7 @@ describe("Dashboard Layout", () => {
     });
 
     test("display error message after reject fetching projects", () => {
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
       mockedGetProjects.mockRejectedValueOnce(
         new Error("Unable to get projects!")
       );
@@ -146,7 +151,7 @@ describe("Dashboard Layout", () => {
     });
 
     test("update store w/ Failed status error message after reject fetching projects", () => {
-      const mockedGetProjects = projectServiceMock.getProjects as jest.Mock;
+      const mockedGetProjects = projectServiceMock.getProjects as vi.Mock;
       mockedGetProjects.mockRejectedValueOnce(
         new Error("Unable to get projects!")
       );

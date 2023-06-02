@@ -8,4 +8,4 @@ interface Project {
   github: Github | null;
 }
 
-export { Project };
+export type { Project };

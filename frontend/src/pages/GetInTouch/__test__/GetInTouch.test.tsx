@@ -1,3 +1,4 @@
+import { Mock, vi, test } from "vitest";
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
 import GetInTouch from "../GetInTouch";
@@ -5,8 +6,8 @@ import * as mockSubscribeService from "../../../services/subscription.service";
 import { renderWithContext } from "../../../utils/test-utils";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("../../../services/subscription.service");
-jest.mock("../../../services/auth.service");
+vi.mock("../../../services/subscription.service");
+vi.mock("../../../services/auth.service");
 
 describe("GetInTouch", () => {
   test("renders the form and aside section", () => {
@@ -26,9 +27,9 @@ describe("GetInTouch", () => {
   });
 
   test("Submit the form", async () => {
-    const mockSubscribtion = mockSubscribeService.subscribe as jest.Mock;
+    const mockSubscribtion = mockSubscribeService.subscribe as Mock;
     mockSubscribtion.mockResolvedValue(null);
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
 
     renderWithContext(<GetInTouch />);
 
@@ -41,9 +42,9 @@ describe("GetInTouch", () => {
   });
 
   test("displays the success message", async () => {
-    const mockSubscribtion = mockSubscribeService.subscribe as jest.Mock;
+    const mockSubscribtion = mockSubscribeService.subscribe as Mock;
     mockSubscribtion.mockResolvedValue(true);
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
 
     renderWithContext(<GetInTouch />);
 
@@ -59,7 +60,7 @@ describe("GetInTouch", () => {
   });
 
   test("should display the error message", async () => {
-    const mockSubscribtion = mockSubscribeService.subscribe as jest.Mock;
+    const mockSubscribtion = mockSubscribeService.subscribe as Mock;
     mockSubscribtion.mockRejectedValueOnce({});
 
     renderWithContext(<GetInTouch />);
@@ -74,7 +75,7 @@ describe("GetInTouch", () => {
   });
 });
 
-function formSubmit(handleSubmit: jest.Mock) {
+function formSubmit(handleSubmit: Mock) {
   const emailInput = screen.getByRole("textbox");
   const notifButton = screen.getByRole("button", { name: /notify me/i });
   const form = emailInput.closest("form") as HTMLFormElement;
