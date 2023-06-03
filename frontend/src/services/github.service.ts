@@ -13,7 +13,7 @@ export const updateProjectGithubRepo = async (
   user: UserInfo,
   project: Project
 ) => {
-  const ref = doc(database, `user/${user.uid}/projects`, project.id);
+  const ref = doc(database, `user/${user.id}/projects`, project.id);
   return await setDoc(ref, { ...project });
 };
 
