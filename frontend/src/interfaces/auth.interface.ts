@@ -11,6 +11,10 @@ export interface UserInfo {
   token?: string;
 }
 
+function isUser(user: UserInfo | unknown): user is UserInfo {
+  return (user as UserInfo).id !== undefined;
+}
+
 function toUserInfo(user: User | null): UserInfo | null {
   if (!user) return null;
   return {
@@ -22,4 +26,4 @@ function toUserInfo(user: User | null): UserInfo | null {
   } as UserInfo;
 }
 
-export { toUserInfo };
+export { toUserInfo, isUser };
