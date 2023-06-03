@@ -1,11 +1,12 @@
 import { Github } from "./github.interface";
 
-interface Project {
+export interface Project {
   name: string;
   id: string;
-  selected?: boolean;
-  timestamp?: number;
-  github: Github | null;
+  selected: boolean;
+  // github: Github | null;
 }
 
-export type { Project };
+export const isProject = (project: Project | unknown): project is Project => {
+  return (project as Project).id !== undefined;
+};
