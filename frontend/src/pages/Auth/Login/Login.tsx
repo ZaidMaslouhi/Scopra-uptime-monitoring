@@ -34,7 +34,7 @@ function Login() {
     try {
       setLoading(true);
       const user: UserInfo = {
-        uid: "",
+        id: "",
         email: data.email,
         password: data.password,
       };
