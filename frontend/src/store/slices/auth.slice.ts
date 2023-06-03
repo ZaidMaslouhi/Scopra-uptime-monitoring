@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { UserInfo, toUserInfo } from "../../interfaces/auth.interface";
+import { UserInfo, isUser, toUserInfo } from "../../interfaces/auth.interface";
 import {
   registerWithEmailAndPassword,
   signOnGoogle,
@@ -8,29 +8,34 @@ import {
   userSignOut,
   signInEmailPassword,
   storeUserLocally,
+  refreshToken,
+  getCurrentUser,
+  removeUserLocally,
 } from "./../../services/auth.service";
+import { isServerError } from "../../utils/interfaces/Error.interface";
 
 export const authLogin = createAsyncThunk(
   "auth/authLogin",
   async (user: UserInfo) => {
-    const loggedUser = toUserInfo((await signInEmailPassword(user)).user);
-    if (loggedUser) {
-      // storeUserLocally(loggedUser);
-      return loggedUser;
+    const result = await signInEmailPassword(user);
+    if (isUser(result)) {
+      storeUserLocally(result);
+      return result;
     }
-    return null;
+    throw new Error(result.message);
   }
 );
 
 export const authRegister = createAsyncThunk(
   "auth/authRegister",
   async (user: UserInfo) => {
-    const newUser = toUserInfo((await registerWithEmailAndPassword(user)).user);
-    if (newUser) {
-      storeUserLocally(newUser);
-      return newUser;
+    const result = await registerWithEmailAndPassword(user);
+
+    if (isUser(result)) {
+      storeUserLocally(result);
+      return result;
     }
-    return null;
+    throw new Error(result.message);
   }
 );
 
@@ -46,8 +51,10 @@ export const authOauth = createAsyncThunk("auth/authOauth", async () => {
 export const updateUserInfo = createAsyncThunk(
   "auth/updateUserInfo",
   async (user: UserInfo) => {
-    await updateUser(user);
-    return { ...user };
+    const result = await updateUser(user);
+
+    if (isServerError(result)) throw new Error(result.message);
+    return result;
   }
 );
 
@@ -57,15 +64,21 @@ interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = { user: null, status: "Idle", error: null };
+const initialState: AuthState = {
+  user: getCurrentUser(),
+  status: "Idle",
+  error: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    verifyUser: (state: AuthState) => {
-      return { ...state, status: "Pending" } as AuthState;
-    },
+    // loadUser: (state: AuthState, action)=>{
+    //   const user = getCurrentUser();
+    //   if(user)
+    //   return {user: {state},}
+    // },
     saveUser: (state: AuthState, action) => {
       const saveUser = {
         user: action.payload,
@@ -76,7 +89,7 @@ const authSlice = createSlice({
     },
     signOut: () => {
       userSignOut();
-      // removeUserLocally();
+      removeUserLocally();
       return { ...initialState };
     },
   },
@@ -85,11 +98,11 @@ const authSlice = createSlice({
       .addCase(authLogin.pending, (state: AuthState) => {
         return { ...state, status: "Pending" } as AuthState;
       })
-      .addCase(authLogin.fulfilled, (state: AuthState, action) => {
+      .addCase(authLogin.fulfilled, (_, action) => {
         return { user: action.payload, status: "Succeeded", error: null };
       })
       .addCase(authLogin.rejected, () => {
-        return { user: null, status: "Failed", error: "Unable to login!" };
+        return { user: null, status: "Failed", error: "Error" };
       });
     builder
       .addCase(authRegister.pending, (state: AuthState) => {
@@ -120,7 +133,11 @@ const authSlice = createSlice({
         return { ...state, status: "Pending" } as AuthState;
       })
       .addCase(updateUserInfo.fulfilled, (state: AuthState, action) => {
-        return { user: action.payload, status: "Succeeded", error: null };
+        return {
+          user: { ...action.payload.user, id: action.payload.user._id },
+          status: "Succeeded",
+          error: null,
+        };
       })
       .addCase(updateUserInfo.rejected, () => {
         return {
@@ -134,6 +151,6 @@ const authSlice = createSlice({
 
 export const selectUserState = (state: RootState) => state.auth;
 
-export const { verifyUser, saveUser, signOut } = authSlice.actions;
+export const { saveUser, signOut } = authSlice.actions;
 
 export default authSlice.reducer;
