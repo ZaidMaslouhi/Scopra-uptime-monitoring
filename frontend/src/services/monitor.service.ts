@@ -1,14 +1,66 @@
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { database } from "../config/firebase.config";
+import axios from "axios";
 import { Monitor } from "../interfaces/monitor.interface";
+import { AxiosError } from "./../../node_modules/axios/index.d";
 
-export const addMonitor = (user: string, project: string, monitor: Monitor) => {
-  const ref = collection(database, `user/${user}/projects/${project}/monitors`);
-  return addDoc(ref, monitor);
+type ServerError = { message: string };
+
+export const addMonitor = async (
+  user: string,
+  projectId: string,
+  monitor: Monitor
+) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BACKEND_API_MONITOR}/`,
+      {
+        project: { id: projectId },
+        monitor: { name: monitor.name, uri: monitor.endpoint },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return {
+        monitor: response.data["monitor"],
+      };
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return serverError.response.data;
+      }
+    }
+    return { message: "Somthing went wrong!" };
+  }
 };
 
 export const getMonitors = async (user: string, project: string) => {
-  return await getDocs(
-    collection(database, `user/${user}/projects/${project}/monitors`)
-  );
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_API_MONITOR}/${project}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return { monitors: response.data["monitors"] };
+    }
+    throw new Error("Somthing went wrong!");
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return serverError.response.data;
+      }
+    }
+    return { message: "Somthing went wrong!" };
+  }
 };
