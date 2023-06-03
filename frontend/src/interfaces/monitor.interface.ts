@@ -1,8 +1,12 @@
-interface Monitor {
+export interface Monitor {
   name: string;
   id?: string;
+  task?: string;
   endpoint: string;
-  timestamp?: number;
 }
 
-export { Monitor };
+function isMonitor(monitor: Monitor | unknown): monitor is Monitor {
+  return (monitor as Monitor).name !== undefined;
+}
+
+export { isMonitor };
