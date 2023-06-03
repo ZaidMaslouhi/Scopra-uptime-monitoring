@@ -58,6 +58,19 @@ export const updateUserInfo = createAsyncThunk(
   }
 );
 
+export const refreshUserToken = createAsyncThunk(
+  "auth/refreshUserToken",
+  async () => {
+    const result = await refreshToken();
+
+    if (isUser(result)) {
+      storeUserLocally(result);
+      return result;
+    }
+    throw new Error(result.message);
+  }
+);
+
 interface AuthState {
   user: UserInfo | null;
   status: "Idle" | "Pending" | "Succeeded" | "Failed";
@@ -145,6 +158,16 @@ const authSlice = createSlice({
           status: "Failed",
           error: "Unable to update user information!",
         };
+      });
+    builder
+      .addCase(refreshUserToken.pending, (state: AuthState) => {
+        return { ...state, status: "Pending" } as AuthState;
+      })
+      .addCase(refreshUserToken.fulfilled, (_, action) => {
+        return { user: action.payload, status: "Succeeded", error: null };
+      })
+      .addCase(refreshUserToken.rejected, () => {
+        return { user: null, status: "Failed", error: "Error" };
       });
   },
 });
