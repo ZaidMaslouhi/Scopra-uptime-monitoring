@@ -1,18 +1,20 @@
 import { User } from "firebase/auth";
 
-interface UserInfo {
-  uid: string;
+export interface UserInfo {
+  id: string;
   email: string;
   password?: string;
   username?: string;
   photoURL?: string;
   phoneNumber?: string;
+  defaultProject?: string;
+  token?: string;
 }
 
 function toUserInfo(user: User | null): UserInfo | null {
   if (!user) return null;
   return {
-    uid: user.uid,
+    id: user.uid,
     email: user.email,
     username: user.displayName || "",
     photoURL: user.photoURL || "",
@@ -20,4 +22,4 @@ function toUserInfo(user: User | null): UserInfo | null {
   } as UserInfo;
 }
 
-export { UserInfo, toUserInfo };
+export { toUserInfo };
