@@ -9,10 +9,14 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.status !== "Pending" && !user.user) navigate("/login");
+    if (!user.user) navigate("/login");
   }, [user.status, user.user]);
 
-  return user.status === "Pending" ? <LoadingAnimation /> : children;
+  return user.status === "Succeeded" || user.user ? (
+    children
+  ) : (
+    <LoadingAnimation />
+  );
 }
 
 export default ProtectedRoute;
