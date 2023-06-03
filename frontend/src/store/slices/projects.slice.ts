@@ -12,29 +12,27 @@ import {
   updateProject,
 } from "../../services/project.service";
 import { RootState } from "../store";
+import { isServerError } from "../../utils/interfaces/Error.interface";
 
 export const getAllProjects = createAsyncThunk(
   "projects/getAllProjects",
   async (payload: { user: UserInfo }) => {
     const { user } = payload;
-    const doc = await getProjects(user);
-    
-    const projects: Project[] = [];
-    if (doc.docs.length > 0) {
-      doc.docs.map((project) => {
-        projects.push({ ...project.data(), id: project.id } as Project);
-      });
-    }
-    return projects;
+    const result = await getProjects(user);
+
+    if (isServerError(result)) throw new Error(result.message);
+    return result;
   }
 );
 
 export const addProject = createAsyncThunk(
   "projects/addProject",
-  async (payload: { user: UserInfo; project: Project }) => {
-    const { user, project } = payload;
-    const newProjectId = await addNewProject(user, project);
-    return { ...project, id: newProjectId.id };
+  async (payload: { user: UserInfo; project: Project; isDefault: boolean }) => {
+    const { user, project, isDefault } = payload;
+    const result = await addNewProject(user, project, isDefault);
+
+    if (isServerError(result)) throw new Error(result.message);
+    return result;
   }
 );
 
@@ -51,8 +49,10 @@ export const deleteProject = createAsyncThunk(
   "projects/deleteProject",
   async (payload: { user: UserInfo; project: Project }) => {
     const { user, project } = payload;
-    await removeProject(user, project);
-    return { ...project };
+    const result = await removeProject(user, project);
+
+    if (isServerError(result)) throw new Error(result.message);
+    return result;
   }
 );
 
@@ -92,7 +92,14 @@ const projctsSlice = createSlice({
     builder.addCase(
       getAllProjects.fulfilled,
       (state: ProjectsState, action) => {
-        state.projects = action.payload;
+        state.projects = [];
+        action.payload.projects.forEach((project: any) => {
+          state.projects.push({
+            id: project._id,
+            name: project.name,
+            selected: action.payload.defaultProject === project._id,
+          } as Project);
+        });
         state.status = "Succeeded";
       }
     );
@@ -105,7 +112,12 @@ const projctsSlice = createSlice({
       state.status = "Pending";
     });
     builder.addCase(addProject.fulfilled, (state: ProjectsState, action) => {
-      state.projects.push(action.payload);
+      const project = action.payload.project;
+      state.projects.push({
+        id: project._id,
+        name: project.name,
+        selected: false,
+      } as Project);
       state.status = "Succeeded";
     });
     builder.addCase(addProject.rejected, (state: ProjectsState) => {
@@ -138,7 +150,7 @@ const projctsSlice = createSlice({
     });
     builder.addCase(deleteProject.fulfilled, (state: ProjectsState, action) => {
       const projects: Project[] = state.projects.filter(
-        (project) => project.id !== action.payload.id
+        (project) => project.id !== action.payload.project.id
       );
       state.projects = [...projects];
       if (state.projects.length > 0) state.projects[0].selected = true;
@@ -156,7 +168,7 @@ export const selectProjectsState = (state: RootState): ProjectsState =>
 
 // export const selectCurrentProject = (state: RootState) => {
 // return state.projects.projects.length > 0
-//   ? state.projects.projects.find((project) => project.selected === true)
+//   ? state.projects.projects.find((project) => project.isDefault === true)
 //   : [];
 // };
 
