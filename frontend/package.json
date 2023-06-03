@@ -1,81 +1,82 @@
 {
-  "name": "scopra-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "./",
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.9.3",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/node": "^18.15.7",
-    "@types/react": "^18.0.29",
-    "@types/react-dom": "^18.0.11",
-    "firebase": "^9.16.0",
-    "lottie-react": "^2.3.1",
-    "octokit": "^2.0.14",
-    "react": "^18.2.0",
-    "react-credit-cards-2": "^1.0.1",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.0",
-    "react-hot-toast": "^2.4.0",
-    "react-icons": "^4.7.1",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^6.6.2",
-    "typescript": "^5.0.2",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview",
-    "test": "vitest watch",
-    "test:no-watch": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "lint": "eslint src/**/*.ts src/**/*.tsx",
-    "lint-fix": "eslint src/**/*.ts src/**/*.tsx --fix",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@types/redux-mock-store": "^1.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "@vitejs/plugin-react": "^4.0.0",
-    "@vitest/browser": "^0.31.3",
-    "autoprefixer": "^10.4.14",
-    "c8": "^7.14.0",
-    "dotenv": "^16.0.3",
-    "eslint": "5.12.0",
-    "eslint-plugin-react": "^7.32.1",
-    "gh-pages": "^5.0.0",
-    "jest-canvas-mock": "^2.4.0",
-    "jsdom": "^22.1.0",
-    "postcss": "^8.4.24",
-    "redux-mock-store": "^1.5.4",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
-    "vite-plugin-node-polyfills": "^0.8.2",
-    "vite-plugin-svgr": "^3.2.0",
-    "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^0.31.3"
-  }
+    "name": "scopra-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": "./",
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.9.3",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/node": "^18.15.7",
+        "@types/react": "^18.0.29",
+        "@types/react-dom": "^18.0.11",
+        "axios": "^1.4.0",
+        "firebase": "^9.16.0",
+        "lottie-react": "^2.3.1",
+        "octokit": "^2.0.14",
+        "react": "^18.2.0",
+        "react-credit-cards-2": "^1.0.1",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.43.0",
+        "react-hot-toast": "^2.4.0",
+        "react-icons": "^4.7.1",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.6.2",
+        "typescript": "^5.0.2",
+        "web-vitals": "^2.1.4"
+    },
+    "scripts": {
+        "start": "vite",
+        "build": "tsc && vite build",
+        "serve": "vite preview",
+        "test": "vitest watch",
+        "test:no-watch": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "lint": "eslint src/**/*.ts src/**/*.tsx",
+        "lint-fix": "eslint src/**/*.ts src/**/*.tsx --fix",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@types/redux-mock-store": "^1.0.3",
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
+        "@typescript-eslint/parser": "^5.56.0",
+        "@vitejs/plugin-react": "^4.0.0",
+        "@vitest/browser": "^0.31.3",
+        "autoprefixer": "^10.4.14",
+        "c8": "^7.14.0",
+        "dotenv": "^16.0.3",
+        "eslint": "5.12.0",
+        "eslint-plugin-react": "^7.32.1",
+        "gh-pages": "^5.0.0",
+        "jest-canvas-mock": "^2.4.0",
+        "jsdom": "^22.1.0",
+        "postcss": "^8.4.24",
+        "redux-mock-store": "^1.5.4",
+        "tailwindcss": "^3.3.2",
+        "vite": "^4.3.9",
+        "vite-plugin-node-polyfills": "^0.8.2",
+        "vite-plugin-svgr": "^3.2.0",
+        "vite-tsconfig-paths": "^4.2.0",
+        "vitest": "^0.31.3"
+    }
 }
