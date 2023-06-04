@@ -43,12 +43,16 @@ function ProjectSettings() {
   } = useForm<FieldValues>({
     values: {
       projectName: selectedProject.name,
-      githubOwner: selectedProject.github?.owner || "",
-      githubRepository: selectedProject.github?.repository || "",
+      // githubOwner: selectedProject.github?.owner || "",
+      // githubRepository: selectedProject.github?.repository || "",
     },
   });
 
   const onDeleteProject = async (userInfo: UserInfo, project: Project) => {
+    if (selectedProject.selected) {
+      ErrorNotification("Default project cannot be deleted.");
+      return null;
+    }
     const message: IConfirmationModal = {
       title: "Delete Project",
       body: "You will lose all of your project related data. this action cannot be undone!",
@@ -73,10 +77,10 @@ function ProjectSettings() {
       const project: Project = {
         ...selectedProject,
         name: data.projectName,
-        github: {
-          owner: data.githubOwner || "",
-          repository: data.githubRepository || "",
-        },
+        // github: {
+        //   owner: data.githubOwner || "",
+        //   repository: data.githubRepository || "",
+        // },
       };
       await dispatch(updateProjectInfo({ user: user, project }));
       SuccessNotification(`${data.projectName} project updated successfully!`);
@@ -157,10 +161,11 @@ function ProjectSettings() {
               </p>
             </div>
             <button
-              className="py-2 px-9 bg-red-400 text-white text-lg rounded-lg"
+              type="button"
+              className="py-2 px-9 bg-red-400 text-white text-lg rounded-lg disabled:bg-red-300"
               onClick={() => onDeleteProject(user, selectedProject)}
             >
-              Delete project
+              Delete Project
             </button>
           </div>
 
