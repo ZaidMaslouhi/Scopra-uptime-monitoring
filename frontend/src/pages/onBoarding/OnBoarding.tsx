@@ -40,11 +40,10 @@ function OnBoarding() {
       const project: Project = {
         id: "",
         name: data.projectName,
-        timestamp: Date.now(),
         selected: true,
-        github: null,
+        // github: null,
       };
-      await dispatch(addProject({ user, project }));
+      await dispatch(addProject({ user, project, isDefault: true }));
       navigate("/monitors");
       SuccessNotification("New project created.");
     } catch (_) {

@@ -3,12 +3,13 @@ import FormInput from "../FormInput/FormInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
 import { Project } from "../../../interfaces/project.interface";
-import {
-  addProject,
-} from "../../../store/slices/projects.slice";
+import { addProject } from "../../../store/slices/projects.slice";
 import { selectUserState } from "../../../store/slices/auth.slice";
 import { UserInfo } from "../../../interfaces/auth.interface";
-import { useAppDispatch, useAppSelector } from "../../../utils/hooks/react-redux-hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../utils/hooks/react-redux-hooks";
 
 type FieldValues = {
   projectName: string;
@@ -38,15 +39,14 @@ function AddProjectModal({ onClose }: { onClose: () => void }) {
       const project: Project = {
         id: "",
         name: data.projectName,
-        github: {
-          owner: data.githubOwner ?? "",
-          repository: data.githubRepo ?? "",
-        },
-        timestamp: Date.now(),
         selected: false,
+        // github: {
+        //   owner: data.githubOwner ?? "",
+        //   repository: data.githubRepo ?? "",
+        // },
       };
 
-      await dispatch(addProject({ user, project }));
+      await dispatch(addProject({ user, project, isDefault: false }));
 
       closeModal();
       SuccessNotification("New project created.");

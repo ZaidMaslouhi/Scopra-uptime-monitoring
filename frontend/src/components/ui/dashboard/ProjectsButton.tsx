@@ -12,11 +12,14 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/react-redux-hooks";
+import { selectUserState } from "../../../store/slices/auth.slice";
+import { UserInfo } from "../../../interfaces/auth.interface";
 
 function ProjectsButton() {
   const [showModal, setShowModal] = useState(false);
   const projects = useAppSelector(selectProjectsState);
   const currentProject = useAppSelector(selectCurrentProject) as Project;
+  const user = useAppSelector(selectUserState).user as UserInfo;
   const dispatch = useAppDispatch();
 
   const closeModal = () => {
@@ -42,7 +45,7 @@ function ProjectsButton() {
           </button>
           <ul className="w-5/6 bg-slate-50 border border-slate-300 rounded-lg hidden overflow-hidden shadow-lg absolute right-2/4 translate-x-1/2 peer-hover:block hover:block">
             {projects.projects.map((project: Project) => {
-              if (!project.selected)
+              if (project.id !== user.defaultProject)
                 return (
                   <li
                     className={`${project.id} px-6 py-4 text-md font-medium text-slate-800 flex items-center justify-center cursor-pointer hover:bg-slate-300`}
