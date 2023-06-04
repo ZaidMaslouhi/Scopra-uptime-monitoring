@@ -3,7 +3,10 @@ import FormInput from "../FormInput/FormInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorNotification, SuccessNotification } from "../toasts/toasts";
 import { Monitor } from "../../../interfaces/monitor.interface";
-import { addNewMonitor } from "../../../store/slices/monitors.slice";
+import {
+  addNewMonitor,
+  selectMonitorsState,
+} from "../../../store/slices/monitors.slice";
 import { UserInfo } from "../../../interfaces/auth.interface";
 import { Project } from "../../../interfaces/project.interface";
 import { selectCurrentProject } from "../../../store/slices/projects.slice";
@@ -12,6 +15,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/react-redux-hooks";
+import { sendWebSocketMessage } from "../../../store/slices/websocket.actions";
 
 type FieldValues = {
   name: string;
@@ -30,6 +34,7 @@ function AddMonitorModal({
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUserState).user as UserInfo;
   const currentProject = useAppSelector(selectCurrentProject) as Project;
+  const monitors = useAppSelector(selectMonitorsState).monitors as Monitor[];
 
   const {
     register,
@@ -50,19 +55,25 @@ function AddMonitorModal({
       const monitor: Monitor = {
         name: data.name,
         endpoint: data.endpoint,
-        timestamp: Date.now(),
       };
-      await dispatch(
+
+      const result = await dispatch(
         addNewMonitor({
-          userId: user.uid,
+          userId: user.id,
           projectId: currentProject.id,
           monitor,
         })
       );
+
+      const tasks = monitors.map((monitor) => monitor.task);
+      tasks.push((result.payload as any).monitor.taskId);
+
+      dispatch(sendWebSocketMessage(tasks));
+
       setShowModal(false);
       SuccessNotification("New monitor created.");
     } catch (_) {
-      ErrorNotification("Error: Unable to create new monitors.");
+      ErrorNotification("Error: Unable to create new monitor.");
     }
   };
 

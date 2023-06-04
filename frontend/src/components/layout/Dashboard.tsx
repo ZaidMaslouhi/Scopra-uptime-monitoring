@@ -14,6 +14,7 @@ import {
   selectProjectsState,
 } from "../../store/slices/projects.slice";
 import { ErrorNotification } from "../ui/toasts/toasts";
+import { connectWebSocket } from "../../store/slices/websocket.actions";
 
 function Dashboard({ children }: { children: React.ReactNode }) {
   const user = useAppSelector(selectUserState);
@@ -31,6 +32,10 @@ function Dashboard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchProjects(user.user as UserInfo);
+    dispatch(connectWebSocket(import.meta.env.VITE_WEBSOCKET_URI as string));
+    // return () => {
+    //   dispatch(disconnectWebSocket());
+    // };
   }, []);
 
   useEffect(() => {

@@ -18,6 +18,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/hooks/react-redux-hooks";
+import { sendWebSocketMessage } from "../../store/slices/websocket.actions";
 
 function Monitors() {
   const user = useAppSelector(selectUserState).user as UserInfo;
@@ -29,15 +30,22 @@ function Monitors() {
   const fetchMonitors = async (userInfo: UserInfo, project: Project) => {
     try {
       await dispatch(
-        getAllMonitors({ userId: userInfo.uid, projectId: project.id })
-      );
+        getAllMonitors({ userId: userInfo.id, projectId: project.id })
+      ).then((result) => {
+        const tasks = (result.payload as any).monitors.map(
+          (monitor: any) => monitor.monitor.taskId
+        );
+        dispatch(sendWebSocketMessage(tasks));
+      });
     } catch (error) {
       ErrorNotification((error as Error).message);
     }
   };
 
   useEffect(() => {
-    if (projects.status === "Succeeded") fetchMonitors(user, project);
+    if (projects.status === "Succeeded" && projects.projects.length > 0) {
+      fetchMonitors(user, project);
+    }
   }, [project]);
 
   if (monitors.status === "Pending") return <LoadingAnimation />;
